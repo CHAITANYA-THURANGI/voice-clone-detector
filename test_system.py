@@ -187,7 +187,7 @@ class TestVoiceShieldFramework(unittest.TestCase):
             self.assertIn("enterprise_telemetry", res_json)
 
     def test_10_mpeg_audio_support(self):
-        mpeg_path = os.path.join("data", "samples", "test_sample.mpeg")
+        mpeg_path = os.path.join("data", "samples", "authentic_human_id.mpeg")
         self.assertTrue(os.path.exists(mpeg_path))
         with open(mpeg_path, "rb") as f:
             files = {"file": ("test_voice.mpeg", f, "audio/mpeg")}
@@ -197,6 +197,7 @@ class TestVoiceShieldFramework(unittest.TestCase):
             self.assertEqual(res_json["status"], "success")
             self.assertIn("risk_assessment", res_json)
             self.assertIn("neural_detector", res_json)
+            self.assertEqual(res_json["risk_assessment"]["risk_level"], "LOW")
 
 
 if __name__ == "__main__":

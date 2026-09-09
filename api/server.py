@@ -171,15 +171,15 @@ def list_benchmark_samples():
     sample_list = []
     for fpath in files:
         fname = os.path.basename(fpath)
-        is_real = "real" in fname.lower() or "test_sample" in fname.lower()
+        is_real = "real" in fname.lower() or "authentic" in fname.lower()
         if is_real:
             desc = "Authentic Human Voice"
         elif "replayed" in fname.lower():
             desc = "Replayed Attack (Acoustic Channel)"
-        elif "mpg" in fname.lower() or "mpeg" in fname.lower():
-            desc = "MPEG Cloned Voice / Audio"
+        elif "clone" in fname.lower() or "synthetic" in fname.lower():
+            desc = "AI Voice Clone / Synthesizer"
         else:
-            desc = "Neural TTS / Clone Voice"
+            desc = "Neural TTS / Deepfake Voice"
 
         sample_list.append({
             "filename": fname,
