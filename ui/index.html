@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoiceShield AI | Real-Time Voice Clone Detection & Prevention</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Navigation & Header -->
+  <header class="top-nav">
+    <div class="brand">
+      <div class="brand-logo">
+        <span class="shield-icon">🛡️</span>
+      </div>
+      <div>
+        <h1>VOICESHIELD <span class="highlight">AI</span></h1>
+        <p class="subtitle">AI-Powered Real-Time Voice Integrity & Cloning Prevention • SIH PS-26104</p>
+      </div>
+    </div>
+    <div class="nav-badges">
+      <span class="badge badge-cyber">AICTE CYBER SECURITY CELL</span>
+      <span class="badge badge-privacy">🔒 DPDP ACT 2023 ZERO-RETENTION</span>
+      <span class="status-indicator"><span class="dot"></span> ENGINE ONLINE</span>
+    </div>
+  </header>
+
+  <main class="dashboard-grid">
+    <!-- Left Column: Audio Controls & Context -->
+    <section class="card input-panel">
+      <h2><span class="icon">🎙️</span> Voice Audio Ingestion</h2>
+      
+      <!-- Tab Controls -->
+      <div class="tab-header">
+        <button class="tab-btn active" onclick="switchTab('benchmarks')">⚡ Benchmarks</button>
+        <button class="tab-btn" onclick="switchTab('upload')">📁 Upload Audio</button>
+        <button class="tab-btn" onclick="switchTab('record')">🔴 Live Mic Stream</button>
+      </div>
+
+      <!-- Tab 1: One-Click Benchmarks -->
+      <div id="tab-benchmarks" class="tab-content active">
+        <p class="section-desc">Instantly test verified authentic, synthetic, and replayed attack audios:</p>
+        <div id="benchmark-list" class="benchmark-grid">
+          <div class="loading-spinner">Loading benchmark samples...</div>
+        </div>
+      </div>
+
+      <!-- Tab 2: File Upload -->
+      <div id="tab-upload" class="tab-content">
+        <div class="drop-zone" id="drop-zone">
+          <span class="upload-icon">📤</span>
+          <p>Drag & Drop call recording here or <strong>browse</strong></p>
+          <span class="file-hint">Supports WAV, OGG, MP3, FLAC, M4A, WebM (FFmpeg 16kHz resampled)</span>
+          <input type="file" id="audio-file-input" accept="audio/*" style="display:none">
+        </div>
+        <div id="selected-file-info" class="selected-file" style="display:none">
+          <span class="file-name" id="file-name-display">sample.wav</span>
+          <button class="btn btn-sm btn-danger" onclick="clearSelectedFile()">✕</button>
+        </div>
+      </div>
+
+      <!-- Tab 3: Live Microphone -->
+      <div id="tab-record" class="tab-content">
+        <div class="mic-container">
+          <canvas id="waveform-canvas" width="400" height="80"></canvas>
+          <div class="mic-controls">
+            <button id="record-btn" class="btn btn-record" onclick="toggleMicrophone()">
+              <span class="rec-dot"></span> Start Live Intercept
+            </button>
+            <span id="record-timer" class="record-timer">00:00</span>
+          </div>
+          <p class="mic-hint">Near real-time 3-second sliding window stream analysis with consecutive anomaly detection.</p>
+        </div>
+      </div>
+
+      <!-- Contextual Enterprise Parameters -->
+      <div class="context-box">
+        <h3><span class="icon">⚙️</span> Call & Transaction Context</h3>
+        
+        <div class="form-group">
+          <label>Transaction Value ($ / ₹)</label>
+          <div class="range-wrap">
+            <input type="range" id="tx-amount" min="0" max="100000" step="5000" value="0" oninput="updateTxDisplay(this.value)">
+            <span id="tx-amount-display" class="tx-val">$0 (Standard Call)</span>
+          </div>
+        </div>
+
+        <div class="form-group-inline">
+          <label class="checkbox-container">
+            <input type="checkbox" id="is-cxo">
+            <span class="checkmark"></span>
+            High-Value Executive / CXO Call
+          </label>
+        </div>
+
+        <div class="form-group-inline">
+          <label class="checkbox-container">
+            <input type="checkbox" id="credential-req">
+            <span class="checkmark"></span>
+            Sensitive Credential / OTP Requested
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>Claimed Identity (Speaker Verification)</label>
+          <input type="text" id="claimed-speaker" class="text-input" placeholder="e.g. CEO_John, Director_Finance (optional)">
+        </div>
+
+        <button id="analyze-btn" class="btn btn-primary btn-block" onclick="runAnalysis()">
+          🔍 Run Voice Authenticity Analysis
+        </button>
+      </div>
+    </section>
+
+    <!-- Right Column: Results & Forensic Intelligence -->
+    <section class="card results-panel">
+      <!-- Top Risk Alert Banner -->
+      <div id="risk-banner" class="risk-banner risk-neutral">
+        <div class="risk-header">
+          <div class="risk-badge" id="risk-badge">⚪ AWAITING INPUT</div>
+          <div class="risk-score-display" id="risk-score-display">0.0% RISK</div>
+        </div>
+        <p id="risk-summary" class="risk-summary">Select an audio benchmark or upload a recording to evaluate voice authenticity.</p>
+      </div>
+
+      <!-- Actionable Fraud Prevention Protocol -->
+      <div id="prevention-card" class="prevention-card">
+        <h3><span class="icon">🚨</span> Automated Enterprise Response Protocol</h3>
+        <div class="prevention-action-header" id="prevention-action-title">
+          Standard Monitoring Protocol
+        </div>
+        <p class="immediate-action" id="prevention-immediate-action">Awaiting analysis...</p>
+        <ul class="action-steps" id="prevention-steps-list">
+          <li>Run audio analysis to trigger dynamic security playbooks.</li>
+        </ul>
+      </div>
+
+      <!-- Multi-Layer Enterprise Forensic Telemetry Grid -->
+      <div class="forensic-grid">
+        <!-- Neural Conformer Deepfake Model Card -->
+        <div class="sub-card">
+          <h4>🤖 Enterprise Voice Conformer</h4>
+          <p class="sub-card-desc">Depthwise Conv + Multi-Head Attn + ASP</p>
+          <div class="metric-val" id="val-neural-prob">--</div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="prog-neural" style="width: 0%"></div>
+          </div>
+          <div class="metric-sub" id="val-neural-pred">Prediction: --</div>
+        </div>
+
+        <!-- Glottal Flow Inverse Residual Biometrics -->
+        <div class="sub-card">
+          <h4>🫁 LPC Glottal Flow Biometrics</h4>
+          <p class="sub-card-desc">Levinson-Durbin Vocal Fold Excitation</p>
+          <div class="metric-val" id="val-glottal-score">--</div>
+          <div class="stat-row">
+            <span>Residual Kurtosis:</span>
+            <strong id="val-kurtosis">--</strong>
+          </div>
+          <div class="stat-row">
+            <span>Glottal Status:</span>
+            <strong id="val-glottal-status">--</strong>
+          </div>
+        </div>
+
+        <!-- Phase-Aware Modified Group Delay (MGD) -->
+        <div class="sub-card">
+          <h4>🌐 Phase Incoherence & MGD</h4>
+          <p class="sub-card-desc">Modified Group Delay & Phase Derivative</p>
+          <div class="metric-val" id="val-phase-score">--</div>
+          <div class="stat-row">
+            <span>High-Freq Phase Jitter:</span>
+            <strong id="val-phase-jitter">--</strong>
+          </div>
+          <div class="stat-row">
+            <span>Phase Continuity:</span>
+            <strong id="val-phase-status">--</strong>
+          </div>
+        </div>
+
+        <!-- Vocoder Spectral Artifacts -->
+        <div class="sub-card">
+          <h4>📊 Vocoder Spectral Artifacts</h4>
+          <p class="sub-card-desc">LFCC & High-Freq Energy (>4kHz)</p>
+          <div class="metric-val" id="val-spectral-score">--</div>
+          <div class="stat-row">
+            <span>Spectral Rolloff:</span>
+            <strong id="val-rolloff">-- Hz</strong>
+          </div>
+          <div class="stat-row">
+            <span>HF Energy Ratio:</span>
+            <strong id="val-hf-ratio">--</strong>
+          </div>
+        </div>
+
+        <!-- Prosody & Microvariations -->
+        <div class="sub-card">
+          <h4>🧬 Prosody & Microvariations</h4>
+          <p class="sub-card-desc">Autocorrelation F0, Jitter & Shimmer</p>
+          <div class="metric-val" id="val-prosody-score">--</div>
+          <div class="stat-row">
+            <span>Pitch Stability (F0 Std):</span>
+            <strong id="val-f0-std">-- Hz</strong>
+          </div>
+          <div class="stat-row">
+            <span>Micro-Jitter:</span>
+            <strong id="val-jitter">--%</strong>
+          </div>
+        </div>
+
+        <!-- Speaker Identity Consistency -->
+        <div class="sub-card">
+          <h4>👤 Identity Voiceprint</h4>
+          <p class="sub-card-desc">Cosine Similarity to Claimed CXO</p>
+          <div class="metric-val" id="val-speaker-score">N/A</div>
+          <div class="stat-row">
+            <span>Enrolled Status:</span>
+            <strong id="val-spk-enrolled">Not Claimed</strong>
+          </div>
+          <div class="stat-row">
+            <span>Biometric Match:</span>
+            <strong id="val-spk-match">--</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Glottal Pulse Biometric Oscilloscope & Timeline -->
+      <div class="timeline-box">
+        <div class="timeline-header-wrap">
+          <h3><span class="icon">🫀</span> Biological Vocal Fold Excitation Scope (LPC Residual)</h3>
+          <span class="badge badge-cyber" id="mitre-badge">MITRE ATT&CK: T1656.001</span>
+        </div>
+        <canvas id="glottal-canvas" height="60" style="width:100%; height:60px; background:rgba(15,23,42,0.8); border-radius:6px; margin-bottom:0.8rem; border:1px solid #1E293B;"></canvas>
+        
+        <h3><span class="icon">📈</span> Live Call Risk Timeline</h3>
+        <div class="chart-container">
+          <canvas id="timeline-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- SIEM CEF Exporter Section -->
+      <div class="siem-box" style="margin-top:1rem; padding:0.9rem; background:rgba(15,23,42,0.6); border:1px solid #1E293B; border-radius:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:0.82rem; font-weight:700; color:#38BDF8;">🛡️ ENTERPRISE SIEM & CEF INCIDENT EXPORTER</span>
+          <button class="btn btn-sm btn-primary" onclick="copyCefEvent()">📋 Copy CEF Syslog</button>
+        </div>
+        <pre id="cef-preview" style="font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:#94A3B8; margin-top:0.5rem; overflow-x:auto; white-space:pre-wrap; background:rgba(0,0,0,0.3); padding:0.5rem; border-radius:6px;">Awaiting incident generation...</pre>
+      </div>
+
+      <!-- Cryptographic Compliance Certificate -->
+      <div class="compliance-footer">
+        <div class="compliance-item">
+          <span>Incident ID:</span> <code id="disp-incident-id">INC-PENDING</code>
+        </div>
+        <div class="compliance-item">
+          <span>Audio SHA-256:</span> <code id="disp-sha256">E3B0C44298FC1C149AFB...</code>
+        </div>
+        <div class="compliance-item">
+          <span>Privacy Standard:</span> <strong>India DPDP Act 2023 (Zero-Retention Ephemeral RAM)</strong>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

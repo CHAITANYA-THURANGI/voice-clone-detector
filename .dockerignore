@@ -1,0 +1,17 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env
+.venv
+env/
+venv/
+.git
+.gitignore
+datasets/Speech Dataset of Human and AI-Generated Voices/*.zip
+datasets/extracted/
+*.zip
+*.log
+.vscode
+.idea
