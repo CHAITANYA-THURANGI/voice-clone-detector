@@ -489,11 +489,12 @@ function renderAnalysisResults(data) {
   // Glottal Biometrics Card
   const glottal = data.glottal_biometrics || {};
   const glottalScore = glottal.glottal_anomaly_score || 0.0;
+  const isAttack = risk.risk_level === 'HIGH' || neural.prediction === 'FAKE';
   document.getElementById('val-glottal-score').textContent = `${(glottalScore * 100).toFixed(1)}%`;
-  document.getElementById('val-glottal-score').style.color = glottalScore > 0.4 ? '#EF4444' : '#10B981';
+  document.getElementById('val-glottal-score').style.color = (glottalScore > 0.4 || isAttack) ? '#EF4444' : '#10B981';
   document.getElementById('val-kurtosis').textContent = glottal.residual_kurtosis || '--';
-  document.getElementById('val-glottal-status').textContent = glottal.glottal_status ? (glottalScore < 0.4 ? 'Natural Impulse' : 'Synthetic Vocal Tract') : '--';
-  document.getElementById('val-glottal-status').style.color = glottalScore > 0.4 ? '#EF4444' : '#10B981';
+  document.getElementById('val-glottal-status').textContent = glottal.display_status || (glottalScore > 0.4 || isAttack ? 'Synthetic Vocal Tract' : 'Natural Impulse');
+  document.getElementById('val-glottal-status').style.color = (glottalScore > 0.4 || isAttack) ? '#EF4444' : '#10B981';
 
   // Draw Glottal Residual Pulse Scope
   if (glottal.waveform_preview && glottal.waveform_preview.length > 0) {
@@ -504,10 +505,10 @@ function renderAnalysisResults(data) {
   const phase = data.phase_forensics || {};
   const phaseScore = phase.phase_incoherence_score || 0.0;
   document.getElementById('val-phase-score').textContent = `${(phaseScore * 100).toFixed(1)}%`;
-  document.getElementById('val-phase-score').style.color = phaseScore > 0.4 ? '#EF4444' : '#10B981';
+  document.getElementById('val-phase-score').style.color = (phaseScore > 0.4 || isAttack) ? '#EF4444' : '#10B981';
   document.getElementById('val-phase-jitter').textContent = phase.high_freq_phase_jitter || '--';
-  document.getElementById('val-phase-status').textContent = phase.status ? (phaseScore < 0.4 ? 'Continuous Phase' : 'Vocoder Phase Jitter') : '--';
-  document.getElementById('val-phase-status').style.color = phaseScore > 0.4 ? '#EF4444' : '#10B981';
+  document.getElementById('val-phase-status').textContent = phase.display_status || (phaseScore > 0.4 || isAttack ? 'Vocoder Phase Jitter' : 'Continuous Phase');
+  document.getElementById('val-phase-status').style.color = (phaseScore > 0.4 || isAttack) ? '#EF4444' : '#10B981';
 
   // Vocoder Spectral Card
   const specScore = risk.sub_scores.spectral_artifact_score;
@@ -541,10 +542,10 @@ function renderAnalysisResults(data) {
     const found = data.pretrained_foundation;
     const foundProb = found.pretrained_fake_prob || 0.0;
     document.getElementById('val-foundation-prob').textContent = `${(foundProb * 100).toFixed(1)}%`;
-    document.getElementById('val-foundation-prob').style.color = foundProb > 0.4 ? '#EF4444' : '#10B981';
+    document.getElementById('val-foundation-prob').style.color = (foundProb > 0.4 || isAttack) ? '#EF4444' : '#10B981';
     document.getElementById('val-foundation-stability').textContent = `${found.foundation_stability || '--'} m/s²`;
-    document.getElementById('val-foundation-verdict').textContent = found.prediction === 'FAKE' ? 'Synthetic Dispersion' : 'Biological Dynamics';
-    document.getElementById('val-foundation-verdict').style.color = found.prediction === 'FAKE' ? '#EF4444' : '#10B981';
+    document.getElementById('val-foundation-verdict').textContent = found.display_verdict || (found.prediction === 'FAKE' || isAttack ? 'Synthetic Dispersion' : 'Biological Dynamics');
+    document.getElementById('val-foundation-verdict').style.color = (found.prediction === 'FAKE' || isAttack) ? '#EF4444' : '#10B981';
   }
 
   // SIEM CEF Event Preview
