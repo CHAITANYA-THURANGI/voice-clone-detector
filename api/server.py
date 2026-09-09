@@ -58,7 +58,7 @@ def get_system_status():
             "SpeakerVerification": "ACTIVE",
             "MITRE_ATT&CK_Telemetry": "T1656 / ACTIVE"
         },
-        "supported_codecs": ["WAV", "OGG", "MP3", "FLAC", "WebM", "Opus", "AAC"]
+        "supported_codecs": ["WAV", "MPEG", "MPG", "MP3", "OGG", "FLAC", "WebM", "Opus", "AAC", "M4A"]
     }
 
 

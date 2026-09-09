@@ -237,7 +237,21 @@ class VoiceCloneDetector:
         Normalizes, resamples to 16kHz mono float32, and runs VAD filter.
         """
         if isinstance(audio_input, str):
-            data, sr = sf.read(audio_input, dtype="float32")
+            try:
+                data, sr = sf.read(audio_input, dtype="float32")
+            except Exception:
+                # Universal fallback for MPEG, MPG, MP4, AAC via FFmpeg
+                import subprocess
+                import tempfile
+                with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp_out:
+                    tmp_wav = tmp_out.name
+                try:
+                    cmd = ["ffmpeg", "-y", "-i", str(audio_input), "-vn", "-ar", str(target_sr), "-ac", "1", "-c:a", "pcm_s16le", tmp_wav]
+                    subprocess.run(cmd, capture_output=True, check=True)
+                    data, sr = sf.read(tmp_wav, dtype="float32")
+                finally:
+                    if os.path.exists(tmp_wav):
+                        os.remove(tmp_wav)
         elif isinstance(audio_input, np.ndarray):
             data = audio_input.astype(np.float32)
             sr = target_sr

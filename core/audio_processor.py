@@ -31,6 +31,7 @@ def convert_to_16k_mono(input_path: str, output_path: str = None) -> str:
         "ffmpeg",
         "-y",
         "-i", input_path,
+        "-vn",
         "-ar", str(TARGET_SAMPLE_RATE),
         "-ac", "1",
         "-c:a", "pcm_s16le",
