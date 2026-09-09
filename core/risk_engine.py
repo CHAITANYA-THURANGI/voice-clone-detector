@@ -21,11 +21,11 @@ class RiskEngine:
 
     def __init__(
         self,
-        weight_neural: float = 0.35,
-        weight_spectral: float = 0.18,
-        weight_prosody: float = 0.15,
-        weight_glottal: float = 0.16,
-        weight_phase: float = 0.16,
+        weight_neural: float = 0.60,
+        weight_spectral: float = 0.12,
+        weight_prosody: float = 0.10,
+        weight_glottal: float = 0.09,
+        weight_phase: float = 0.09,
         weight_speaker: float = 0.10
     ):
         self.w_neural = weight_neural
@@ -168,18 +168,25 @@ class RiskEngine:
         final_score = min(1.0, base_score * context_multiplier)
 
         # 5. Determine Actionable Risk Tier
-        if final_score < 0.40:
-            risk_level = "LOW"
-            badge = "🟢 LOW RISK"
-            summary = "Bona fide human speech verified. No significant cloning indicators detected."
-        elif final_score < 0.70:
+        # If the Deep Conformer neural backbone is confident (>75%) that the voice is cloned,
+        # or composite score exceeds high-risk threshold, elevate to HIGH RISK
+        is_neural_attack = (neural_fake_prob >= 0.75)
+        
+        if final_score >= 0.65 or is_neural_attack:
+            risk_level = "HIGH"
+            badge = "🔴 HIGH RISK (ATTACK)"
+            summary = "Strong synthetic / cloned speech signatures detected. Potential active social engineering attack."
+            # Ensure final risk score reflects the severity of confirmed AI deepfake
+            if is_neural_attack:
+                final_score = max(final_score, min(0.99, neural_fake_prob * 0.95))
+        elif final_score >= 0.38 or neural_fake_prob >= 0.50:
             risk_level = "SUSPICIOUS"
             badge = "🟡 SUSPICIOUS - VERIFY"
             summary = "Borderline or conflicting acoustic/prosodic indicators. Secondary out-of-band verification required."
         else:
-            risk_level = "HIGH"
-            badge = "🔴 HIGH RISK (ATTACK)"
-            summary = "Strong synthetic / cloned speech signatures detected. Potential active social engineering attack."
+            risk_level = "LOW"
+            badge = "🟢 LOW RISK"
+            summary = "Bona fide human speech verified. No significant cloning indicators detected."
 
         return {
             "risk_score": round(final_score, 4),

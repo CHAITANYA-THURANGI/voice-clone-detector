@@ -306,7 +306,7 @@ class VoiceCloneDetector:
         if fake_prob < 0.35:
             risk_level = "LOW"
             badge = "🟢 LOW RISK (AUTHENTIC)"
-        elif fake_prob < 0.70:
+        elif fake_prob < 0.50:
             risk_level = "SUSPICIOUS"
             badge = "🟡 SUSPICIOUS - VERIFY"
         else:

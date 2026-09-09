@@ -96,13 +96,15 @@ def analyze_phase_coherence(waveform: np.ndarray, sr: int = 16000, nfft: int = 5
     # Neural vocoders (HiFi-GAN, WaveGlow, Diffusion) produce distinctive
     # high-frequency group delay spikes and phase derivative dispersion
     phase_incoherence = 0.0
-    if hf_jitter > 3.2:
+    if hf_jitter > 3.4:
         phase_incoherence += 0.45
-    elif hf_jitter > 1.8:
+    elif hf_jitter > 3.0:
         phase_incoherence += 0.20
 
-    if mgd_var > 0.35 or mgd_var < 0.001:
-        phase_incoherence += 0.30
+    if mgd_var > 8.0:
+        phase_incoherence += 0.35
+    elif mgd_var < 0.0001:
+        phase_incoherence += 0.25
 
     phase_incoherence = min(1.0, phase_incoherence)
 
