@@ -454,22 +454,23 @@ async function runAnalysis() {
     }
 
     const res = await fetch('/api/analyze-audio', { method: 'POST', body: formData });
-    if (!res.ok) {
+    const rawText = await res.text();
+    let data;
+    try {
+      data = JSON.parse(rawText);
+    } catch (e) {
       let errMsg = `Server returned status ${res.status}`;
-      try {
-        const err = await res.json();
-        errMsg = err.detail || errMsg;
-      } catch (e) {
-        const text = await res.text();
-        if (text.includes('<title>')) {
-          const match = text.match(/<title>(.*?)<\/title>/i);
-          if (match && match[1]) errMsg = `Server Error (${res.status}): ${match[1]}`;
-        }
+      if (rawText.includes('<title>')) {
+        const match = rawText.match(/<title>(.*?)<\/title>/i);
+        if (match && match[1]) errMsg = `Server Error (${res.status}): ${match[1]}`;
       }
       throw new Error(errMsg);
     }
 
-    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.detail || `Server returned status ${res.status}`);
+    }
+
     renderAnalysisResults(data);
   } catch (err) {
     alert(`Analysis Error: ${err.message}`);
