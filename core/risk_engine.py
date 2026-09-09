@@ -21,14 +21,16 @@ class RiskEngine:
 
     def __init__(
         self,
-        weight_neural: float = 0.60,
-        weight_spectral: float = 0.12,
-        weight_prosody: float = 0.10,
-        weight_glottal: float = 0.09,
-        weight_phase: float = 0.09,
+        weight_neural: float = 0.50,
+        weight_foundation: float = 0.18,
+        weight_spectral: float = 0.08,
+        weight_prosody: float = 0.08,
+        weight_glottal: float = 0.08,
+        weight_phase: float = 0.08,
         weight_speaker: float = 0.10
     ):
         self.w_neural = weight_neural
+        self.w_foundation = weight_foundation
         self.w_spectral = weight_spectral
         self.w_prosody = weight_prosody
         self.w_glottal = weight_glottal
@@ -47,20 +49,23 @@ class RiskEngine:
         flatness = metrics.get("spectral_flatness", 0.005)
         rolloff = metrics.get("spectral_rolloff_hz", 3500.0)
 
-        # High-frequency truncation anomaly (typical of 8kHz/16kHz compressed vocoders)
-        if hf_ratio < 0.008 or hf_ratio > 0.40:
+        # Vocoders (e.g. Diffusion, HiFi-GAN, WaveGlow) exhibit abnormal high-frequency noise floor
+        # or extreme energy concentrations in upper bands (>4kHz)
+        if hf_ratio > 0.35:
             score += 0.35
-        elif hf_ratio < 0.015:
-            score += 0.15
-
-        # Spectral flatness anomaly (overly noisy or overly synthetic pure harmonic lines)
-        if flatness > 0.06:
-            score += 0.30
-        elif flatness < 0.0005:
+        elif hf_ratio > 0.20:
             score += 0.20
 
-        # Rolloff cutoff
-        if rolloff < 1800:
+        # Spectral flatness anomaly:
+        # Neural TTS vocoders often introduce excessive noise floor (flatness > 0.30)
+        # or pure synthetic harmonics with extreme pitch periodicity (flatness < 0.0001)
+        if flatness > 0.32:
+            score += 0.35
+        elif flatness < 0.0001:
+            score += 0.25
+
+        # Extreme cutoff anomaly (below 600 Hz is unnatural even for telephony speech)
+        if rolloff < 600:
             score += 0.25
 
         return min(1.0, score)
@@ -105,6 +110,7 @@ class RiskEngine:
         speaker_verification: Optional[Dict[str, Any]] = None,
         glottal_assessment: Optional[Dict[str, Any]] = None,
         phase_assessment: Optional[Dict[str, Any]] = None,
+        foundation_assessment: Optional[Dict[str, Any]] = None,
         context: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
@@ -118,7 +124,15 @@ class RiskEngine:
         glottal_score = glottal_assessment.get("glottal_anomaly_score", 0.0) if glottal_assessment else 0.0
         phase_score = phase_assessment.get("phase_incoherence_score", 0.0) if phase_assessment else 0.0
 
-        # 3. Speaker verification score
+        # 3. Pretrained Whisper Foundation Vector
+        if foundation_assessment and foundation_assessment.get("is_available", False):
+            foundation_score = foundation_assessment.get("pretrained_fake_prob", 0.5)
+            w_found = self.w_foundation
+        else:
+            foundation_score = 0.0
+            w_found = 0.0
+
+        # 4. Speaker verification score
         if speaker_verification and speaker_verification.get("enrolled"):
             speaker_risk = speaker_verification.get("mismatch_risk", 0.5)
             w_spk = self.w_speaker
@@ -127,17 +141,19 @@ class RiskEngine:
             w_spk = 0.0
 
         # Renormalize active weights
-        total_weight = self.w_neural + self.w_spectral + self.w_prosody + self.w_glottal + self.w_phase + w_spk
+        total_weight = self.w_neural + w_found + self.w_spectral + self.w_prosody + self.w_glottal + self.w_phase + w_spk
         norm_w_neural = self.w_neural / total_weight
+        norm_w_found = w_found / total_weight
         norm_w_spectral = self.w_spectral / total_weight
         norm_w_prosody = self.w_prosody / total_weight
         norm_w_glottal = self.w_glottal / total_weight
         norm_w_phase = self.w_phase / total_weight
         norm_w_speaker = w_spk / total_weight
 
-        # 4. Multi-Vector Composite Base Score
+        # 5. Multi-Vector Composite Base Score
         base_score = (
             (norm_w_neural * neural_fake_prob) +
+            (norm_w_found * foundation_score) +
             (norm_w_spectral * spectral_score) +
             (norm_w_prosody * prosody_score) +
             (norm_w_glottal * glottal_score) +

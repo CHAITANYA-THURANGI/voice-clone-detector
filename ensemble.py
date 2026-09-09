@@ -24,6 +24,7 @@ from core.conformer_model import load_enterprise_conformer
 from core.model import load_trained_model
 from core.glottal_forensics import analyze_glottal_biometrics
 from core.spectral_phase import analyze_phase_coherence
+from core.pretrained_voice_detector import analyze_pretrained_foundation_voiceprint
 from core.enterprise_telemetry import EnterpriseTelemetryEngine
 from core.speaker_verifier import SpeakerVerifier
 from core.risk_engine import RiskEngine
@@ -85,18 +86,22 @@ class VoiceIntegrityEnsemble:
         # 7. Vector 3: Phase-Aware Modified Group Delay (MGD) Analysis
         phase_result = analyze_phase_coherence(filtered_waveform, sr=16000)
 
-        # 8. Vector 5: Speaker Identity Verification (if claimed identity provided)
+        # 8. Vector 4: Pretrained Whisper Foundation Speech Encoder (680,000h Representation)
+        foundation_result = analyze_pretrained_foundation_voiceprint(filtered_waveform, sr=16000)
+
+        # 9. Vector 5: Speaker Identity Verification (if claimed identity provided)
         spk_result = None
         if claimed_speaker_id:
             spk_result = self.speaker_verifier.verify(claimed_speaker_id, filtered_waveform)
 
-        # 9. Dynamic Multi-Vector Risk Engine Evaluation
+        # 10. Dynamic Multi-Vector Risk Engine Evaluation (Trained Conformer + Pretrained Whisper + Biometrics)
         risk_assessment = self.risk_engine.evaluate_risk(
             neural_fake_prob=neural_result["fake_probability"],
             forensic_metrics=forensic["metrics"],
             speaker_verification=spk_result,
             glottal_assessment=glottal_result,
             phase_assessment=phase_result,
+            foundation_assessment=foundation_result,
             context=context
         )
 
@@ -136,6 +141,7 @@ class VoiceIntegrityEnsemble:
             "audio_metadata": audio_metadata,
             "risk_assessment": risk_assessment,
             "neural_detector": neural_result,
+            "pretrained_foundation": foundation_result,
             "forensic_metrics": forensic["metrics"],
             "glottal_biometrics": glottal_result,
             "phase_forensics": phase_result,

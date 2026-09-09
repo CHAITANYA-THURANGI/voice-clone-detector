@@ -80,8 +80,14 @@ def analyze_glottal_biometrics(waveform: np.ndarray, sr: int = 16000, lpc_order:
     nre_list = []
     preview_samples = []
 
-    num_frames = (len(waveform) - frame_size) // step_size + 1
-    for i in range(num_frames):
+    total_frames = (len(waveform) - frame_size) // step_size + 1
+    max_eval_frames = 100
+    if total_frames > max_eval_frames:
+        frame_indices = np.linspace(0, total_frames - 1, max_eval_frames).astype(int)
+    else:
+        frame_indices = np.arange(total_frames)
+
+    for i in frame_indices:
         start = i * step_size
         frame = waveform[start:start + frame_size]
 

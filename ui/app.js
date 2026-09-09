@@ -536,6 +536,17 @@ function renderAnalysisResults(data) {
     document.getElementById('val-spk-match').style.color = '#94A3B8';
   }
 
+  // Pretrained Foundation Speech Model Card
+  if (data.pretrained_foundation) {
+    const found = data.pretrained_foundation;
+    const foundProb = found.pretrained_fake_prob || 0.0;
+    document.getElementById('val-foundation-prob').textContent = `${(foundProb * 100).toFixed(1)}%`;
+    document.getElementById('val-foundation-prob').style.color = foundProb > 0.4 ? '#EF4444' : '#10B981';
+    document.getElementById('val-foundation-stability').textContent = `${found.foundation_stability || '--'} m/s²`;
+    document.getElementById('val-foundation-verdict').textContent = found.prediction === 'FAKE' ? 'Synthetic Dispersion' : 'Biological Dynamics';
+    document.getElementById('val-foundation-verdict').style.color = found.prediction === 'FAKE' ? '#EF4444' : '#10B981';
+  }
+
   // SIEM CEF Event Preview
   if (data.enterprise_telemetry && data.enterprise_telemetry.cef_event) {
     document.getElementById('cef-preview').textContent = data.enterprise_telemetry.cef_event;
