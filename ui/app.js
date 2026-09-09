@@ -22,13 +22,19 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Switch Tabs
-function switchTab(tabId) {
+function switchTab(tabId, ev) {
   currentTab = tabId;
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
 
-  event.target.classList.add('active');
-  document.getElementById(`tab-${tabId}`).classList.add('active');
+  const targetBtn = (ev && ev.currentTarget) || (window.event && window.event.currentTarget) || document.querySelector(`button[onclick*="'${tabId}'"]`);
+  if (targetBtn) {
+    targetBtn.classList.add('active');
+  }
+  const targetContent = document.getElementById(`tab-${tabId}`);
+  if (targetContent) {
+    targetContent.classList.add('active');
+  }
 }
 
 // Update Transaction Display

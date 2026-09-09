@@ -165,12 +165,22 @@ async def enroll_speaker(
 def list_benchmark_samples():
     """Lists available test audio files for the interactive dashboard."""
     samples_dir = os.path.join(PROJECT_ROOT, "data", "samples")
-    files = sorted(glob.glob(os.path.join(samples_dir, "*.wav")))
+    files = sorted(glob.glob(os.path.join(samples_dir, "*.wav")) + 
+                   glob.glob(os.path.join(samples_dir, "*.mpeg")) + 
+                   glob.glob(os.path.join(samples_dir, "*.mpg")))
     sample_list = []
     for fpath in files:
         fname = os.path.basename(fpath)
-        is_real = "real" in fname.lower()
-        desc = "Authentic Human Voice" if is_real else ("Replayed Attack (Acoustic Channel)" if "replayed" in fname else "Neural TTS / Clone Voice")
+        is_real = "real" in fname.lower() or "test_sample" in fname.lower()
+        if is_real:
+            desc = "Authentic Human Voice"
+        elif "replayed" in fname.lower():
+            desc = "Replayed Attack (Acoustic Channel)"
+        elif "mpg" in fname.lower() or "mpeg" in fname.lower():
+            desc = "MPEG Cloned Voice / Audio"
+        else:
+            desc = "Neural TTS / Clone Voice"
+
         sample_list.append({
             "filename": fname,
             "type": "REAL" if is_real else "FAKE",
@@ -182,11 +192,12 @@ def list_benchmark_samples():
 
 @app.get("/api/sample-audio/{filename}")
 def get_sample_audio(filename: str):
-    """Streams a benchmark sample WAV audio file."""
+    """Streams a benchmark sample audio file."""
     fpath = os.path.join(PROJECT_ROOT, "data", "samples", filename)
     if not os.path.exists(fpath):
         raise HTTPException(status_code=404, detail="Sample not found")
-    return FileResponse(fpath, media_type="audio/wav")
+    media_type = "audio/mpeg" if filename.lower().endswith((".mpeg", ".mpg")) else "audio/wav"
+    return FileResponse(fpath, media_type=media_type)
 
 
 # Mount UI static directory
