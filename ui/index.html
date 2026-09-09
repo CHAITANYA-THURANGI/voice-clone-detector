@@ -39,6 +39,7 @@
         <button class="tab-btn active" onclick="switchTab('benchmarks', event)">⚡ Benchmarks</button>
         <button class="tab-btn" onclick="switchTab('upload', event)">📁 Upload Audio</button>
         <button class="tab-btn" onclick="switchTab('record', event)">🔴 Live Mic Stream</button>
+        <button class="tab-btn" onclick="switchTab('docs', event)">📄 Docs & PDFs</button>
       </div>
 
       <!-- Tab 1: One-Click Benchmarks -->
@@ -74,6 +75,29 @@
             <span id="record-timer" class="record-timer">00:00</span>
           </div>
           <p class="mic-hint">Near real-time 3-second sliding window stream analysis with consecutive anomaly detection.</p>
+        </div>
+      </div>
+
+      <!-- Tab 4: Technical Documentation & Official PDFs -->
+      <div id="tab-docs" class="tab-content">
+        <p class="section-desc">Download official technical documentation, architecture whitepaper, and SIH PS-26104 reports in PDF format:</p>
+        <div class="docs-download-list" style="display:flex; flex-direction:column; gap:0.6rem; margin-top:0.6rem;">
+          <a href="/api/docs/download/VoiceShield_Technical_Documentation.pdf" target="_blank" class="btn btn-sm" style="background:#1E293B; border:1px solid #38BDF8; color:#38BDF8; display:flex; justify-content:space-between; align-items:center; text-decoration:none; padding:0.6rem 0.8rem; border-radius:6px;">
+            <span>📘 <strong>Technical Documentation (SIH 26104)</strong></span>
+            <span style="font-size:0.75rem; background:#0F172A; padding:2px 6px; border-radius:4px;">PDF (28 KB) ⬇</span>
+          </a>
+          <a href="/api/docs/download/VoiceShield_Project_Overview.pdf" target="_blank" class="btn btn-sm" style="background:#1E293B; border:1px solid #10B981; color:#10B981; display:flex; justify-content:space-between; align-items:center; text-decoration:none; padding:0.6rem 0.8rem; border-radius:6px;">
+            <span>🛡️ <strong>Project Architecture & Overview</strong></span>
+            <span style="font-size:0.75rem; background:#0F172A; padding:2px 6px; border-radius:4px;">PDF (13 KB) ⬇</span>
+          </a>
+          <a href="/api/docs/download/VoiceShield_Transferable_Model_Guide.pdf" target="_blank" class="btn btn-sm" style="background:#1E293B; border:1px solid #F59E0B; color:#F59E0B; display:flex; justify-content:space-between; align-items:center; text-decoration:none; padding:0.6rem 0.8rem; border-radius:6px;">
+            <span>🚀 <strong>Transferable ONNX / PyTorch Integration Guide</strong></span>
+            <span style="font-size:0.75rem; background:#0F172A; padding:2px 6px; border-radius:4px;">PDF (6 KB) ⬇</span>
+          </a>
+          <a href="https://github.com/CHAITANYA-THURANGI/voice-clone-detector" target="_blank" class="btn btn-sm" style="background:#0F172A; border:1px solid #64748B; color:#F1F5F9; display:flex; justify-content:space-between; align-items:center; text-decoration:none; padding:0.6rem 0.8rem; border-radius:6px; margin-top:0.4rem;">
+            <span>⭐ <strong>GitHub Source Code Repository</strong></span>
+            <span style="font-size:0.75rem; color:#94A3B8;">Open GitHub ↗</span>
+          </a>
         </div>
       </div>
 

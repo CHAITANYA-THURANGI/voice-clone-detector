@@ -200,6 +200,38 @@ def get_sample_audio(filename: str):
     return FileResponse(fpath, media_type=media_type)
 
 
+@app.get("/api/docs/list")
+def list_available_docs():
+    """Lists generated PDF documents available for direct download."""
+    pdf_dir = os.path.join(PROJECT_ROOT, "generated_documentation_pdfs")
+    docs = []
+    if os.path.exists(pdf_dir):
+        for fname in sorted(os.listdir(pdf_dir)):
+            if fname.lower().endswith(".pdf"):
+                fpath = os.path.join(pdf_dir, fname)
+                size_kb = round(os.path.getsize(fpath) / 1024, 1)
+                docs.append({
+                    "filename": fname,
+                    "size_kb": size_kb,
+                    "url": f"/api/docs/download/{fname}"
+                })
+    return {"documents": docs}
+
+
+@app.get("/api/docs/download/{filename}")
+def download_doc_pdf(filename: str):
+    """Streams a generated documentation PDF file."""
+    fpath = os.path.join(PROJECT_ROOT, "generated_documentation_pdfs", filename)
+    if not os.path.exists(fpath):
+        raise HTTPException(status_code=404, detail="Document PDF not found")
+    return FileResponse(
+        fpath, 
+        media_type="application/pdf", 
+        filename=filename,
+        headers={"Content-Disposition": f"inline; filename={filename}"}
+    )
+
+
 # Mount UI static directory
 ui_dir = os.path.join(PROJECT_ROOT, "ui")
 if os.path.exists(ui_dir):
