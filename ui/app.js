@@ -455,8 +455,18 @@ async function runAnalysis() {
 
     const res = await fetch('/api/analyze-audio', { method: 'POST', body: formData });
     if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.detail || 'Analysis request failed');
+      let errMsg = `Server returned status ${res.status}`;
+      try {
+        const err = await res.json();
+        errMsg = err.detail || errMsg;
+      } catch (e) {
+        const text = await res.text();
+        if (text.includes('<title>')) {
+          const match = text.match(/<title>(.*?)<\/title>/i);
+          if (match && match[1]) errMsg = `Server Error (${res.status}): ${match[1]}`;
+        }
+      }
+      throw new Error(errMsg);
     }
 
     const data = await res.json();
