@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
     private lateinit var serverUrlInput: EditText
     private lateinit var emergencyPhoneInput: EditText
+    private lateinit var btnTestConnection: Button
     private lateinit var btnSetCallScreening: Button
     private lateinit var btnTestSms: Button
     private lateinit var btnSaveSettings: Button
@@ -118,7 +119,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadSavedPreferences() {
         val prefs = getSharedPreferences("voiceshield_prefs", Context.MODE_PRIVATE)
-        serverUrlInput.setText(prefs.getString("server_url", "http://10.0.2.2:8000"))
+        val defaultUrl = "http://172.24.101.1:8000"
+        val savedUrl = prefs.getString("server_url", defaultUrl) ?: defaultUrl
+        val finalUrl = if (savedUrl.contains("10.0.2.2")) defaultUrl else savedUrl
+        serverUrlInput.setText(finalUrl)
         emergencyPhoneInput.setText(prefs.getString("emergency_phone", "+91-99887-76655"))
     }
 
@@ -192,6 +196,14 @@ class MainActivity : AppCompatActivity() {
         }
         layout.addView(btnSaveSettings, buttonParams(24))
 
+        btnTestConnection = Button(this).apply {
+            text = "🧪 Test Backend Server Connection"
+            setBackgroundColor(android.graphics.Color.parseColor("#0891B2"))
+            setTextColor(android.graphics.Color.WHITE)
+            setOnClickListener { testBackendConnection() }
+        }
+        layout.addView(btnTestConnection, buttonParams(12))
+
         btnSetCallScreening = Button(this).apply {
             text = "📞 Set Default Call Screening App (Truecaller Mode)"
             setBackgroundColor(android.graphics.Color.parseColor("#059669"))
@@ -220,20 +232,56 @@ class MainActivity : AppCompatActivity() {
         return scrollView
     }
 
+    private fun testBackendConnection() {
+        val serverUrl = serverUrlInput.text.toString().trim().removeSuffix("/")
+        Toast.makeText(this, "📡 Testing connection to $serverUrl ...", Toast.LENGTH_SHORT).show()
+
+        mainScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                try {
+                    val startTime = System.currentTimeMillis()
+                    val url = URL("$serverUrl/api/system-status")
+                    val conn = url.openConnection() as HttpURLConnection
+                    conn.requestMethod = "GET"
+                    conn.connectTimeout = 4000
+                    conn.readTimeout = 4000
+                    val code = conn.responseCode
+                    val latency = System.currentTimeMillis() - startTime
+
+                    if (code == 200) {
+                        Pair(true, "✅ Successfully Connected! (HTTP 200, ${latency}ms)\n\nServer is Online and reachable from this phone.\nTarget: $serverUrl")
+                    } else {
+                        Pair(false, "❌ Server reached but returned HTTP $code: ${conn.responseMessage}")
+                    }
+                } catch (e: Exception) {
+                    Pair(false, "❌ Connection failed: ${e.localizedMessage ?: e.toString()}\n\nTarget URL: $serverUrl\n\nEnsure:\n1. PC and Phone are on the same Wi-Fi network.\n2. Backend server is started with --host 0.0.0.0.")
+                }
+            }
+
+            AlertDialog.Builder(this@MainActivity)
+                .setTitle("📡 Server Connectivity Diagnostic")
+                .setMessage(result.second)
+                .setPositiveButton("OK", null)
+                .show()
+        }
+    }
+
     private fun fetchAndShowHistory() {
-        val serverUrl = serverUrlInput.text.toString().trim()
+        val serverUrl = serverUrlInput.text.toString().trim().removeSuffix("/")
         Toast.makeText(this, "🔄 Fetching forensic audit history...", Toast.LENGTH_SHORT).show()
 
         mainScope.launch {
+            var errorDetail: String? = null
             val historyList = withContext(Dispatchers.IO) {
                 try {
                     val url = URL("$serverUrl/api/history?limit=30")
                     val conn = url.openConnection() as HttpURLConnection
                     conn.requestMethod = "GET"
-                    conn.connectTimeout = 3000
-                    conn.readTimeout = 3000
+                    conn.connectTimeout = 4000
+                    conn.readTimeout = 4000
 
-                    if (conn.responseCode == 200) {
+                    val code = conn.responseCode
+                    if (code == 200) {
                         val resp = conn.inputStream.bufferedReader().readText()
                         val json = JSONObject(resp)
                         val arr = json.optJSONArray("history") ?: org.json.JSONArray()
@@ -243,15 +291,26 @@ class MainActivity : AppCompatActivity() {
                         }
                         list
                     } else {
+                        errorDetail = "HTTP $code: ${conn.responseMessage}"
                         emptyList<JSONObject>()
                     }
                 } catch (e: Exception) {
+                    errorDetail = e.localizedMessage ?: e.toString()
                     emptyList<JSONObject>()
                 }
             }
 
             if (historyList.isEmpty()) {
-                Toast.makeText(this@MainActivity, "⚠️ Could not connect to backend server or history is empty.", Toast.LENGTH_LONG).show()
+                val msg = if (errorDetail != null) {
+                    "⚠️ Connection Failed: $errorDetail\n\nTarget: $serverUrl\nEnsure your PC server is running and phone is on the same Wi-Fi."
+                } else {
+                    "ℹ️ No forensic activity records found yet on server."
+                }
+                AlertDialog.Builder(this@MainActivity)
+                    .setTitle("📜 Forensic Audit History")
+                    .setMessage(msg)
+                    .setPositiveButton("OK", null)
+                    .show()
                 return@launch
             }
 

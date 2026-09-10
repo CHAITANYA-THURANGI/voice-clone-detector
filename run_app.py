@@ -31,12 +31,26 @@ def main():
         print("[INIT] Model checkpoint not found. Training AcousticProsodicNet from scratch...")
         train_model_from_scratch(epochs=18, batch_size=16)
 
-    host = "127.0.0.1"
-    port = 8000
+    import socket
+
+    def get_local_ip():
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            ip = s.getsockname()[0]
+            s.close()
+            return ip
+        except Exception:
+            return "127.0.0.1"
+
+    local_ip = get_local_ip()
+    host = os.environ.get("HOST", "0.0.0.0")
+    port = int(os.environ.get("PORT", 8000))
 
     print(f"\n🚀 System Online & Operational!")
-    print(f"👉 Interactive Web Dashboard: http://{host}:{port}")
-    print(f"📖 OpenAPI Swagger Docs:      http://{host}:{port}/docs")
+    print(f"👉 Local Web Dashboard:       http://localhost:{port}")
+    print(f"📱 Mobile / Network Dashboard: http://{local_ip}:{port}")
+    print(f"📖 OpenAPI Swagger Docs:      http://localhost:{port}/docs")
     print(f"🔒 DPDP Act 2023 Compliance:  ACTIVE (Zero-retention ephemeral memory)")
     print("=" * 80 + "\n")
 

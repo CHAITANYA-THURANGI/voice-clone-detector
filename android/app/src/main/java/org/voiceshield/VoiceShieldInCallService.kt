@@ -38,7 +38,7 @@ class VoiceShieldInCallService : InCallService() {
         private const val SAMPLE_RATE = 16000
         private const val CHUNK_DURATION_SEC = 2
         private const val BUFFER_SIZE = SAMPLE_RATE * CHUNK_DURATION_SEC * 2 // 16-bit PCM
-        var backendUrl = "http://10.0.2.2:8000"
+        var backendUrl = "http://172.24.101.1:8000"
         var emergencyPhone = "+91-99887-76655"
     }
 

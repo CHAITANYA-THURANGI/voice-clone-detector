@@ -33,7 +33,7 @@ class VoiceShieldCallService : InCallService() {
 
     companion object {
         private const val TAG = "VoiceShieldCallService"
-        private const val BACKEND_URL = "http://10.0.2.2:8000" // Android Emulator localhost bridge or Cloud IP
+        private const val BACKEND_URL = "http://172.24.101.1:8000" // Host PC Wi-Fi IP or Cloud IP
         private const val SAMPLE_RATE = 16000
         private const val CHUNK_DURATION_MS = 2500
     }

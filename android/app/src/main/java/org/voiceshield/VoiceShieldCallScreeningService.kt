@@ -29,7 +29,7 @@ class VoiceShieldCallScreeningService : CallScreeningService() {
 
     companion object {
         private const val TAG = "VoiceShieldScreening"
-        var backendServerUrl = "http://10.0.2.2:8000" // Default Android Emulator to host PC
+        var backendServerUrl = "http://172.24.101.1:8000" // Default Host PC Wi-Fi IP
         var emergencySmsRecipient = "+91-99887-76655" // Configured via MainActivity
     }
 

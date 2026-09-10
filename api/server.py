@@ -7,6 +7,7 @@ and telecom core gateways (SIH PS-26104).
 import os
 import sys
 import glob
+import asyncio
 from typing import Optional, Dict
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -102,7 +103,8 @@ async def analyze_audio_file(
         }
 
         call_prefix = (file.filename or "AUDIO")[:8]
-        result = ensemble_instance.analyze_audio(
+        result = await asyncio.to_thread(
+            ensemble_instance.analyze_audio,
             audio_input=audio_bytes,
             claimed_speaker_id=claimed_speaker_id if claimed_speaker_id else None,
             context=context,
@@ -138,7 +140,8 @@ async def extension_scan_audio(file: UploadFile = File(...)):
         if file.filename and "." in file.filename:
             ext = file.filename.rsplit(".", 1)[-1].lower()
 
-        result = ensemble_instance.analyze_audio(
+        result = await asyncio.to_thread(
+            ensemble_instance.analyze_audio,
             audio_input=audio_bytes,
             call_id="BROWSER-EXT",
             file_ext=ext
@@ -211,7 +214,7 @@ async def process_stream_chunk(
         if file.filename and "." in file.filename:
             ext = file.filename.rsplit(".", 1)[-1].lower()
 
-        chunk_waveform = load_audio_from_bytes(audio_bytes, file_ext=ext)
+        chunk_waveform = await asyncio.to_thread(load_audio_from_bytes, audio_bytes, file_ext=ext)
         cxo_flag = is_cxo_call if is_cxo is None else (is_cxo or is_cxo_call)
 
         if call_id not in active_stream_sessions:
@@ -229,7 +232,7 @@ async def process_stream_chunk(
             )
 
         session = active_stream_sessions[call_id]
-        chunk_result = session.process_chunk(chunk_waveform, timestamp_sec=timestamp_sec)
+        chunk_result = await asyncio.to_thread(session.process_chunk, chunk_waveform, timestamp_sec=timestamp_sec)
         return chunk_result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
