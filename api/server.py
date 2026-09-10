@@ -6,6 +6,15 @@ and telecom core gateways (SIH PS-26104).
 
 import os
 import sys
+
+# Force single-threaded execution to prevent thread-pool RAM explosion on Render/Linux free-tier (512MB)
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
+os.environ.setdefault("OPENBLAS_NUM_THREADS", "1")
+os.environ.setdefault("VECLIB_MAXIMUM_THREADS", "1")
+os.environ.setdefault("NUMEXPR_NUM_THREADS", "1")
+os.environ.setdefault("ENABLE_LOCAL_WHISPER", "0")
+
 import gc
 import glob
 import asyncio
@@ -19,6 +28,12 @@ from fastapi.responses import FileResponse, JSONResponse
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
+
+try:
+    import torch
+    torch.set_num_threads(1)
+except Exception:
+    pass
 
 from ensemble import ensemble_instance
 from core.stream_detector import RealTimeStreamDetector

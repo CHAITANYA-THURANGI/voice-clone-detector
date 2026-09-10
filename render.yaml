@@ -3,13 +3,21 @@ services:
     name: voiceshield-ai
     runtime: python
     plan: free
-    buildCommand: "pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && pip install --no-cache-dir -r requirements.txt"
-    startCommand: "uvicorn api.server:app --host 0.0.0.0 --port $PORT"
+    buildCommand: "pip install --no-cache-dir -r requirements.txt"
+    startCommand: "uvicorn api.server:app --host 0.0.0.0 --port $PORT --workers 1 --limit-concurrency 8"
     healthCheckPath: /api/system-status
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: PORT
         value: 8000
+      - key: WEB_CONCURRENCY
+        value: "1"
       - key: ENABLE_LOCAL_WHISPER
         value: "0"
+      - key: OMP_NUM_THREADS
+        value: "1"
+      - key: MKL_NUM_THREADS
+        value: "1"
+      - key: OPENBLAS_NUM_THREADS
+        value: "1"

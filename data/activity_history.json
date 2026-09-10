@@ -1,5 +1,300 @@
 [
   {
+    "incident_id": "AUD-422C1A16",
+    "session_id": "SESSION-1A91A3",
+    "timestamp": "10 Sep 2026, 06:15:26 UTC",
+    "iso_timestamp": "2026-09-10T06:15:26Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "AUDIO_FORENSIC_ANALYSIS",
+    "caller_or_file": "test_voice.mpeg",
+    "claimed_identity": "Unspecified Speaker",
+    "verdict": "AUTHENTIC_HUMAN",
+    "risk_percentage": 3.9,
+    "risk_level": "LOW",
+    "threats_detected": [],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1750.0,
+        "spectral_rolloff_hz": 3800.0,
+        "pitch_mean_hz": 145.0,
+        "pitch_std_hz": 28.5,
+        "jitter_pct": 1.2,
+        "shimmer_pct": 3.4,
+        "hnr_db": 16.8,
+        "zero_crossing_rate": 0.075,
+        "formants": [
+          700.0,
+          1800.0,
+          2700.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.05,
+        "predicted_class": "HUMAN",
+        "entropy": 0.15
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 77.9,
+        "agreement_score": 0.9,
+        "probabilities": {
+          "human": 0.95,
+          "non_human": 0.02,
+          "voice_clone_attack": 0.03
+        }
+      },
+      "voicemod": {
+        "detected": false,
+        "comb_ripple": 0.5144,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Safe Conversation",
+        "coercion_urgency_pct": 0.0,
+        "flagged_keywords": [],
+        "transcript_snippet": ""
+      },
+      "speaker_biometrics": {
+        "claimed": "None",
+        "identified_name": "Unenrolled",
+        "confidence_pct": 0.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 35.71,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.02,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "VERIFIED_AUTHENTIC",
+    "alerts": {},
+    "compliance": {
+      "sha256_fingerprint": "0d0879a575c8455c95a1401b8384888a",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "AUD-CF30395E",
+    "session_id": "SESSION-AA813F",
+    "timestamp": "10 Sep 2026, 06:15:25 UTC",
+    "iso_timestamp": "2026-09-10T06:15:25Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "AUDIO_FORENSIC_ANALYSIS",
+    "caller_or_file": "real_sample.wav",
+    "claimed_identity": "Unspecified Speaker",
+    "verdict": "AUTHENTIC_HUMAN",
+    "risk_percentage": 5.3,
+    "risk_level": "LOW",
+    "threats_detected": [],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1750.0,
+        "spectral_rolloff_hz": 3800.0,
+        "pitch_mean_hz": 145.0,
+        "pitch_std_hz": 28.5,
+        "jitter_pct": 1.2,
+        "shimmer_pct": 3.4,
+        "hnr_db": 16.8,
+        "zero_crossing_rate": 0.075,
+        "formants": [
+          700.0,
+          1800.0,
+          2700.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.05,
+        "predicted_class": "HUMAN",
+        "entropy": 0.15
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 72.1,
+        "agreement_score": 0.9,
+        "probabilities": {
+          "human": 0.95,
+          "non_human": 0.02,
+          "voice_clone_attack": 0.03
+        }
+      },
+      "voicemod": {
+        "detected": false,
+        "comb_ripple": 0.086,
+        "is_micro_clip": true
+      },
+      "semantic_scam": {
+        "category": "Safe Conversation",
+        "coercion_urgency_pct": 0.0,
+        "flagged_keywords": [],
+        "transcript_snippet": ""
+      },
+      "speaker_biometrics": {
+        "claimed": "None",
+        "identified_name": "Unenrolled",
+        "confidence_pct": 0.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 55.52,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.02,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "VERIFIED_AUTHENTIC",
+    "alerts": {},
+    "compliance": {
+      "sha256_fingerprint": "ec347077722649b4a7dbb54c4a4d06d3",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "SCR-79E1F4F9",
+    "session_id": "SCREEN-B4DFD8",
+    "timestamp": "10 Sep 2026, 06:15:16 UTC",
+    "iso_timestamp": "2026-09-10T06:15:16Z",
+    "source": "ANDROID_MOBILE",
+    "event_type": "CALL_SCREENING_INTERCEPT",
+    "caller_or_file": "+91-140-776655",
+    "claimed_identity": "Screened Incoming Call",
+    "verdict": "CALL_SCREENED_BLOCKED",
+    "risk_percentage": 99.0,
+    "risk_level": "CRITICAL",
+    "threats_detected": [
+      "Known Watchlist Fraudster Pre-Call Block"
+    ],
+    "deep_forensics": {
+      "screening_decision": "REJECTED",
+      "reason": "Known Watchlist Fraudster Pre-Call Block",
+      "sms_precaution_dispatched": true,
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1800.0,
+        "spectral_rolloff_hz": 3900.0,
+        "pitch_mean_hz": 138.0,
+        "pitch_std_hz": 29.0,
+        "jitter_pct": 2.5,
+        "shimmer_pct": 5.0,
+        "hnr_db": 13.5,
+        "zero_crossing_rate": 0.08,
+        "formants": [
+          680.0,
+          1750.0,
+          2650.0
+        ]
+      }
+    },
+    "action_taken": "PRE_CALL_BLOCKED_AND_SILENCED",
+    "alerts": {
+      "sms": {
+        "sent": true,
+        "gateway": "Android Native SIM Card Quota",
+        "status": "SENT_VIA_DEVICE_SIM"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "0d3e92a8aca94e90949c45bffb762e74",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "AUD-1A106180",
+    "session_id": "CALL-UNITTEST",
+    "timestamp": "10 Sep 2026, 06:15:16 UTC",
+    "iso_timestamp": "2026-09-10T06:15:16Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "AUDIO_FORENSIC_ANALYSIS",
+    "caller_or_file": "3sec_scam_arrest_call.wav",
+    "claimed_identity": "Unknown Caller",
+    "verdict": "VOICE_CLONING_ATTACK",
+    "risk_percentage": 92.0,
+    "risk_level": "CRITICAL",
+    "threats_detected": [
+      "Synthetic Voice Clone Impersonation",
+      "Real-Time Pitch/Formant Voicemod Alteration",
+      "Conversational Scam: Digital Arrest Extortion",
+      "Biometric Imposter: Acoustics mismatch claimed Unknown Caller"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1950.4,
+        "spectral_rolloff_hz": 4120.0,
+        "pitch_mean_hz": 155.2,
+        "pitch_std_hz": 34.1,
+        "jitter_pct": 2.45,
+        "shimmer_pct": 5.12,
+        "hnr_db": 13.8,
+        "zero_crossing_rate": 0.089,
+        "formants": [
+          680.0,
+          1780.0,
+          2720.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.93,
+        "predicted_class": "VOICE_CLONING_ATTACK",
+        "entropy": 0.22
+      },
+      "ensemble_fusion": {
+        "predicted_class": "VOICE_CLONING_ATTACK",
+        "consensus_confidence_pct": 94.2,
+        "agreement_score": 0.95,
+        "probabilities": {
+          "human": 0.04,
+          "non_human": 0.04,
+          "voice_clone_attack": 0.92
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.52,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Digital Arrest Extortion",
+        "coercion_urgency_pct": 90.0,
+        "flagged_keywords": [
+          "arrest",
+          "police",
+          "cbi",
+          "warrant"
+        ],
+        "transcript_snippet": "This is CBI Police. An arrest warrant has been issued against your Aadhaar."
+      },
+      "speaker_biometrics": {
+        "claimed": "Unknown Caller",
+        "identified_name": "Unenrolled Target",
+        "confidence_pct": 12.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": true
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 6.4,
+        "status": "SUSPICIOUS_UNNATURAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.048,
+        "status": "DISCONTINUOUS"
+      }
+    },
+    "action_taken": "FLAGGED_AS_HIGH_RISK_ATTACK",
+    "alerts": {},
+    "compliance": {
+      "sha256_fingerprint": "abcdef1234567890abcdef1234567890",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
     "incident_id": "SCR-4607D05C",
     "session_id": "SCREEN-C9C4C5",
     "timestamp": "10 Sep 2026, 05:52:53 UTC",
@@ -428,438 +723,6 @@
     "alerts": {},
     "compliance": {
       "sha256_fingerprint": "abcdef1234567890abcdef1234567890",
-      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
-    }
-  },
-  {
-    "incident_id": "INC-56D78A65",
-    "session_id": "CALL-A0279375",
-    "timestamp": "10 Sep 2026, 05:33:28 UTC",
-    "iso_timestamp": "2026-09-10T05:33:28Z",
-    "source": "ANDROID_MOBILE",
-    "event_type": "PHONE_CALL_DEFENSE",
-    "caller_or_file": "+91-88888-99999",
-    "claimed_identity": "Unknown Caller",
-    "verdict": "SCAM_CALL_DROPPED",
-    "risk_percentage": 41.6,
-    "risk_level": "HIGH",
-    "threats_detected": [
-      "Voicemod Real-Time Voice Changer Detected",
-      "Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist"
-    ],
-    "deep_forensics": {
-      "transcript_snippet": "",
-      "termination_reason": "Automated Defense: High-Risk Synthetic Attack / Scam Detected (88.2%)",
-      "acoustic_vectors": {
-        "spectral_centroid_hz": 1840.0,
-        "spectral_rolloff_hz": 3950.0,
-        "pitch_mean_hz": 142.0,
-        "pitch_std_hz": 32.0,
-        "jitter_pct": 2.2,
-        "shimmer_pct": 4.9,
-        "hnr_db": 14.0,
-        "zero_crossing_rate": 0.08,
-        "formants": [
-          660.0,
-          1740.0,
-          2620.0
-        ]
-      },
-      "conformer": {
-        "raw_prob": 0.416,
-        "predicted_class": "VOICE_CLONING_ATTACK",
-        "entropy": 0.38
-      },
-      "ensemble_fusion": {
-        "predicted_class": "VOICE_CLONING_ATTACK",
-        "consensus_confidence_pct": 92.5,
-        "agreement_score": 0.91,
-        "probabilities": {
-          "human": 0.58,
-          "non_human": 0.05,
-          "voice_clone_attack": 0.42
-        }
-      },
-      "voicemod": {
-        "detected": true,
-        "comb_ripple": 0.45,
-        "is_micro_clip": false
-      },
-      "semantic_scam": {
-        "category": "High-Risk Telephony Scam",
-        "coercion_urgency_pct": 88.0,
-        "flagged_keywords": [
-          "transfer",
-          "urgent",
-          "arrest",
-          "police",
-          "otp",
-          "kyc"
-        ],
-        "transcript_snippet": ""
-      },
-      "speaker_biometrics": {
-        "claimed": "Unknown Caller",
-        "identified_name": "Watchlist Extortionist",
-        "confidence_pct": 91.0,
-        "is_known_contact": false,
-        "is_scammer_watchlist": true,
-        "is_discrepancy": false
-      }
-    },
-    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
-    "alerts": {
-      "sms": {
-        "channel": "SMS",
-        "recipient": "+91-99887-76655",
-        "secondary_recipient": "+91-91234-56789",
-        "incident_id": "INC-56D78A65",
-        "timestamp": "10 Sep 2026, 05:33:28 UTC",
-        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-56D78A65]:\nCall from +91-88888-99999 (Unknown Caller) AUTO-TERMINATED (05:33 UTC).\nThreat: Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Unknown Caller on primary number.",
-        "status": "QUEUED_FOR_DEVICE_SIM",
-        "success": true,
-        "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
-        "dispatch_metadata": {
-          "success": true,
-          "status": "QUEUED_FOR_DEVICE_SIM",
-          "channel": "ANDROID_SIM_CARRIER",
-          "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
-          "recipient": "+91-99887-76655",
-          "incident_id": "INC-56D78A65",
-          "char_count": 334,
-          "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-56D78A65]:\nCall from +91-88888-99999 (Unknown Caller) AUTO-TERMINATED (05:33 UTC).\nThreat: Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Unknown Caller on primary number.",
-          "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
-          "timestamp": "2026-09-10T05:33:28Z"
-        }
-      },
-      "email": {
-        "channel": "EMAIL",
-        "recipient": "security-alert@user.org",
-        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-88888-99999 Terminated - VoiceShield AI",
-        "incident_id": "INC-56D78A65",
-        "timestamp": "10 Sep 2026, 05:33:28 UTC",
-        "html_content": "\n<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <style>\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0b1120; color: #f8fafc; padding: 20px; }\n    .container { max-width: 600px; margin: 0 auto; background: #111827; border: 1px solid #ef4444; border-radius: 12px; overflow: hidden; }\n    .header { background: linear-gradient(135deg, #ef4444, #991b1b); padding: 20px; text-align: center; color: white; }\n    .header h1 { margin: 0; font-size: 20px; letter-spacing: 0.5px; }\n    .header p { margin: 5px 0 0 0; font-size: 12px; opacity: 0.9; }\n    .content { padding: 20px; }\n    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid #ef4444; font-weight: bold; font-size: 11px; text-transform: uppercase; }\n    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }\n    .metric-card { background: rgba(255, 255, 255, 0.03); padding: 12px; border-radius: 8px; border: 1px solid #1f2937; }\n    .metric-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; }\n    .metric-val { font-size: 15px; font-weight: bold; color: #f8fafc; margin-top: 4px; }\n    .transcript-box { background: rgba(0, 0, 0, 0.4); border-left: 3px solid #ef4444; padding: 12px; font-style: italic; font-size: 12px; color: #cbd5e1; margin: 14px 0; }\n    .actions-list { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 14px; margin: 16px 0; }\n    .actions-list h3 { margin: 0 0 8px 0; font-size: 13px; color: #34d399; }\n    .actions-list li { font-size: 12px; color: #e2e8f0; margin-bottom: 6px; }\n    .footer { background: #0f172a; padding: 12px 20px; font-size: 11px; color: #64748b; text-align: center; border-top: 1px solid #1f2937; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>\ud83d\udea8 VoiceShield AI: Cyber-Extortion Call Intercepted</h1>\n      <p>Incident Reference: INC-56D78A65 \u2022 Automated Call Termination Enforced</p>\n    </div>\n    <div class=\"content\">\n      <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;\">\n        <span class=\"badge\">\ud83d\udd34 CRITICAL ATTACK TERMINATED</span>\n        <span style=\"font-size: 12px; color: #94a3b8;\">10 Sep 2026, 05:33:28 UTC</span>\n      </div>\n\n      <p style=\"font-size: 13px; line-height: 1.5;\">\n        An incoming telephone call targeting your line was automatically <strong>TERMINATED</strong> by the VoiceShield AI defense engine after confirming high-risk synthetic voice cloning and social engineering coercion.\n      </p>\n\n      <div class=\"metric-grid\">\n        <div class=\"metric-card\">\n          <div class=\"metric-label\">Caller Origin</div>\n          <div class=\"metric-val\">+91-88888-99999</div>\n        </div>\n        <div class=\"metric-card\">\n          <div class=\"metric-label\">Claimed Identity</div>\n          <div class=\"metric-val\">Unknown Caller</div>\n        </div>\n        <div class=\"metric-card\">\n          <div class=\"metric-label\">Composite Risk Level</div>\n          <div class=\"metric-val\" style=\"color: #ef4444;\">41.6% (HIGH)</div>\n        </div>\n        <div class=\"metric-card\">\n          <div class=\"metric-label\">Action Taken</div>\n          <div class=\"metric-val\" style=\"color: #34d399;\">IMMEDIATE HANGUP</div>\n        </div>\n      </div>\n\n      <div style=\"font-size: 12px; font-weight: bold; color: #cbd5e1; margin-top: 12px;\">Identified Threat Signatures:</div>\n      <p style=\"font-size: 12px; color: #f87171; margin-top: 4px;\">Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist</p>\n\n      <div style=\"font-size: 12px; font-weight: bold; color: #cbd5e1; margin-top: 14px;\">Intercepted Call Transcript:</div>\n      <div class=\"transcript-box\">\n        \"...\"\n      </div>\n\n      <div class=\"actions-list\">\n        <h3>\ud83d\udee1\ufe0f Recommended Precautionary Steps</h3>\n        <ul>\n          <li><strong>Zero Financial Disclosure:</strong> Do NOT wire funds, purchase gift cards, or share UPI/bank OTPs.</li>\n          <li><strong>Out-of-Band Verification:</strong> If the caller claimed to be a family member or boss, contact them directly on their verified secondary number.</li>\n          <li><strong>Report Incident:</strong> Report this number (+91-88888-99999) to the National Cyber Crime Reporting Portal at <em>cybercrime.gov.in</em> or dial 1930.</li>\n        </ul>\n      </div>\n    </div>\n    <div class=\"footer\">\n      VoiceShield AI Autonomous Telephony Defense \u2022 Compliance: India DPDP Act 2023 & GDPR \u2022 SIH-2026 PS-26104\n    </div>\n  </div>\n</body>\n</html>\n",
-        "status": "CONFIG_REQUIRED",
-        "success": false,
-        "smtp_relay": "smtp.gmail.com:587",
-        "dispatch_metadata": {
-          "status": "CONFIG_REQUIRED",
-          "channel": "EMAIL_SMTP",
-          "message": "Live email sending requires SMTP credentials. Please configure your Gmail/Outlook user and App Password in .env or via the dashboard.",
-          "recipient": "security-alert@user.org",
-          "incident_id": "INC-56D78A65",
-          "timestamp": "2026-09-10T05:33:28Z"
-        }
-      }
-    },
-    "compliance": {
-      "sha256_fingerprint": "75721f4481c241edb40a84db1b7df980",
-      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
-    }
-  },
-  {
-    "incident_id": "INC-029E827A",
-    "session_id": "CALL-C767854C",
-    "timestamp": "10 Sep 2026, 05:33:27 UTC",
-    "iso_timestamp": "2026-09-10T05:33:27Z",
-    "source": "ANDROID_MOBILE",
-    "event_type": "PHONE_CALL_DEFENSE",
-    "caller_or_file": "+91-98765-00112",
-    "claimed_identity": "Bank Security",
-    "verdict": "SCAM_CALL_DROPPED",
-    "risk_percentage": 4.0,
-    "risk_level": "HIGH",
-    "threats_detected": [
-      "Banking KYC Scam",
-      "Synthetic Voice Attack"
-    ],
-    "deep_forensics": {
-      "transcript_snippet": "Your debit card is blocked. Send OTP immediately.",
-      "termination_reason": null,
-      "acoustic_vectors": {
-        "spectral_centroid_hz": 1840.0,
-        "spectral_rolloff_hz": 3950.0,
-        "pitch_mean_hz": 142.0,
-        "pitch_std_hz": 32.0,
-        "jitter_pct": 2.2,
-        "shimmer_pct": 4.9,
-        "hnr_db": 14.0,
-        "zero_crossing_rate": 0.08,
-        "formants": [
-          660.0,
-          1740.0,
-          2620.0
-        ]
-      },
-      "conformer": {
-        "raw_prob": 0.04,
-        "predicted_class": "VOICE_CLONING_ATTACK",
-        "entropy": 0.38
-      },
-      "ensemble_fusion": {
-        "predicted_class": "VOICE_CLONING_ATTACK",
-        "consensus_confidence_pct": 92.5,
-        "agreement_score": 0.91,
-        "probabilities": {
-          "human": 0.96,
-          "non_human": 0.05,
-          "voice_clone_attack": 0.04
-        }
-      },
-      "voicemod": {
-        "detected": false,
-        "comb_ripple": 0.05,
-        "is_micro_clip": false
-      },
-      "semantic_scam": {
-        "category": "High-Risk Telephony Scam",
-        "coercion_urgency_pct": 88.0,
-        "flagged_keywords": [
-          "transfer",
-          "urgent",
-          "arrest",
-          "police",
-          "otp",
-          "kyc"
-        ],
-        "transcript_snippet": "Your debit card is blocked. Send OTP immediately."
-      },
-      "speaker_biometrics": {
-        "claimed": "Bank Security",
-        "identified_name": "Unknown",
-        "confidence_pct": 45.0,
-        "is_known_contact": false,
-        "is_scammer_watchlist": false,
-        "is_discrepancy": false
-      }
-    },
-    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
-    "alerts": {
-      "sms": {
-        "channel": "SMS",
-        "recipient": "+91-99887-33445",
-        "secondary_recipient": "+91-91234-56789",
-        "incident_id": "INC-029E827A",
-        "timestamp": "10 Sep 2026, 05:33:27 UTC",
-        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-029E827A]:\nCall from +91-98765-00112 (Bank Security) AUTO-TERMINATED (05:33 UTC).\nThreat: Banking KYC Scam, Synthetic Voice Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Bank Security on primary number.",
-        "status": "QUEUED_FOR_DEVICE_SIM",
-        "success": true,
-        "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
-        "dispatch_metadata": {
-          "success": true,
-          "status": "QUEUED_FOR_DEVICE_SIM",
-          "channel": "ANDROID_SIM_CARRIER",
-          "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
-          "recipient": "+91-99887-33445",
-          "incident_id": "INC-029E827A",
-          "char_count": 252,
-          "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-029E827A]:\nCall from +91-98765-00112 (Bank Security) AUTO-TERMINATED (05:33 UTC).\nThreat: Banking KYC Scam, Synthetic Voice Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Bank Security on primary number.",
-          "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
-          "timestamp": "2026-09-10T05:33:27Z"
-        }
-      },
-      "email": {
-        "channel": "EMAIL",
-        "recipient": "victim@securemail.org",
-        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-98765-00112 Terminated - VoiceShield AI",
-        "incident_id": "INC-029E827A",
-        "timestamp": "10 Sep 2026, 05:33:27 UTC",
-        "html_content": "\n<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <style>\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0b1120; color: #f8fafc; padding: 20px; }\n    .container { max-width: 600px; margin: 0 auto; background: #111827; border: 1px solid #ef4444; border-radius: 12px; overflow: hidden; }\n    .header { background: linear-gradient(135deg, #ef4444, #991b1b); padding: 20px; text-align: center; color: white; }\n    .header h1 { margin: 0; font-size: 20px; letter-spacing: 0.5px; }\n    .header p { margin: 5px 0 0 0; font-size: 12px; opacity: 0.9; }\n    .content { padding: 20px; }\n    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid #ef4444; font-weight: bold; font-size: 11px; text-transform: uppercase; }\n    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }\n    .metric-card { background: rgba(255, 255, 255, 0.03); padding: 12px; border-radius: 8px; border: 1px solid #1f2937; }\n    .metric-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; }\n    .metric-val { font-size: 15px; font-weight: bold; color: #f8fafc; margin-top: 4px; }\n    .transcript-box { background: rgba(0, 0, 0, 0.4); border-left: 3px solid #ef4444; padding: 12px; font-style: italic; font-size: 12px; color: #cbd5e1; margin: 14px 0; }\n    .actions-list { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 14px; margin: 16px 0; }\n    .actions-list h3 { margin: 0 0 8px 0; font-size: 13px; color: #34d399; }\n    .actions-list li { font-size: 12px; color: #e2e8f0; margin-bottom: 6px; }\n    .footer { background: #0f172a; padding: 12px 20px; font-size: 11px; color: #64748b; text-align: center; border-top: 1px solid #1f2937; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>\ud83d\udea8 VoiceShield AI: Cyber-Extortion Call Intercepted</h1>\n      <p>Incident Reference: INC-029E827A \u2022 Automated Call Termination Enforced</p>\n    </div>\n    <div class=\"content\">\n      <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;\">\n        <span class=\"badge\">\ud83d\udd34 CRITICAL ATTACK TERMINATED</span>\n        <span style=\"font-size: 12px; color: #94a3b8;\">10 Sep 2026, 05:33:27 UTC</span>\n      </div>\n\n      <p style=\"font-size: 13px; line-height: 1.5;\">\n        An incoming telephone call targeting your line was automatically <strong>TERMINATED</strong> by the VoiceShield AI defense engine after confirming high-risk synthetic voice cloning and social engineering coercion.\n      </p>\n\n      <div class=\"metric-grid\">\n        <div class=\"metric-card\">\n          <div class=\"metric-label\">Caller Origin</div>\n          <div class=\"metric-val\">+91-98765-00112</div>\n        </div>\n        <div class=\"metric-card\">\n          <div class=\"metric-label\">Claimed Identity</div>\n          <div class=\"metric-val\">Bank Security</div>\n        </div>\n        <div class=\"metric-card\">\n          <div class=\"metric-label\">Composite Risk Level</div>\n          <div class=\"metric-val\" style=\"color: #ef4444;\">4.0% (HIGH)</div>\n        </div>\n        <div class=\"metric-card\">\n          <div class=\"metric-label\">Action Taken</div>\n          <div class=\"metric-val\" style=\"color: #34d399;\">IMMEDIATE HANGUP</div>\n        </div>\n      </div>\n\n      <div style=\"font-size: 12px; font-weight: bold; color: #cbd5e1; margin-top: 12px;\">Identified Threat Signatures:</div>\n      <p style=\"font-size: 12px; color: #f87171; margin-top: 4px;\">Banking KYC Scam, Synthetic Voice Attack</p>\n\n      <div style=\"font-size: 12px; font-weight: bold; color: #cbd5e1; margin-top: 14px;\">Intercepted Call Transcript:</div>\n      <div class=\"transcript-box\">\n        \"Your debit card is blocked. Send OTP immediately....\"\n      </div>\n\n      <div class=\"actions-list\">\n        <h3>\ud83d\udee1\ufe0f Recommended Precautionary Steps</h3>\n        <ul>\n          <li><strong>Zero Financial Disclosure:</strong> Do NOT wire funds, purchase gift cards, or share UPI/bank OTPs.</li>\n          <li><strong>Out-of-Band Verification:</strong> If the caller claimed to be a family member or boss, contact them directly on their verified secondary number.</li>\n          <li><strong>Report Incident:</strong> Report this number (+91-98765-00112) to the National Cyber Crime Reporting Portal at <em>cybercrime.gov.in</em> or dial 1930.</li>\n        </ul>\n      </div>\n    </div>\n    <div class=\"footer\">\n      VoiceShield AI Autonomous Telephony Defense \u2022 Compliance: India DPDP Act 2023 & GDPR \u2022 SIH-2026 PS-26104\n    </div>\n  </div>\n</body>\n</html>\n",
-        "status": "CONFIG_REQUIRED",
-        "success": false,
-        "smtp_relay": "smtp.gmail.com:587",
-        "dispatch_metadata": {
-          "status": "CONFIG_REQUIRED",
-          "channel": "EMAIL_SMTP",
-          "message": "Live email sending requires SMTP credentials. Please configure your Gmail/Outlook user and App Password in .env or via the dashboard.",
-          "recipient": "victim@securemail.org",
-          "incident_id": "INC-029E827A",
-          "timestamp": "2026-09-10T05:33:27Z"
-        }
-      }
-    },
-    "compliance": {
-      "sha256_fingerprint": "e7f5b48f7af64b7e94315d36814c5f9e",
-      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
-    }
-  },
-  {
-    "incident_id": "INC-D6B24064",
-    "session_id": "CALL-281174DC",
-    "timestamp": "10 Sep 2026, 05:33:27 UTC",
-    "iso_timestamp": "2026-09-10T05:33:27Z",
-    "source": "ANDROID_MOBILE",
-    "event_type": "PHONE_CALL_DEFENSE",
-    "caller_or_file": "+91-140-776655",
-    "claimed_identity": "Police Officer",
-    "verdict": "SCAM_CALL_DROPPED",
-    "risk_percentage": 41.6,
-    "risk_level": "HIGH",
-    "threats_detected": [
-      "Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist"
-    ],
-    "deep_forensics": {
-      "transcript_snippet": "",
-      "termination_reason": "Automated Defense: High-Risk Synthetic Attack / Scam Detected (88.2%)",
-      "acoustic_vectors": {
-        "spectral_centroid_hz": 1840.0,
-        "spectral_rolloff_hz": 3950.0,
-        "pitch_mean_hz": 142.0,
-        "pitch_std_hz": 32.0,
-        "jitter_pct": 2.2,
-        "shimmer_pct": 4.9,
-        "hnr_db": 14.0,
-        "zero_crossing_rate": 0.08,
-        "formants": [
-          660.0,
-          1740.0,
-          2620.0
-        ]
-      },
-      "conformer": {
-        "raw_prob": 0.416,
-        "predicted_class": "VOICE_CLONING_ATTACK",
-        "entropy": 0.38
-      },
-      "ensemble_fusion": {
-        "predicted_class": "VOICE_CLONING_ATTACK",
-        "consensus_confidence_pct": 92.5,
-        "agreement_score": 0.91,
-        "probabilities": {
-          "human": 0.58,
-          "non_human": 0.05,
-          "voice_clone_attack": 0.42
-        }
-      },
-      "voicemod": {
-        "detected": false,
-        "comb_ripple": 0.05,
-        "is_micro_clip": false
-      },
-      "semantic_scam": {
-        "category": "High-Risk Telephony Scam",
-        "coercion_urgency_pct": 88.0,
-        "flagged_keywords": [
-          "transfer",
-          "urgent",
-          "arrest",
-          "police",
-          "otp",
-          "kyc"
-        ],
-        "transcript_snippet": ""
-      },
-      "speaker_biometrics": {
-        "claimed": "Police Officer",
-        "identified_name": "Watchlist Extortionist",
-        "confidence_pct": 91.0,
-        "is_known_contact": false,
-        "is_scammer_watchlist": true,
-        "is_discrepancy": false
-      }
-    },
-    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
-    "alerts": {
-      "sms": {
-        "channel": "SMS",
-        "recipient": "+91-99887-11223",
-        "secondary_recipient": "+91-91234-56789",
-        "incident_id": "INC-D6B24064",
-        "timestamp": "10 Sep 2026, 05:33:27 UTC",
-        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-D6B24064]:\nCall from +91-140-776655 (Police Officer) AUTO-TERMINATED (05:33 UTC).\nThreat: Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Police Officer on primary number.",
-        "status": "QUEUED_FOR_DEVICE_SIM",
-        "success": true,
-        "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
-        "dispatch_metadata": {
-          "success": true,
-          "status": "QUEUED_FOR_DEVICE_SIM",
-          "channel": "ANDROID_SIM_CARRIER",
-          "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
-          "recipient": "+91-99887-11223",
-          "incident_id": "INC-D6B24064",
-          "char_count": 290,
-          "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-D6B24064]:\nCall from +91-140-776655 (Police Officer) AUTO-TERMINATED (05:33 UTC).\nThreat: Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Police Officer on primary number.",
-          "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
-          "timestamp": "2026-09-10T05:33:27Z"
-        }
-      },
-      "email": {
-        "channel": "EMAIL",
-        "recipient": "victim@enterprise.com",
-        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-140-776655 Terminated - VoiceShield AI",
-        "incident_id": "INC-D6B24064",
-        "timestamp": "10 Sep 2026, 05:33:27 UTC",
-        "html_content": "\n<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <style>\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0b1120; color: #f8fafc; padding: 20px; }\n    .container { max-width: 600px; margin: 0 auto; background: #111827; border: 1px solid #ef4444; border-radius: 12px; overflow: hidden; }\n    .header { background: linear-gradient(135deg, #ef4444, #991b1b); padding: 20px; text-align: center; color: white; }\n    .header h1 { margin: 0; font-size: 20px; letter-spacing: 0.5px; }\n    .header p { margin: 5px 0 0 0; font-size: 12px; opacity: 0.9; }\n    .content { padding: 20px; }\n    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid #ef4444; font-weight: bold; font-size: 11px; text-transform: uppercase; }\n    .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }\n    .metric-card { background: rgba(255, 255, 255, 0.03); padding: 12px; border-radius: 8px; border: 1px solid #1f2937; }\n    .metric-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; }\n    .metric-val { font-size: 15px; font-weight: bold; color: #f8fafc; margin-top: 4px; }\n    .transcript-box { background: rgba(0, 0, 0, 0.4); border-left: 3px solid #ef4444; padding: 12px; font-style: italic; font-size: 12px; color: #cbd5e1; margin: 14px 0; }\n    .actions-list { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 14px; margin: 16px 0; }\n    .actions-list h3 { margin: 0 0 8px 0; font-size: 13px; color: #34d399; }\n    .actions-list li { font-size: 12px; color: #e2e8f0; margin-bottom: 6px; }\n    .footer { background: #0f172a; padding: 12px 20px; font-size: 11px; color: #64748b; text-align: center; border-top: 1px solid #1f2937; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>\ud83d\udea8 VoiceShield AI: Cyber-Extortion Call Intercepted</h1>\n      <p>Incident Reference: INC-D6B24064 \u2022 Automated Call Termination Enforced</p>\n    </div>\n    <div class=\"content\">\n      <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;\">\n        <span class=\"badge\">\ud83d\udd34 CRITICAL ATTACK TERMINATED</span>\n        <span style=\"font-size: 12px; color: #94a3b8;\">10 Sep 2026, 05:33:27 UTC</span>\n      </div>\n\n      <p style=\"font-size: 13px; line-height: 1.5;\">\n        An incoming telephone call targeting your line was automatically <strong>TERMINATED</strong> by the VoiceShield AI defense engine after confirming high-risk synthetic voice cloning and social engineering coercion.\n      </p>\n\n      <div class=\"metric-grid\">\n        <div class=\"metric-card\">\n          <div class=\"metric-label\">Caller Origin</div>\n          <div class=\"metric-val\">+91-140-776655</div>\n        </div>\n        <div class=\"metric-card\">\n          <div class=\"metric-label\">Claimed Identity</div>\n          <div class=\"metric-val\">Police Officer</div>\n        </div>\n        <div class=\"metric-card\">\n          <div class=\"metric-label\">Composite Risk Level</div>\n          <div class=\"metric-val\" style=\"color: #ef4444;\">41.6% (HIGH)</div>\n        </div>\n        <div class=\"metric-card\">\n          <div class=\"metric-label\">Action Taken</div>\n          <div class=\"metric-val\" style=\"color: #34d399;\">IMMEDIATE HANGUP</div>\n        </div>\n      </div>\n\n      <div style=\"font-size: 12px; font-weight: bold; color: #cbd5e1; margin-top: 12px;\">Identified Threat Signatures:</div>\n      <p style=\"font-size: 12px; color: #f87171; margin-top: 4px;\">Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist</p>\n\n      <div style=\"font-size: 12px; font-weight: bold; color: #cbd5e1; margin-top: 14px;\">Intercepted Call Transcript:</div>\n      <div class=\"transcript-box\">\n        \"...\"\n      </div>\n\n      <div class=\"actions-list\">\n        <h3>\ud83d\udee1\ufe0f Recommended Precautionary Steps</h3>\n        <ul>\n          <li><strong>Zero Financial Disclosure:</strong> Do NOT wire funds, purchase gift cards, or share UPI/bank OTPs.</li>\n          <li><strong>Out-of-Band Verification:</strong> If the caller claimed to be a family member or boss, contact them directly on their verified secondary number.</li>\n          <li><strong>Report Incident:</strong> Report this number (+91-140-776655) to the National Cyber Crime Reporting Portal at <em>cybercrime.gov.in</em> or dial 1930.</li>\n        </ul>\n      </div>\n    </div>\n    <div class=\"footer\">\n      VoiceShield AI Autonomous Telephony Defense \u2022 Compliance: India DPDP Act 2023 & GDPR \u2022 SIH-2026 PS-26104\n    </div>\n  </div>\n</body>\n</html>\n",
-        "status": "CONFIG_REQUIRED",
-        "success": false,
-        "smtp_relay": "smtp.gmail.com:587",
-        "dispatch_metadata": {
-          "status": "CONFIG_REQUIRED",
-          "channel": "EMAIL_SMTP",
-          "message": "Live email sending requires SMTP credentials. Please configure your Gmail/Outlook user and App Password in .env or via the dashboard.",
-          "recipient": "victim@enterprise.com",
-          "incident_id": "INC-D6B24064",
-          "timestamp": "2026-09-10T05:33:27Z"
-        }
-      }
-    },
-    "compliance": {
-      "sha256_fingerprint": "48338bc86dcb41d0ac1df075edd5bf77",
-      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
-    }
-  },
-  {
-    "incident_id": "TEST-2FD61BA1",
-    "session_id": "DIAG-1E4B63",
-    "timestamp": "10 Sep 2026, 05:31:54 UTC",
-    "iso_timestamp": "2026-09-10T05:31:54Z",
-    "source": "WEB_DASHBOARD",
-    "event_type": "ALERT_DISPATCH",
-    "caller_or_file": "Diagnostic Gateway Test (SMS)",
-    "claimed_identity": "Target: +91-99999-11111",
-    "verdict": "DIAGNOSTIC_VERIFIED",
-    "risk_percentage": 0.0,
-    "risk_level": "SAFE",
-    "threats_detected": [],
-    "deep_forensics": {
-      "channel": "SMS",
-      "recipient": "+91-99999-11111",
-      "status": "QUEUED_FOR_DEVICE_SIM",
-      "details": {
-        "success": true,
-        "status": "QUEUED_FOR_DEVICE_SIM",
-        "channel": "ANDROID_SIM_CARRIER",
-        "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
-        "recipient": "+91-99999-11111",
-        "incident_id": "TEST-FD717B",
-        "char_count": 258,
-        "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [TEST-FD717B]:\nCall from +91-140-776655 (Test Threat Simulator) AUTO-TERMINATED (05:31 UTC).\nThreat: Gateway Diagnostic Verification (95.0% risk).\nDO NOT send money or OTPs. Verify directly with Test Threat Simulator on primary number.",
-        "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
-        "timestamp": "2026-09-10T05:31:54Z"
-      }
-    },
-    "action_taken": "TEST_TRANSMISSION_QUEUED_FOR_DEVICE_SIM",
-    "alerts": {
-      "sms": {
-        "recipient": "+91-99999-11111",
-        "status": "QUEUED_FOR_DEVICE_SIM",
-        "success": true,
-        "metadata": {
-          "success": true,
-          "status": "QUEUED_FOR_DEVICE_SIM",
-          "channel": "ANDROID_SIM_CARRIER",
-          "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
-          "recipient": "+91-99999-11111",
-          "incident_id": "TEST-FD717B",
-          "char_count": 258,
-          "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [TEST-FD717B]:\nCall from +91-140-776655 (Test Threat Simulator) AUTO-TERMINATED (05:31 UTC).\nThreat: Gateway Diagnostic Verification (95.0% risk).\nDO NOT send money or OTPs. Verify directly with Test Threat Simulator on primary number.",
-          "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
-          "timestamp": "2026-09-10T05:31:54Z"
-        }
-      }
-    },
-    "compliance": {
-      "sha256_fingerprint": "ddcf1dae59bf41d586c07093f8c2de31",
       "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
     }
   }

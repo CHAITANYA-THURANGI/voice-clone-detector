@@ -88,9 +88,10 @@ def load_audio_from_bytes(audio_bytes: bytes, file_ext: str = "wav") -> np.ndarr
                 if sr == TARGET_SAMPLE_RATE:
                     waveform = data
                 else:
-                    # Use librosa/scipy resample or let FFmpeg handle
-                    import librosa
-                    waveform = librosa.resample(data, orig_sr=sr, target_sr=TARGET_SAMPLE_RATE)
+                    # Use lightweight scipy.signal resample (zero extra dependencies)
+                    import scipy.signal
+                    num_samples = int(round(len(data) * float(TARGET_SAMPLE_RATE) / float(sr)))
+                    waveform = scipy.signal.resample(data, num_samples).astype(np.float32)
         except Exception:
             waveform = None
 

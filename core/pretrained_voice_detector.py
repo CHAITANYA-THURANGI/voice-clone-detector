@@ -121,7 +121,9 @@ def analyze_pretrained_foundation_voiceprint(waveform: np.ndarray, sr: int = 160
     Uses ultra-lightweight kinematics by default, or Whisper encoder if ENABLE_LOCAL_WHISPER=1.
     """
     model = get_pretrained_audio_encoder()
-    if model is None or len(waveform) < 1600:
+    if model is None:
+        return analyze_foundation_acoustic_kinematics(waveform, sr=sr)
+    if len(waveform) < 1600:
         return {
             "pretrained_fake_prob": 0.5,
             "prediction": "UNCERTAIN",
