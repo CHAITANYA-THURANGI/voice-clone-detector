@@ -16,6 +16,10 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HISTORY_FILE_PATH = os.path.join(PROJECT_ROOT, "data", "activity_history.json")
 LEGACY_INCIDENTS_PATH = os.path.join(PROJECT_ROOT, "data", "call_defense_incidents.json")
 
+# Ephemeral storage settings to prevent Render cloud memory/storage exhaustion
+MAX_SERVER_HISTORY_ENTRIES = int(os.environ.get("MAX_SERVER_HISTORY", "10"))
+DISABLE_DISK_HISTORY = os.environ.get("DISABLE_DISK_HISTORY", "0") == "1" or bool(os.environ.get("RENDER"))
+
 
 class AuditHistoryManager:
     """
@@ -33,11 +37,12 @@ class AuditHistoryManager:
         """Loads activity history, migrating legacy call defense incidents if needed."""
         os.makedirs(os.path.dirname(self.storage_path), exist_ok=True)
         
-        # 1. Load existing activity history if file exists
+        # 1. Load existing activity history if file exists (capped to MAX_SERVER_HISTORY_ENTRIES)
         if os.path.exists(self.storage_path):
             try:
                 with open(self.storage_path, "r", encoding="utf-8") as f:
-                    self.history = json.load(f)
+                    raw_data = json.load(f)
+                    self.history = raw_data[:MAX_SERVER_HISTORY_ENTRIES] if isinstance(raw_data, list) else []
                 return
             except Exception as e:
                 print(f"[AuditHistoryManager] Error reading history: {e}")
@@ -144,7 +149,9 @@ class AuditHistoryManager:
         }
 
     def _save_to_disk(self):
-        """Persists the in-memory history array to disk."""
+        """Persists the in-memory history array to disk if disk storage is enabled."""
+        if DISABLE_DISK_HISTORY:
+            return
         try:
             with open(self.storage_path, "w", encoding="utf-8") as f:
                 json.dump(self.history, f, indent=2)
@@ -170,9 +177,9 @@ class AuditHistoryManager:
 
             # Insert at the beginning (latest first)
             self.history.insert(0, record)
-            # Cap at 500 recent events
-            if len(self.history) > 500:
-                self.history = self.history[:500]
+            # Cap at MAX_SERVER_HISTORY_ENTRIES to guarantee zero RAM bloat on Render
+            if len(self.history) > MAX_SERVER_HISTORY_ENTRIES:
+                self.history = self.history[:MAX_SERVER_HISTORY_ENTRIES]
 
             self._save_to_disk()
             return record

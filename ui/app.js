@@ -476,6 +476,7 @@ async function runAnalysis() {
     }
 
     renderAnalysisResults(data);
+    saveAnalysisResultToChromeCache(data, fileName);
     loadHistoryData(true);
   } catch (err) {
     alert(`Analysis Error: ${err.message}`);
@@ -1167,34 +1168,142 @@ function showGatewayFeedback(box, msg, color, bg) {
 /* ==========================================================================
    DEEP FORENSIC ACTIVITY & AUDIT TRAIL LOGIC
    ========================================================================== */
+const BROWSER_CACHE_KEY = 'voiceshield_audit_history_cache_v1';
 let currentHistoryData = [];
 let currentHistoryFilter = 'ALL';
 let historySearchQuery = '';
 
-async function loadHistoryData(forceRefresh = false) {
+function getBrowserCachedHistory() {
   try {
-    const res = await fetch('/api/history?limit=100');
-    if (!res.ok) return;
-    const data = await res.json();
-    currentHistoryData = data.history || [];
+    const raw = localStorage.getItem(BROWSER_CACHE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
 
-    // Update Statistics Counters
-    const stats = data.statistics || {};
-    const totalEl = document.getElementById('hstat-total');
-    const blockedEl = document.getElementById('hstat-blocked');
-    const callsEl = document.getElementById('hstat-calls');
-    const alertsEl = document.getElementById('hstat-alerts');
-    const badgeCountEl = document.getElementById('history-badge-count');
+function saveBrowserCachedHistory(list) {
+  try {
+    localStorage.setItem(BROWSER_CACHE_KEY, JSON.stringify(list));
+  } catch (e) {
+    console.warn('[Cache] LocalStorage save error:', e);
+  }
+}
 
-    if (totalEl) totalEl.textContent = stats.total_events || currentHistoryData.length;
-    if (blockedEl) blockedEl.textContent = stats.attacks_blocked || 0;
-    if (callsEl) callsEl.textContent = (stats.phone_defenses || 0) + (stats.screened_calls || 0);
-    if (alertsEl) alertsEl.textContent = stats.alerts_dispatched || 0;
-    if (badgeCountEl) badgeCountEl.textContent = currentHistoryData.length;
+function saveAnalysisResultToChromeCache(data, fileName) {
+  try {
+    const risk = data.risk_assessment || {};
+    const fusion = data.ensemble_fusion || {};
+    const fraud = data.semantic_fraud_detector || {};
+    const vm = data.voicemod_forensics || {};
+    const claimedSpeaker = document.getElementById('claimed-speaker')?.value?.trim() || 'None';
+    
+    const incidentId = 'AUD-' + Math.random().toString(16).substring(2, 10).toUpperCase();
+    const now = new Date();
+    const timestamp = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + 
+                      ', ' + now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' UTC';
 
-    renderHistoryTable();
+    const pClass = fusion.predicted_class || risk.predicted_class || 'ANALYZED';
+    const riskPct = parseFloat(risk.risk_percentage || 0);
+
+    const newRecord = {
+      incident_id: incidentId,
+      session_id: 'CHROME-SESSION-' + Math.random().toString(16).substring(2, 8).toUpperCase(),
+      timestamp: timestamp,
+      iso_timestamp: now.toISOString(),
+      source: 'CHROME_BROWSER_CACHE',
+      event_type: 'AUDIO_FORENSIC_ANALYSIS',
+      caller_or_file: fileName || 'uploaded_voice_recording.wav',
+      claimed_identity: claimedSpeaker,
+      verdict: pClass,
+      risk_percentage: riskPct,
+      risk_level: risk.risk_level || 'LOW',
+      threats_detected: risk.threats_detected || [],
+      action_taken: riskPct >= 65 ? 'THREAT_FLIGHT_BLOCKED' : 'VERIFIED_SAFE',
+      deep_forensics: {
+        acoustic_vectors: data.forensic_metrics || {},
+        conformer: data.neural_detector || {},
+        ensemble_fusion: fusion,
+        voicemod: vm,
+        semantic_scam: fraud,
+        speaker_biometrics: data.speaker_verification || {},
+        glottal_lpc: data.glottal_biometrics || {},
+        phase_mgd: data.spectral_phase_coherence || {}
+      },
+      compliance: {
+        sha256_fingerprint: data.compliance_audit?.audio_sha256 || 'Ephemeral-Client-Hashed',
+        privacy_standard: 'India DPDP Act 2023 (Zero-Retention Ephemeral RAM)'
+      }
+    };
+
+    let cached = getBrowserCachedHistory();
+    cached.unshift(newRecord);
+    if (cached.length > 250) cached = cached.slice(0, 250);
+    saveBrowserCachedHistory(cached);
+    currentHistoryData = cached;
+    updateHistoryStatsFromData(currentHistoryData);
   } catch (err) {
-    console.warn('[History] Error loading history:', err);
+    console.warn('[Cache] Could not save analysis to Chrome cache:', err);
+  }
+}
+
+function updateHistoryStatsFromData(list) {
+  const total = list.length;
+  const blocked = list.filter(i => (parseFloat(i.risk_percentage) || 0) >= 50 || (i.verdict || '').includes('ATTACK') || (i.verdict || '').includes('DROPPED')).length;
+  const calls = list.filter(i => i.event_type === 'PHONE_CALL_DEFENSE' || i.event_type === 'CALL_SCREENING_INTERCEPT').length;
+  const alerts = list.filter(i => i.alerts && (i.alerts.sms || i.alerts.email)).length;
+
+  const totalEl = document.getElementById('hstat-total');
+  const blockedEl = document.getElementById('hstat-blocked');
+  const callsEl = document.getElementById('hstat-calls');
+  const alertsEl = document.getElementById('hstat-alerts');
+  const badgeCountEl = document.getElementById('history-badge-count');
+
+  if (totalEl) totalEl.textContent = total;
+  if (blockedEl) blockedEl.textContent = blocked;
+  if (callsEl) callsEl.textContent = calls;
+  if (alertsEl) alertsEl.textContent = alerts;
+  if (badgeCountEl) badgeCountEl.textContent = total;
+}
+
+async function loadHistoryData(forceRefresh = false) {
+  // 1. Instantly load and render from Chrome browser local storage cache
+  const cached = getBrowserCachedHistory();
+  if (cached && cached.length > 0) {
+    currentHistoryData = cached;
+    updateHistoryStatsFromData(currentHistoryData);
+    renderHistoryTable();
+  }
+
+  // 2. Non-blocking background sync with backend
+  try {
+    const res = await fetch('/api/history?limit=25');
+    if (res.ok) {
+      const data = await res.json();
+      const serverHistory = data.history || [];
+      if (serverHistory.length > 0) {
+        const existingIds = new Set(currentHistoryData.map(item => item.incident_id));
+        let merged = [...currentHistoryData];
+        for (const sItem of serverHistory) {
+          if (!existingIds.has(sItem.incident_id)) {
+            merged.push(sItem);
+            existingIds.add(sItem.incident_id);
+          }
+        }
+        if (merged.length > 250) merged = merged.slice(0, 250);
+        currentHistoryData = merged;
+        saveBrowserCachedHistory(currentHistoryData);
+        updateHistoryStatsFromData(currentHistoryData);
+        renderHistoryTable();
+      }
+    }
+  } catch (err) {
+    console.log('[History] Background sync skipped (using Chrome cache):', err.message);
+  }
+
+  if (currentHistoryData.length === 0) {
+    updateHistoryStatsFromData([]);
+    renderHistoryTable();
   }
 }
 
@@ -1356,9 +1465,12 @@ async function openHistoryDetail(incidentId) {
   body.innerHTML = '<div style="text-align:center; padding:3rem; color:#94A3B8;"><div class="loading-spinner"></div> Loading deep forensic profile...</div>';
 
   try {
-    const res = await fetch(`/api/history/${incidentId}`);
-    if (!res.ok) throw new Error(`Incident ${incidentId} not found`);
-    const incident = await res.json();
+    let incident = currentHistoryData.find(i => i.incident_id === incidentId);
+    if (!incident) {
+      const res = await fetch(`/api/history/${incidentId}`);
+      if (!res.ok) throw new Error(`Incident ${incidentId} not found`);
+      incident = await res.json();
+    }
 
     title.textContent = `Deep Forensic Profile: ${incident.incident_id}`;
     subtitle.textContent = `${incident.event_type} • ${incident.timestamp} • Source: ${incident.source}`;
@@ -1550,19 +1662,33 @@ function closeHistoryDetailModal() {
 }
 
 function exportHistoryFile() {
-  window.location.href = '/api/history/export';
+  if (!currentHistoryData || currentHistoryData.length === 0) {
+    alert('No forensic history records in Chrome cache to export.');
+    return;
+  }
+  const blob = new Blob([JSON.stringify(currentHistoryData, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `voiceshield_audit_trail_chrome_${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 async function confirmClearHistory() {
-  if (!confirm('Are you sure you want to clear all forensic history logs? This cannot be undone.')) {
+  if (!confirm('Are you sure you want to clear your local forensic history logs from Chrome cache? This cannot be undone.')) {
     return;
   }
   try {
-    const res = await fetch('/api/history/clear', { method: 'DELETE' });
-    if (res.ok) {
-      await loadHistoryData(true);
-      alert('✅ Forensic audit history cleared.');
-    }
+    localStorage.removeItem(BROWSER_CACHE_KEY);
+    currentHistoryData = [];
+    updateHistoryStatsFromData([]);
+    renderHistoryTable();
+
+    fetch('/api/history/clear', { method: 'DELETE' }).catch(() => {});
+    alert('✅ Forensic audit history cleared from Chrome cache.');
   } catch (err) {
     alert(`Error clearing history: ${err.message}`);
   }

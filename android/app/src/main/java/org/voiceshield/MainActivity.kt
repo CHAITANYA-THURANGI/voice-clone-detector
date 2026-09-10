@@ -270,9 +270,13 @@ class MainActivity : AppCompatActivity() {
         val serverUrl = serverUrlInput.text.toString().trim().removeSuffix("/")
         Toast.makeText(this, "🔄 Fetching forensic audit history...", Toast.LENGTH_SHORT).show()
 
+        val prefs = getSharedPreferences("voiceshield_prefs", Context.MODE_PRIVATE)
+
         mainScope.launch {
             var errorDetail: String? = null
-            val historyList = withContext(Dispatchers.IO) {
+            var isFromCache = false
+
+            var historyList = withContext(Dispatchers.IO) {
                 try {
                     val url = URL("$serverUrl/api/history?limit=30")
                     val conn = url.openConnection() as HttpURLConnection
@@ -283,6 +287,8 @@ class MainActivity : AppCompatActivity() {
                     val code = conn.responseCode
                     if (code == 200) {
                         val resp = conn.inputStream.bufferedReader().readText()
+                        prefs.edit().putString("cached_history", resp).apply()
+
                         val json = JSONObject(resp)
                         val arr = json.optJSONArray("history") ?: org.json.JSONArray()
                         val list = mutableListOf<JSONObject>()
@@ -300,11 +306,30 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            // Fallback to local device cache if network is unavailable or returned empty
+            if (historyList.isEmpty()) {
+                val cachedResp = prefs.getString("cached_history", null)
+                if (!cachedResp.isNullOrEmpty()) {
+                    try {
+                        val json = JSONObject(cachedResp)
+                        val arr = json.optJSONArray("history") ?: org.json.JSONArray()
+                        val list = mutableListOf<JSONObject>()
+                        for (i in 0 until arr.length()) {
+                            list.add(arr.getJSONObject(i))
+                        }
+                        if (list.isNotEmpty()) {
+                            historyList = list
+                            isFromCache = true
+                        }
+                    } catch (_: Exception) {}
+                }
+            }
+
             if (historyList.isEmpty()) {
                 val msg = if (errorDetail != null) {
                     "⚠️ Connection Failed: $errorDetail\n\nTarget: $serverUrl\nEnsure your PC server is running and phone is on the same Wi-Fi."
                 } else {
-                    "ℹ️ No forensic activity records found yet on server."
+                    "ℹ️ No forensic activity records found yet."
                 }
                 AlertDialog.Builder(this@MainActivity)
                     .setTitle("📜 Forensic Audit History")
@@ -312,6 +337,10 @@ class MainActivity : AppCompatActivity() {
                     .setPositiveButton("OK", null)
                     .show()
                 return@launch
+            }
+
+            if (isFromCache) {
+                Toast.makeText(this@MainActivity, "📱 Showing locally cached audit trail", Toast.LENGTH_SHORT).show()
             }
 
             // Build item titles
@@ -329,8 +358,14 @@ class MainActivity : AppCompatActivity() {
                 "$icon $id: $caller\n   Verdict: $verdict (${risk}%)"
             }.toTypedArray()
 
+            val titleText = if (isFromCache) {
+                "📜 Deep Forensic History (${historyList.size}) [Local Cache]"
+            } else {
+                "📜 Deep Forensic History (${historyList.size})"
+            }
+
             AlertDialog.Builder(this@MainActivity)
-                .setTitle("📜 Deep Forensic History (${historyList.size})")
+                .setTitle(titleText)
                 .setItems(titles) { _, which ->
                     val selected = historyList[which]
                     showIncidentDetailDialog(selected)
