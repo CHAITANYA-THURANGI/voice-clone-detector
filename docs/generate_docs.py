@@ -222,6 +222,33 @@ def get_custom_styles():
         alignment=TA_LEFT
     )
 
+    step_title_style = ParagraphStyle(
+        'StepTitle',
+        parent=styles['Normal'],
+        fontName='Helvetica-Bold',
+        fontSize=9.5,
+        leading=13,
+        textColor=colors.HexColor('#0F172A'),
+        spaceBefore=6,
+        spaceAfter=3,
+        keepWithNext=True
+    )
+
+    warning_style = ParagraphStyle(
+        'WarningBox',
+        parent=styles['Normal'],
+        fontName='Helvetica',
+        fontSize=8,
+        leading=11.5,
+        textColor=colors.HexColor('#991B1B'),
+        backColor=colors.HexColor('#FEF2F2'),
+        borderColor=colors.HexColor('#F87171'),
+        borderWidth=0.75,
+        borderPadding=7,
+        spaceBefore=5,
+        spaceAfter=7
+    )
+
     return {
         'title': title_style,
         'subtitle': subtitle_style,
@@ -233,6 +260,8 @@ def get_custom_styles():
         'code': code_style,
         'equation': equation_style,
         'callout': callout_style,
+        'warning': warning_style,
+        'step_title': step_title_style,
         'th': table_header_style,
         'td': table_cell_style
     }
@@ -906,6 +935,192 @@ def build_dossier_pdf():
     print(f"Generated: {pdf_path}")
 
 
+def build_guide_pdf():
+    pdf_path = os.path.join(DOC_DIR, "5_Email_Alert_Setup_and_Chrome_Extension_Installation_Guide.pdf")
+    doc = SimpleDocTemplate(pdf_path, pagesize=letter, leftMargin=54, rightMargin=54, topMargin=54, bottomMargin=54)
+    styles = get_custom_styles()
+    story = []
+
+    # Title & Header
+    story.append(Spacer(1, 10))
+    story.append(Paragraph("<font color='#0284C7'><b>SMART INDIA HACKATHON 2026 • PS-26104 • OPERATOR SETUP MANUAL</b></font>", styles['meta']))
+    story.append(Spacer(1, 8))
+    story.append(Paragraph("Email Security Alert Gateway & Chrome Extension Installation Guide", styles['title']))
+    story.append(Paragraph("Step-by-Step Operator Procedures for Gmail 16-Digit App Password & Chromium In-Tab Defense", styles['subtitle']))
+    story.append(HRFlowable(width="100%", thickness=2, color=colors.HexColor('#0284C7'), spaceBefore=4, spaceAfter=12))
+
+    # Meta Table
+    meta_data = [
+        [
+            Paragraph("<b>Target Features:</b>", styles['td']),
+            Paragraph("Real-World SMTP Alerts & Browser Extension", styles['td']),
+            Paragraph("<b>Document Ref:</b>", styles['td']),
+            Paragraph("VS-DOC-2026-05", styles['td'])
+        ],
+        [
+            Paragraph("<b>Security Protocol:</b>", styles['td']),
+            Paragraph("Google App Password TLS Port 587 & MV3", styles['td']),
+            Paragraph("<b>Supported Browsers:</b>", styles['td']),
+            Paragraph("Chrome, Edge, Brave, Opera", styles['td'])
+        ]
+    ]
+    t = Table(meta_data, colWidths=[100, 180, 90, 134])
+    t.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,-1), colors.HexColor('#F8FAFC')),
+        ('BOX', (0,0), (-1,-1), 0.5, colors.HexColor('#CBD5E1')),
+        ('INNERGRID', (0,0), (-1,-1), 0.5, colors.HexColor('#E2E8F0')),
+        ('TOPPADDING', (0,0), (-1,-1), 4),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+        ('LEFTPADDING', (0,0), (-1,-1), 6),
+        ('RIGHTPADDING', (0,0), (-1,-1), 6),
+    ]))
+    story.append(t)
+    story.append(Spacer(1, 12))
+
+    # =========================================================================
+    # PART 1: GMAIL 16-DIGIT APP PASSWORD & EMAIL ALERT SETUP
+    # =========================================================================
+    story.append(Paragraph("PART 1: Gmail 16-Digit App Password & Emergency Email Alert Setup", styles['h1']))
+    story.append(Paragraph(
+        "VoiceShield AI connects directly to Google's mail relay (<code>smtp.gmail.com:587</code>) using an encrypted TLS socket to transmit real-time emergency incident advisories to users when a synthetic cloning or cyber-extortion call is terminated. For security, Google requires an <b>App Password</b> instead of your normal account login password.",
+        styles['body']
+    ))
+
+    # Password comparison table
+    pw_comp = [
+        [Paragraph("<b>Password Type</b>", styles['th']), Paragraph("<b>Format & Length</b>", styles['th']), Paragraph("<b>Purpose & Security Rationale</b>", styles['th'])],
+        [
+            Paragraph("<b>Primary Account Password</b>", styles['td']),
+            Paragraph("User-defined (e.g. MySecret#2026)", styles['td']),
+            Paragraph("Grants complete master access to Google account. <b>Never share with any external application.</b>", styles['td'])
+        ],
+        [
+            Paragraph("<b>Google 16-Digit App Password</b>", styles['td']),
+            Paragraph("16 lowercase letters (e.g. abcd efgh ijkl mnop)", styles['td']),
+            Paragraph("Restricted specifically to automated SMTP mail transmission. Can be revoked anytime with one click.", styles['td'])
+        ]
+    ]
+    t_pw = Table(pw_comp, colWidths=[130, 130, 244])
+    t_pw.setStyle(TableStyle([
+        ('BACKGROUND', (0,0), (-1,0), colors.HexColor('#0F172A')),
+        ('BOX', (0,0), (-1,-1), 0.5, colors.HexColor('#CBD5E1')),
+        ('INNERGRID', (0,0), (-1,-1), 0.5, colors.HexColor('#E2E8F0')),
+        ('TOPPADDING', (0,0), (-1,-1), 4),
+        ('BOTTOMPADDING', (0,0), (-1,-1), 4),
+        ('LEFTPADDING', (0,0), (-1,-1), 5),
+        ('RIGHTPADDING', (0,0), (-1,-1), 5),
+    ]))
+    story.append(t_pw)
+    story.append(Spacer(1, 8))
+
+    story.append(Paragraph("Step-by-Step Generation Procedure:", styles['h2']))
+
+    story.append(Paragraph("<b>Step 1.1: Enable 2-Step Verification on Google</b>", styles['step_title']))
+    story.append(Paragraph(
+        "Google strictly requires 2-Step Verification before generating App Passwords:<br/>"
+        "1. Open your browser and navigate to: <code>https://myaccount.google.com/security</code><br/>"
+        "2. Locate the section <b>'How you sign in to Google'</b>.<br/>"
+        "3. Verify that <b>2-Step Verification</b> is <b>ON</b>. If OFF, click it and register your mobile number.",
+        styles['body']
+    ))
+
+    story.append(Paragraph("<b>Step 1.2: Generate the 16-Digit App Password</b>", styles['step_title']))
+    story.append(Paragraph(
+        "1. Open the direct Google App Passwords utility: <code>https://myaccount.google.com/apppasswords</code><br/>"
+        "2. Confirm your Google identity by entering your password if prompted.<br/>"
+        "3. In the <b>'App name'</b> input box, type: <code>VoiceShield AI</code><br/>"
+        "4. Click the blue <b>'Create'</b> button.<br/>"
+        "5. A popup window will display your 16-character code in a yellow box (e.g. <code>abcd efgh ijkl mnop</code>).<br/>"
+        "6. Copy this code to your clipboard.",
+        styles['body']
+    ))
+
+    story.append(Paragraph("<b>Step 1.3: Apply Credentials in VoiceShield AI Dashboard</b>", styles['step_title']))
+    story.append(Paragraph(
+        "1. Open the VoiceShield Web Dashboard (<code>http://localhost:8000</code> or your Cloudflare Tunnel URL).<br/>"
+        "2. Switch to <b>Tab 4: 📞 Phone Call Defense</b>.<br/>"
+        "3. Scroll down to <b>🌐 Real-World Alert Gateways & Live Testing</b> card.<br/>"
+        "4. Enter the required parameters:<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;• <b>Sender Gmail Address:</b> <code>your_email@gmail.com</code><br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;• <b>Gmail 16-Digit App Password:</b> <code>abcd efgh ijkl mnop</code><br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;• <b>Alert Recipient Email:</b> <code>your_email@gmail.com</code> (or target inbox)<br/>"
+        "5. Click <b>💾 Save Credentials</b>.<br/>"
+        "6. Click <b>✉️ Test Real Email to My Inbox</b>. VoiceShield will execute an encrypted TLS handshake to Google's server and deliver the alert.",
+        styles['body']
+    ))
+
+    story.append(Paragraph(
+        "<b>Verification Check:</b> Open your email inbox. You will receive an email titled:<br/>"
+        "<i>'🚨 [CRITICAL ALERT] Incoming Threat Call from +91-140-776655 Terminated - VoiceShield AI'</i><br/>"
+        "Containing formatted acoustic metrics, risk score, intercepted transcript, and cybercrime advisory.",
+        styles['callout']
+    ))
+
+    story.append(Spacer(1, 10))
+
+    # =========================================================================
+    # PART 2: CHROME EXTENSION INSTALLATION & LIVE TAB DEFENSE
+    # =========================================================================
+    story.append(Paragraph("PART 2: Installing the VoiceShield AI Chrome Browser Extension", styles['h1']))
+    story.append(Paragraph(
+        "The VoiceShield AI Browser Extension monitors incoming web audio streams—including <b>WhatsApp Web voice notes and calls, Google Meet, Zoom Web, and Microsoft Teams</b>. It intercepts voice packets in real-time, displays an on-screen HUD threat overlay, and automatically mutes synthetic deepfake audio.",
+        styles['body']
+    ))
+
+    story.append(Paragraph("Step-by-Step Installation Procedure:", styles['h2']))
+
+    story.append(Paragraph("<b>Step 2.1: Open Chromium Extensions Management</b>", styles['step_title']))
+    story.append(Paragraph(
+        "Open Google Chrome (or Edge / Brave) and type the following into your top URL address bar:<br/>"
+        "<code>chrome://extensions/</code> (or <code>edge://extensions/</code> on Microsoft Edge) and press <b>Enter</b>.",
+        styles['body']
+    ))
+
+    story.append(Paragraph("<b>Step 2.2: Enable Developer Mode</b>", styles['step_title']))
+    story.append(Paragraph(
+        "In the top-right corner of the Extensions page, toggle the <b>'Developer mode'</b> switch to <b>ON</b>. Once activated, three buttons will appear in the top-left toolbar: <i>[Load unpacked]</i>, <i>[Pack extension]</i>, and <i>[Update]</i>.",
+        styles['body']
+    ))
+
+    story.append(Paragraph("<b>Step 2.3: Load the Unpacked Extension Directory</b>", styles['step_title']))
+    story.append(Paragraph(
+        "1. Click the <b>'Load unpacked'</b> button in the top-left corner.<br/>"
+        "2. A file selection dialog will open. Navigate to the extension folder inside your repository:<br/>"
+        "&nbsp;&nbsp;&nbsp;&nbsp;<code>C:\\SIH_2026\\Voice Clone Detector\\extension</code><br/>"
+        "3. Click on the <b>extension</b> folder to highlight it, and click <b>'Select Folder'</b>.<br/>"
+        "4. Chrome will immediately install and activate <b>VoiceShield AI - Real-Time Voice Clone & Scam Blocker (v1.0.0)</b>.",
+        styles['body']
+    ))
+
+    story.append(Paragraph("<b>Step 2.4: Pin the Shield Icon to the Toolbar</b>", styles['step_title']))
+    story.append(Paragraph(
+        "1. Click the <b>Puzzle Piece (🧩 Extensions)</b> icon located at the top-right of your Chrome window.<br/>"
+        "2. Find <b>VoiceShield AI</b> in the dropdown list.<br/>"
+        "3. Click the <b>Pin (📌)</b> icon next to it so the cyan <b>VoiceShield Shield (🛡️)</b> icon is permanently visible.",
+        styles['body']
+    ))
+
+    story.append(Paragraph("<b>Step 2.5: Test and Verify Extension Operation</b>", styles['step_title']))
+    story.append(Paragraph(
+        "1. Ensure your VoiceShield Python engine is running: <code>python run_app.py</code><br/>"
+        "2. Click the <b>VoiceShield Shield (🛡️)</b> icon in your Chrome toolbar to open the dark-mode popup.<br/>"
+        "3. Confirm the status bar at the bottom displays: <b>🟢 Engine: Online (Conformer + Voicemod)</b>.<br/>"
+        "4. Under <b>'Forensic Engine Verification'</b>, select <code>3s Family Voice Note Clone</code> and click <b>'Test Scan'</b>.<br/>"
+        "5. The popup will immediately turn red: <b>🚨 VOICE CLONING ATTACK DETECTED (Risk: 96.8%)</b>, auto-muting synthetic audio and broadcasting the HUD alert banner across active browser tabs!",
+        styles['body']
+    ))
+
+    # Architecture summary box
+    story.append(Paragraph(
+        "<b>Security & Privacy Guarantee:</b><br/>"
+        "VoiceShield AI's Chrome extension complies with <b>Manifest V3</b>. Audio capture is performed entirely within memory buffers, never stored to browser cookies or external tracking servers, adhering strictly to the India DPDP Act 2023 zero-retention principles.",
+        styles['callout']
+    ))
+
+    doc.build(story, canvasmaker=NumberedCanvas)
+    print(f"Generated: {pdf_path}")
+
+
 def main():
     print("=" * 80)
     print("   VOICESHIELD AI - ENTERPRISE DOCUMENTATION PDF SUITE GENERATOR")
@@ -915,6 +1130,7 @@ def main():
     build_models_pdf()
     build_architecture_pdf()
     build_dossier_pdf()
+    build_guide_pdf()
 
     # Mirror all generated PDFs to docs/ directory
     for f in os.listdir(DOC_DIR):
@@ -924,7 +1140,7 @@ def main():
             shutil.copy2(src, dst)
             print(f"Mirrored to docs: {dst}")
 
-    print("\n✅ All 4 comprehensive documentation PDFs successfully generated!")
+    print("\n✅ All 5 comprehensive documentation PDFs successfully generated!")
 
 
 if __name__ == "__main__":
