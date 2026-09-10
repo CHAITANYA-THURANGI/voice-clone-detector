@@ -260,6 +260,12 @@ body {
   color: var(--danger);
 }
 
+.tag-scam {
+  background: rgba(245, 158, 11, 0.25);
+  color: #FBBF24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
 /* Drop Zone */
 .drop-zone {
   border: 2px dashed var(--card-border);
@@ -688,3 +694,712 @@ body {
   padding: 0.1rem 0.4rem;
   border-radius: 4px;
 }
+
+/* Deep Multi-Model Ensemble Consensus Card */
+.ensemble-consensus-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1.2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.ensemble-consensus-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #10B981, #F59E0B, #EF4444);
+}
+
+.ensemble-consensus-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.9rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.consensus-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.consensus-class-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  letter-spacing: 0.5px;
+}
+
+.consensus-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  background: rgba(15, 23, 42, 0.5);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  margin-bottom: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .consensus-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.consensus-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.consensus-col .label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.consensus-col strong {
+  font-size: 0.92rem;
+  font-family: var(--font-mono);
+  color: var(--text-main);
+}
+
+.prob-distribution-wrap {
+  margin-bottom: 0.85rem;
+}
+
+.prob-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.tri-progress-bar {
+  display: flex;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--card-border);
+}
+
+.tri-progress-bar div {
+  transition: width 0.4s ease;
+}
+
+.forensic-reasons {
+  background: rgba(15, 23, 42, 0.3);
+  border-left: 3px solid var(--primary);
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.78rem;
+}
+
+.forensic-reasons ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #CBD5E1;
+}
+
+.forensic-reasons li {
+  margin-bottom: 0.2rem;
+}
+
+/* ==========================================================================
+   Semantic ALM / LLM Cyber-Fraud Intelligence Card Styles
+   ========================================================================== */
+.semantic-scam-card {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 12px;
+  padding: 1.1rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.semantic-scam-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8B5CF6, #38BDF8, #F59E0B);
+}
+
+.semantic-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.9rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.semantic-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.semantic-threat-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid #8B5CF6;
+  color: #C084FC;
+  letter-spacing: 0.5px;
+}
+
+.dual-matrix-banner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  background: rgba(15, 23, 42, 0.5);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  margin-bottom: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .dual-matrix-banner {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dual-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dual-col .label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dual-col strong {
+  font-size: 0.88rem;
+  font-family: var(--font-mono);
+  color: var(--text-main);
+}
+
+.dual-col.verdict-col strong {
+  color: #38BDF8;
+}
+
+.transcript-container {
+  margin-bottom: 0.9rem;
+}
+
+.transcript-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.engine-tag {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--primary);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.transcript-box {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: #F1F5F9;
+  font-style: italic;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.scam-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .scam-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.coercion-wrap, .tactics-wrap {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+}
+
+.coercion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.coercion-header strong {
+  font-family: var(--font-mono);
+  color: var(--text-main);
+  font-size: 0.84rem;
+}
+
+.coercion-progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+}
+
+.coercion-progress-bar div {
+  height: 100%;
+  transition: width 0.4s ease;
+}
+
+.keywords-wrap .label, .tactics-wrap .label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.keyword-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.kw-tag {
+  font-size: 0.7rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #F87171;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+.empty-tag {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.tactics-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.76rem;
+  color: #CBD5E1;
+  line-height: 1.4;
+}
+
+.tactics-list li {
+  margin-bottom: 0.25rem;
+}
+
+/* =========================================================================
+   PHONE CALL DEFENSE & 1:N SPEAKER DIRECTORY STYLES
+   ========================================================================= */
+
+.phone-defense-box {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
+
+.phone-input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.phone-input-group label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.phone-input-group input, .phone-input-group select {
+  width: 100%;
+  background: #1E293B;
+  color: var(--text-main);
+  border: 1px solid #334155;
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.phone-call-hud {
+  background: #0F172A;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+.phone-call-hud.in-call {
+  border-color: #00E5FF;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+}
+
+.phone-call-hud.terminated {
+  border-color: #EF4444;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+  animation: hud-shake 0.4s ease;
+}
+
+@keyframes hud-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+.call-hud-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.call-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.call-status-idle { background: rgba(148, 163, 184, 0.15); color: #94A3B8; border: 1px solid #334155; }
+.call-status-active { background: rgba(16, 185, 129, 0.2); color: #34D399; border: 1px solid #10B981; }
+.call-status-dropped { background: rgba(239, 68, 68, 0.25); color: #FCA5A5; border: 1px solid #EF4444; }
+
+.call-timer {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.spk-match-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #1E293B;
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  margin-bottom: 0.8rem;
+  font-size: 0.78rem;
+}
+
+.spk-match-name {
+  font-weight: 700;
+  color: #38BDF8;
+}
+
+.sms-alert-preview {
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 8px;
+  padding: 0.8rem;
+  margin-top: 0.8rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.sms-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  color: #34D399;
+  margin-bottom: 0.4rem;
+  font-size: 0.78rem;
+}
+
+.sms-body {
+  font-family: var(--font-mono);
+  color: #E2E8F0;
+  white-space: pre-line;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.speaker-dir-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+.speaker-profile-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.spk-prof-info h5 {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-main);
+}
+
+.spk-prof-info span {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* Email Modal */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: #111827;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  width: 650px;
+  max-width: 95vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 1.2rem;
+  border-bottom: 1px solid var(--card-border);
+  background: #0F172A;
+}
+
+.modal-header h3 {
+  font-size: 0.95rem;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.modal-body {
+  padding: 1.2rem;
+}
+
+/* ==========================================================================
+   Deep Forensic Activity & Audit Trail Styles
+   ========================================================================== */
+
+.history-container {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.history-panel {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.hfilter-btn {
+  background: #1E293B;
+  border: 1px solid #334155;
+  color: #94A3B8;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hfilter-btn:hover {
+  background: #334155;
+  color: #F8FAFC;
+}
+
+.hfilter-btn.active {
+  background: #2563EB;
+  border-color: #38BDF8;
+  color: #FFFFFF;
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+}
+
+.history-table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+
+.history-table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #1E293B;
+  vertical-align: middle;
+}
+
+.history-table tr:hover {
+  background: rgba(30, 41, 59, 0.5);
+}
+
+/* Badges for Event Verdicts */
+.verdict-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.verdict-critical {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid #EF4444;
+  color: #F87171;
+}
+
+.verdict-warning {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid #F59E0B;
+  color: #FBBF24;
+}
+
+.verdict-safe {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid #10B981;
+  color: #34D399;
+}
+
+.verdict-info {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid #38BDF8;
+  color: #38BDF8;
+}
+
+/* Deep Telemetry Table */
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.telemetry-box {
+  background: #0B1120;
+  border: 1px solid #1E293B;
+  border-radius: 8px;
+  padding: 0.9rem;
+}
+
+.telemetry-box h4 {
+  margin: 0 0 0.6rem 0;
+  font-size: 0.8rem;
+  color: #38BDF8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.telemetry-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.74rem;
+}
+
+.telemetry-table td {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.telemetry-table td:first-child {
+  color: #94A3B8;
+}
+
+.telemetry-table td:last-child {
+  text-align: right;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: #F8FAFC;
+}
+
+.baseline-diff {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  margin-left: 0.3rem;
+}
+
+.diff-danger { background: rgba(239, 68, 68, 0.2); color: #F87171; }
+.diff-ok { background: rgba(16, 185, 129, 0.2); color: #34D399; }
+

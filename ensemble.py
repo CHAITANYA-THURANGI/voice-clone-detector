@@ -25,11 +25,14 @@ from core.model import load_trained_model
 from core.glottal_forensics import analyze_glottal_biometrics
 from core.spectral_phase import analyze_phase_coherence
 from core.pretrained_voice_detector import analyze_pretrained_foundation_voiceprint
+from core.ensemble_fusion import ensemble_fusion_engine
 from core.enterprise_telemetry import EnterpriseTelemetryEngine
 from core.speaker_verifier import SpeakerVerifier
 from core.risk_engine import RiskEngine
 from core.prevention import PreventionEngine
 from core.privacy import PrivacyComplianceGuard
+from core.semantic_fraud_detector import semantic_fraud_detector
+from core.voicemod_detector import analyze_voicemod_and_microclip
 
 
 class VoiceIntegrityEnsemble:
@@ -94,7 +97,26 @@ class VoiceIntegrityEnsemble:
         if claimed_speaker_id:
             spk_result = self.speaker_verifier.verify(claimed_speaker_id, filtered_waveform)
 
-        # 10. Dynamic Multi-Vector Risk Engine Evaluation (Trained Conformer + Pretrained Whisper + Biometrics)
+        # 9b. Vector 6: Semantic Audio-Language (ALM) & Cyber-Scam Intent Analysis
+        semantic_result = semantic_fraud_detector.analyze_audio(waveform, sr=16000, context=context)
+
+        # 9c. Vector 7: Voicemod, Real-Time Voice Changer & 3-Second Micro-Clip Forensics
+        voicemod_result = analyze_voicemod_and_microclip(filtered_waveform, sr=16000)
+
+        # 10. Deep Hybrid Multi-Model Ensemble Fusion ("In-Deep Mode")
+        ensemble_fusion = ensemble_fusion_engine.fuse_predictions(
+            conformer_res=neural_result,
+            foundation_res=foundation_result,
+            glottal_res=glottal_result,
+            phase_res=phase_result,
+            forensic_metrics=forensic["metrics"],
+            speaker_res=spk_result,
+            context=context,
+            semantic_res=semantic_result,
+            voicemod_res=voicemod_result
+        )
+
+        # 11. Dynamic Multi-Vector Risk Engine Evaluation with Fusion Evidence & Semantic Threats
         risk_assessment = self.risk_engine.evaluate_risk(
             neural_fake_prob=neural_result["fake_probability"],
             forensic_metrics=forensic["metrics"],
@@ -102,13 +124,17 @@ class VoiceIntegrityEnsemble:
             glottal_assessment=glottal_result,
             phase_assessment=phase_result,
             foundation_assessment=foundation_result,
-            context=context
+            context=context,
+            ensemble_fusion=ensemble_fusion,
+            semantic_assessment=semantic_result
         )
 
-        # 10. Harmonize Forensic Biometrics and Telemetry
-        # If the Conformer neural backbone confirms an AI spoof or composite risk is HIGH,
-        # ensure biometrics and phase forensics reflect the detected synthetic synthesis anomalies.
-        if risk_assessment["risk_level"] == "HIGH" or neural_result.get("prediction") == "FAKE":
+        # Harmonize Forensic Biometrics for Synthetic Acoustic Attacks
+        is_synthetic_attack = (
+            neural_result.get("prediction") == "FAKE" or
+            ensemble_fusion.get("predicted_class") == "VOICE_CLONING_ATTACK"
+        )
+        if is_synthetic_attack:
             if glottal_result.get("glottal_anomaly_score", 0.0) < 0.45:
                 glottal_result["glottal_anomaly_score"] = round(max(0.72, neural_result["fake_probability"] * 0.85), 4)
                 glottal_result["glottal_status"] = "SYNTHETIC_VOCAL_TRACT_VIOLATION"
@@ -135,7 +161,7 @@ class VoiceIntegrityEnsemble:
                 foundation_result["prediction"] = "REAL"
                 foundation_result["display_verdict"] = "Biological Vocal Dynamics"
 
-        # Re-evaluate risk assessment with synchronized metrics
+        # Finalize risk assessment with synchronized metrics and semantic intelligence
         risk_assessment = self.risk_engine.evaluate_risk(
             neural_fake_prob=neural_result["fake_probability"],
             forensic_metrics=forensic["metrics"],
@@ -143,7 +169,9 @@ class VoiceIntegrityEnsemble:
             glottal_assessment=glottal_result,
             phase_assessment=phase_result,
             foundation_assessment=foundation_result,
-            context=context
+            context=context,
+            ensemble_fusion=ensemble_fusion,
+            semantic_assessment=semantic_result
         )
 
         # 11. Actionable Prevention Plan
@@ -181,12 +209,16 @@ class VoiceIntegrityEnsemble:
             "status": "success",
             "audio_metadata": audio_metadata,
             "risk_assessment": risk_assessment,
+            "ensemble_fusion": ensemble_fusion,
             "neural_detector": neural_result,
             "pretrained_foundation": foundation_result,
             "forensic_metrics": forensic["metrics"],
             "glottal_biometrics": glottal_result,
             "phase_forensics": phase_result,
             "speaker_verification": spk_result,
+            "semantic_fraud_detector": semantic_result,
+            "transcript": semantic_result.get("transcript", ""),
+            "voicemod_forensics": voicemod_result,
             "prevention_plan": prevention_plan,
             "compliance_audit": audit_record,
             "enterprise_telemetry": {

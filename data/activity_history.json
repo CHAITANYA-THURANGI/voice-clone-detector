@@ -1,0 +1,1647 @@
+[
+  {
+    "incident_id": "TEST-1F6318B9",
+    "session_id": "DIAG-3025B8",
+    "timestamp": "10 Sep 2026, 04:23:18 UTC",
+    "iso_timestamp": "2026-09-10T04:23:18Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "ALERT_DISPATCH",
+    "caller_or_file": "Diagnostic Gateway Test (EMAIL)",
+    "claimed_identity": "Target: ",
+    "verdict": "DIAGNOSTIC_FAILED",
+    "risk_percentage": 0.0,
+    "risk_level": "SAFE",
+    "threats_detected": [],
+    "deep_forensics": {
+      "channel": "EMAIL",
+      "recipient": "",
+      "status": "CONFIG_REQUIRED",
+      "details": {
+        "success": false,
+        "status": "CONFIG_REQUIRED",
+        "error": "SMTP credentials are not configured in .env or settings."
+      }
+    },
+    "action_taken": "TEST_TRANSMISSION_CONFIG_REQUIRED",
+    "alerts": {
+      "email": {
+        "recipient": "",
+        "status": "CONFIG_REQUIRED",
+        "success": false,
+        "metadata": {
+          "success": false,
+          "status": "CONFIG_REQUIRED",
+          "error": "SMTP credentials are not configured in .env or settings."
+        }
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "980e8794e5004f5a8b2c8ebecdf8234f",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-C4F0DE24",
+    "session_id": "CALL-6620BA71",
+    "timestamp": "10 Sep 2026, 01:32:10 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-98765-99887",
+    "claimed_identity": "Mom",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 41.6,
+    "risk_level": "MEDIUM",
+    "threats_detected": [
+      "Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist",
+      "Biometric Imposter: Caller claims 'Mom' but acoustics mismatch",
+      "Voicemod Real-Time Voice Changer Detected",
+      "Conversational Scam: \ud83d\udea8 Digital Arrest Extortion"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.416,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.58,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.42
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.45,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Conversational Scam: \ud83d\udea8 Digital Arrest Extortion",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-C4F0DE24]:\nIncoming call from +91-98765-99887 (Mom) was AUTOMATICALLY TERMINATED at 10 Sep 2026, 01:32:10 UTC.\nThreat Detected: Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Biometric Imposter: Caller claims 'Mom' but acoustics mismatch, Voicemod Real-Time Voice Changer Detected, Conversational Scam: \ud83d\udea8 Digital Arrest Extortion (Risk: 41.6%).\nPRECAUTIONS:\n1. Do NOT transfer funds or share netbanking OTPs.\n2. Do NOT call back this number.\n3. Verify through secondary channel or report at cybercrime.gov.in."
+      },
+      "speaker_biometrics": {
+        "claimed": "Mom",
+        "identified_name": "Watchlist Extortionist",
+        "confidence_pct": 91.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": true,
+        "is_discrepancy": true
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-11223",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-C4F0DE24",
+        "timestamp": "10 Sep 2026, 01:32:10 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-C4F0DE24]:\nIncoming call from +91-98765-99887 (Mom) was AUTOMATICALLY TERMINATED at 10 Sep 2026, 01:32:10 UTC.\nThreat Detected: Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Biometric Imposter: Caller claims 'Mom' but acoustics mismatch, Voicemod Real-Time Voice Changer Detected, Conversational Scam: \ud83d\udea8 Digital Arrest Extortion (Risk: 41.6%).\nPRECAUTIONS:\n1. Do NOT transfer funds or share netbanking OTPs.\n2. Do NOT call back this number.\n3. Verify through secondary channel or report at cybercrime.gov.in.",
+        "status": "DELIVERED_SUCCESSFULLY",
+        "gateway": "VoiceShield Telephony SMS Gateway / Twilio Carrier Relay"
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "target-victim@company.com",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-98765-99887 Terminated - VoiceShield AI",
+        "status": "DISPATCHED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "edf32b1f304447a8809961674f54ff79",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-C4488C57",
+    "session_id": "CALL-00A2C12C",
+    "timestamp": "10 Sep 2026, 01:32:48 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-98765-00000",
+    "claimed_identity": "Unknown Number",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 41.6,
+    "risk_level": "MEDIUM",
+    "threats_detected": [
+      "Conversational Scam: \ud83d\udea8 Digital Arrest Extortion",
+      "Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist",
+      "Voicemod Real-Time Voice Changer Detected"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.416,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.58,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.42
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.45,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Conversational Scam: \ud83d\udea8 Digital Arrest Extortion",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-C4488C57]:\nIncoming call from +91-98765-00000 (Unknown Number) was AUTOMATICALLY TERMINATED at 10 Sep 2026, 01:32:48 UTC.\nThreat Detected: Conversational Scam: \ud83d\udea8 Digital Arrest Extortion, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Voicemod Real-Time Voice Changer Detected (Risk: 41.6%).\nPRECAUTIONS:\n1. Do NOT transfer funds or share netbanking OTPs.\n2. Do NOT call back this number.\n3. Verify through secondary channel or report at cybercrime.gov.in."
+      },
+      "speaker_biometrics": {
+        "claimed": "Unknown Number",
+        "identified_name": "Watchlist Extortionist",
+        "confidence_pct": 91.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": true,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-76655",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-C4488C57",
+        "timestamp": "10 Sep 2026, 01:32:48 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-C4488C57]:\nIncoming call from +91-98765-00000 (Unknown Number) was AUTOMATICALLY TERMINATED at 10 Sep 2026, 01:32:48 UTC.\nThreat Detected: Conversational Scam: \ud83d\udea8 Digital Arrest Extortion, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Voicemod Real-Time Voice Changer Detected (Risk: 41.6%).\nPRECAUTIONS:\n1. Do NOT transfer funds or share netbanking OTPs.\n2. Do NOT call back this number.\n3. Verify through secondary channel or report at cybercrime.gov.in.",
+        "status": "DELIVERED_SUCCESSFULLY",
+        "gateway": "VoiceShield Telephony SMS Gateway / Twilio Carrier Relay"
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "security-alert@user.org",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-98765-00000 Terminated - VoiceShield AI",
+        "status": "DISPATCHED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "e8af322ca33242438c1e1212a7b53540",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-5842F5BB",
+    "session_id": "CALL-3D9446B3",
+    "timestamp": "10 Sep 2026, 01:35:01 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-140-776655",
+    "claimed_identity": "Police Officer",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 41.6,
+    "risk_level": "MEDIUM",
+    "threats_detected": [
+      "Voicemod Real-Time Voice Changer Detected",
+      "Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist",
+      "Conversational Scam: \ud83d\udea8 Digital Arrest Extortion"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.416,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.58,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.42
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.45,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Conversational Scam: \ud83d\udea8 Digital Arrest Extortion",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-5842F5BB]:\nIncoming call from +91-140-776655 (Police Officer) was AUTOMATICALLY TERMINATED at 10 Sep 2026, 01:35:01 UTC.\nThreat Detected: Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Conversational Scam: \ud83d\udea8 Digital Arrest Extortion (Risk: 41.6%).\nPRECAUTIONS:\n1. Do NOT transfer funds or share netbanking OTPs.\n2. Do NOT call back this number.\n3. Verify through secondary channel or report at cybercrime.gov.in."
+      },
+      "speaker_biometrics": {
+        "claimed": "Police Officer",
+        "identified_name": "Watchlist Extortionist",
+        "confidence_pct": 91.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": true,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-11223",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-5842F5BB",
+        "timestamp": "10 Sep 2026, 01:35:01 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-5842F5BB]:\nIncoming call from +91-140-776655 (Police Officer) was AUTOMATICALLY TERMINATED at 10 Sep 2026, 01:35:01 UTC.\nThreat Detected: Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Conversational Scam: \ud83d\udea8 Digital Arrest Extortion (Risk: 41.6%).\nPRECAUTIONS:\n1. Do NOT transfer funds or share netbanking OTPs.\n2. Do NOT call back this number.\n3. Verify through secondary channel or report at cybercrime.gov.in.",
+        "status": "DELIVERED_SUCCESSFULLY",
+        "gateway": "VoiceShield Telephony SMS Gateway / Twilio Carrier Relay"
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "victim@enterprise.com",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-140-776655 Terminated - VoiceShield AI",
+        "status": "DISPATCHED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "0b92148b57af4c24ab6a30f85ad81d3a",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-F2F679F2",
+    "session_id": "CALL-79AC156F",
+    "timestamp": "10 Sep 2026, 01:35:01 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-98765-00112",
+    "claimed_identity": "Bank Security",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 4.0,
+    "risk_level": "LOW",
+    "threats_detected": [
+      "Banking KYC Scam",
+      "Synthetic Voice Attack"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.04,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.96,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.04
+        }
+      },
+      "voicemod": {
+        "detected": false,
+        "comb_ripple": 0.08,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Banking KYC Scam",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-F2F679F2]:\nIncoming call from +91-98765-00112 (Bank Security) was AUTOMATICALLY TERMINATED at 10 Sep 2026, 01:35:01 UTC.\nThreat Detected: Banking KYC Scam, Synthetic Voice Attack (Risk: 4.0%).\nPRECAUTIONS:\n1. Do NOT transfer funds or share netbanking OTPs.\n2. Do NOT call back this number.\n3. Verify through secondary channel or report at cybercrime.gov.in."
+      },
+      "speaker_biometrics": {
+        "claimed": "Bank Security",
+        "identified_name": "Unknown",
+        "confidence_pct": 45.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-33445",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-F2F679F2",
+        "timestamp": "10 Sep 2026, 01:35:01 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-F2F679F2]:\nIncoming call from +91-98765-00112 (Bank Security) was AUTOMATICALLY TERMINATED at 10 Sep 2026, 01:35:01 UTC.\nThreat Detected: Banking KYC Scam, Synthetic Voice Attack (Risk: 4.0%).\nPRECAUTIONS:\n1. Do NOT transfer funds or share netbanking OTPs.\n2. Do NOT call back this number.\n3. Verify through secondary channel or report at cybercrime.gov.in.",
+        "status": "DELIVERED_SUCCESSFULLY",
+        "gateway": "VoiceShield Telephony SMS Gateway / Twilio Carrier Relay"
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "victim@securemail.org",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-98765-00112 Terminated - VoiceShield AI",
+        "status": "DISPATCHED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "a188307c198d4b0ebb94001678fff14e",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-8D1DA171",
+    "session_id": "CALL-DBDA1BAF",
+    "timestamp": "10 Sep 2026, 01:35:02 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-88888-99999",
+    "claimed_identity": "Unknown Caller",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 41.6,
+    "risk_level": "MEDIUM",
+    "threats_detected": [
+      "Voicemod Real-Time Voice Changer Detected",
+      "Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist",
+      "Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.416,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.58,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.42
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.45,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-8D1DA171]:\nIncoming call from +91-88888-99999 (Unknown Caller) was AUTOMATICALLY TERMINATED at 10 Sep 2026, 01:35:02 UTC.\nThreat Detected: Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation (Risk: 41.6%).\nPRECAUTIONS:\n1. Do NOT transfer funds or share netbanking OTPs.\n2. Do NOT call back this number.\n3. Verify through secondary channel or report at cybercrime.gov.in."
+      },
+      "speaker_biometrics": {
+        "claimed": "Unknown Caller",
+        "identified_name": "Watchlist Extortionist",
+        "confidence_pct": 91.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": true,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-76655",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-8D1DA171",
+        "timestamp": "10 Sep 2026, 01:35:02 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-8D1DA171]:\nIncoming call from +91-88888-99999 (Unknown Caller) was AUTOMATICALLY TERMINATED at 10 Sep 2026, 01:35:02 UTC.\nThreat Detected: Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation (Risk: 41.6%).\nPRECAUTIONS:\n1. Do NOT transfer funds or share netbanking OTPs.\n2. Do NOT call back this number.\n3. Verify through secondary channel or report at cybercrime.gov.in.",
+        "status": "DELIVERED_SUCCESSFULLY",
+        "gateway": "VoiceShield Telephony SMS Gateway / Twilio Carrier Relay"
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "security-alert@user.org",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-88888-99999 Terminated - VoiceShield AI",
+        "status": "DISPATCHED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "79580bb188314a3bacd8bde079293be6",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-641EB9DA",
+    "session_id": "CALL-716848CA",
+    "timestamp": "10 Sep 2026, 01:41:40 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-98765-43210",
+    "claimed_identity": "Mom",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 41.6,
+    "risk_level": "MEDIUM",
+    "threats_detected": [
+      "Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation",
+      "Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist",
+      "Biometric Imposter: Caller claims 'Mom' but acoustics mismatch",
+      "Voicemod Real-Time Voice Changer Detected"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.416,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.58,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.42
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.45,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-641EB9DA]:\nIncoming call from +91-98765-43210 (Mom) was AUTOMATICALLY TERMINATED at 10 Sep 2026, 01:41:40 UTC.\nThreat Detected: Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Biometric Imposter: Caller claims 'Mom' but acoustics mismatch, Voicemod Real-Time Voice Changer Detected (Risk: 41.6%).\nPRECAUTIONS:\n1. Do NOT transfer funds or share netbanking OTPs.\n2. Do NOT call back this number.\n3. Verify through secondary channel or report at cybercrime.gov.in."
+      },
+      "speaker_biometrics": {
+        "claimed": "Mom",
+        "identified_name": "Watchlist Extortionist",
+        "confidence_pct": 91.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": true,
+        "is_discrepancy": true
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-93379-97814",
+        "secondary_recipient": "+91-93379-97814",
+        "incident_id": "INC-641EB9DA",
+        "timestamp": "10 Sep 2026, 01:41:40 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-641EB9DA]:\nIncoming call from +91-98765-43210 (Mom) was AUTOMATICALLY TERMINATED at 10 Sep 2026, 01:41:40 UTC.\nThreat Detected: Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Biometric Imposter: Caller claims 'Mom' but acoustics mismatch, Voicemod Real-Time Voice Changer Detected (Risk: 41.6%).\nPRECAUTIONS:\n1. Do NOT transfer funds or share netbanking OTPs.\n2. Do NOT call back this number.\n3. Verify through secondary channel or report at cybercrime.gov.in.",
+        "status": "DELIVERED_SUCCESSFULLY",
+        "gateway": "VoiceShield Telephony SMS Gateway / Twilio Carrier Relay"
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "security-alert@user.org",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-98765-43210 Terminated - VoiceShield AI",
+        "status": "DISPATCHED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "b22ef4e08d9b4d09b327d6261f7b14f8",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-218A4C9F",
+    "session_id": "CALL-E560116C",
+    "timestamp": "10 Sep 2026, 02:05:09 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "ANDROID_MOBILE",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-140-776655",
+    "claimed_identity": "Anita Sharma (Mom)",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 4.0,
+    "risk_level": "LOW",
+    "threats_detected": [],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.04,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.96,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.04
+        }
+      },
+      "voicemod": {
+        "detected": false,
+        "comb_ripple": 0.08,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Impersonation Threat",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD ALERT [INC-218A4C9F]:\nCall from +91-140-776655 (Anita Sharma (Mom)) AUTO-TERMINATED (02:05 UTC).\nThreat: AI Voice Clone Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Anita Sharma (Mom) on primary number."
+      },
+      "speaker_biometrics": {
+        "claimed": "Anita Sharma (Mom)",
+        "identified_name": "Unknown",
+        "confidence_pct": 45.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-76655",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-218A4C9F",
+        "timestamp": "10 Sep 2026, 02:05:09 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD ALERT [INC-218A4C9F]:\nCall from +91-140-776655 (Anita Sharma (Mom)) AUTO-TERMINATED (02:05 UTC).\nThreat: AI Voice Clone Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Anita Sharma (Mom) on primary number.",
+        "status": "QUEUED_FOR_DEVICE_SIM",
+        "success": true,
+        "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
+        "dispatch_metadata": {
+          "success": true,
+          "status": "QUEUED_FOR_DEVICE_SIM",
+          "channel": "ANDROID_SIM_CARRIER",
+          "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
+          "recipient": "+91-99887-76655",
+          "incident_id": "INC-218A4C9F",
+          "char_count": 239,
+          "sms_text": "\ud83d\udea8 VOICESHIELD ALERT [INC-218A4C9F]:\nCall from +91-140-776655 (Anita Sharma (Mom)) AUTO-TERMINATED (02:05 UTC).\nThreat: AI Voice Clone Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Anita Sharma (Mom) on primary number.",
+          "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
+          "timestamp": "2026-09-10T02:05:09Z"
+        }
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "victim@domain.org",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-140-776655 Terminated - VoiceShield AI",
+        "status": "AUTH_FAILED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "dd16212ed4494dd1a0177d57b962b866",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-AB451839",
+    "session_id": "CALL-E49F3EAF",
+    "timestamp": "10 Sep 2026, 02:05:34 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "ANDROID_MOBILE",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-140-776655",
+    "claimed_identity": "Police Officer",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 41.6,
+    "risk_level": "MEDIUM",
+    "threats_detected": [
+      "Conversational Scam: \ud83d\udea8 Digital Arrest Extortion",
+      "Voicemod Real-Time Voice Changer Detected",
+      "Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.416,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.58,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.42
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.45,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Conversational Scam: \ud83d\udea8 Digital Arrest Extortion",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD ALERT [INC-AB451839]:\nCall from +91-140-776655 (Police Officer) AUTO-TERMINATED (02:05 UTC).\nThreat: Conversational Scam: \ud83d\udea8 Digital Arrest Extortion, Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Police Officer on primary number."
+      },
+      "speaker_biometrics": {
+        "claimed": "Police Officer",
+        "identified_name": "Watchlist Extortionist",
+        "confidence_pct": 91.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": true,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-11223",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-AB451839",
+        "timestamp": "10 Sep 2026, 02:05:34 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD ALERT [INC-AB451839]:\nCall from +91-140-776655 (Police Officer) AUTO-TERMINATED (02:05 UTC).\nThreat: Conversational Scam: \ud83d\udea8 Digital Arrest Extortion, Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Police Officer on primary number.",
+        "status": "QUEUED_FOR_DEVICE_SIM",
+        "success": true,
+        "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
+        "dispatch_metadata": {
+          "success": true,
+          "status": "QUEUED_FOR_DEVICE_SIM",
+          "channel": "ANDROID_SIM_CARRIER",
+          "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
+          "recipient": "+91-99887-11223",
+          "incident_id": "INC-AB451839",
+          "char_count": 379,
+          "sms_text": "\ud83d\udea8 VOICESHIELD ALERT [INC-AB451839]:\nCall from +91-140-776655 (Police Officer) AUTO-TERMINATED (02:05 UTC).\nThreat: Conversational Scam: \ud83d\udea8 Digital Arrest Extortion, Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Police Officer on primary number.",
+          "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
+          "timestamp": "2026-09-10T02:05:34Z"
+        }
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "victim@enterprise.com",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-140-776655 Terminated - VoiceShield AI",
+        "status": "CONFIG_REQUIRED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "baf59da7a0154972805f691a82678904",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-0C401D11",
+    "session_id": "CALL-DDCD1F8D",
+    "timestamp": "10 Sep 2026, 02:05:34 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "ANDROID_MOBILE",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-98765-00112",
+    "claimed_identity": "Bank Security",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 4.0,
+    "risk_level": "LOW",
+    "threats_detected": [
+      "Banking KYC Scam",
+      "Synthetic Voice Attack"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.04,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.96,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.04
+        }
+      },
+      "voicemod": {
+        "detected": false,
+        "comb_ripple": 0.08,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Banking KYC Scam",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD ALERT [INC-0C401D11]:\nCall from +91-98765-00112 (Bank Security) AUTO-TERMINATED (02:05 UTC).\nThreat: Banking KYC Scam, Synthetic Voice Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Bank Security on primary number."
+      },
+      "speaker_biometrics": {
+        "claimed": "Bank Security",
+        "identified_name": "Unknown",
+        "confidence_pct": 45.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-33445",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-0C401D11",
+        "timestamp": "10 Sep 2026, 02:05:34 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD ALERT [INC-0C401D11]:\nCall from +91-98765-00112 (Bank Security) AUTO-TERMINATED (02:05 UTC).\nThreat: Banking KYC Scam, Synthetic Voice Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Bank Security on primary number.",
+        "status": "QUEUED_FOR_DEVICE_SIM",
+        "success": true,
+        "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
+        "dispatch_metadata": {
+          "success": true,
+          "status": "QUEUED_FOR_DEVICE_SIM",
+          "channel": "ANDROID_SIM_CARRIER",
+          "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
+          "recipient": "+91-99887-33445",
+          "incident_id": "INC-0C401D11",
+          "char_count": 249,
+          "sms_text": "\ud83d\udea8 VOICESHIELD ALERT [INC-0C401D11]:\nCall from +91-98765-00112 (Bank Security) AUTO-TERMINATED (02:05 UTC).\nThreat: Banking KYC Scam, Synthetic Voice Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Bank Security on primary number.",
+          "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
+          "timestamp": "2026-09-10T02:05:34Z"
+        }
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "victim@securemail.org",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-98765-00112 Terminated - VoiceShield AI",
+        "status": "CONFIG_REQUIRED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "50fb5f5dc1b34b78b340e9cd0a0450cb",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-5E5853D5",
+    "session_id": "CALL-D6C989C9",
+    "timestamp": "10 Sep 2026, 02:05:35 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "ANDROID_MOBILE",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-88888-99999",
+    "claimed_identity": "Unknown Caller",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 41.6,
+    "risk_level": "MEDIUM",
+    "threats_detected": [
+      "Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation",
+      "Voicemod Real-Time Voice Changer Detected",
+      "Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.416,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.58,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.42
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.45,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD ALERT [INC-5E5853D5]:\nCall from +91-88888-99999 (Unknown Caller) AUTO-TERMINATED (02:05 UTC).\nThreat: Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation, Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Unknown Caller on primary number."
+      },
+      "speaker_biometrics": {
+        "claimed": "Unknown Caller",
+        "identified_name": "Watchlist Extortionist",
+        "confidence_pct": 91.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": true,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-76655",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-5E5853D5",
+        "timestamp": "10 Sep 2026, 02:05:35 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD ALERT [INC-5E5853D5]:\nCall from +91-88888-99999 (Unknown Caller) AUTO-TERMINATED (02:05 UTC).\nThreat: Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation, Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Unknown Caller on primary number.",
+        "status": "QUEUED_FOR_DEVICE_SIM",
+        "success": true,
+        "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
+        "dispatch_metadata": {
+          "success": true,
+          "status": "QUEUED_FOR_DEVICE_SIM",
+          "channel": "ANDROID_SIM_CARRIER",
+          "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
+          "recipient": "+91-99887-76655",
+          "incident_id": "INC-5E5853D5",
+          "char_count": 394,
+          "sms_text": "\ud83d\udea8 VOICESHIELD ALERT [INC-5E5853D5]:\nCall from +91-88888-99999 (Unknown Caller) AUTO-TERMINATED (02:05 UTC).\nThreat: Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation, Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Unknown Caller on primary number.",
+          "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
+          "timestamp": "2026-09-10T02:05:35Z"
+        }
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "security-alert@user.org",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-88888-99999 Terminated - VoiceShield AI",
+        "status": "CONFIG_REQUIRED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "4a42aa6d94e1418887d3971d79299b34",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-94C7DBB1",
+    "session_id": "CALL-AC6B9D27",
+    "timestamp": "10 Sep 2026, 02:06:02 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "ANDROID_MOBILE",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-140-776655",
+    "claimed_identity": "Police Officer",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 41.6,
+    "risk_level": "MEDIUM",
+    "threats_detected": [
+      "Conversational Scam: \ud83d\udea8 Digital Arrest Extortion",
+      "Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist",
+      "Voicemod Real-Time Voice Changer Detected"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.416,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.58,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.42
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.45,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Conversational Scam: \ud83d\udea8 Digital Arrest Extortion",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-94C7DBB1]:\nCall from +91-140-776655 (Police Officer) AUTO-TERMINATED (02:06 UTC).\nThreat: Conversational Scam: \ud83d\udea8 Digital Arrest Extortion, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Voicemod Real-Time Voice Changer Detected (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Police Officer on primary number."
+      },
+      "speaker_biometrics": {
+        "claimed": "Police Officer",
+        "identified_name": "Watchlist Extortionist",
+        "confidence_pct": 91.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": true,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-11223",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-94C7DBB1",
+        "timestamp": "10 Sep 2026, 02:06:02 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-94C7DBB1]:\nCall from +91-140-776655 (Police Officer) AUTO-TERMINATED (02:06 UTC).\nThreat: Conversational Scam: \ud83d\udea8 Digital Arrest Extortion, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Voicemod Real-Time Voice Changer Detected (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Police Officer on primary number.",
+        "status": "QUEUED_FOR_DEVICE_SIM",
+        "success": true,
+        "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
+        "dispatch_metadata": {
+          "success": true,
+          "status": "QUEUED_FOR_DEVICE_SIM",
+          "channel": "ANDROID_SIM_CARRIER",
+          "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
+          "recipient": "+91-99887-11223",
+          "incident_id": "INC-94C7DBB1",
+          "char_count": 382,
+          "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-94C7DBB1]:\nCall from +91-140-776655 (Police Officer) AUTO-TERMINATED (02:06 UTC).\nThreat: Conversational Scam: \ud83d\udea8 Digital Arrest Extortion, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Voicemod Real-Time Voice Changer Detected (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Police Officer on primary number.",
+          "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
+          "timestamp": "2026-09-10T02:06:02Z"
+        }
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "victim@enterprise.com",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-140-776655 Terminated - VoiceShield AI",
+        "status": "CONFIG_REQUIRED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "d3ed9f9dadc540c7b3e1b28770374864",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-E1FE2C34",
+    "session_id": "CALL-28F4756A",
+    "timestamp": "10 Sep 2026, 02:06:02 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "ANDROID_MOBILE",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-98765-00112",
+    "claimed_identity": "Bank Security",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 4.0,
+    "risk_level": "LOW",
+    "threats_detected": [
+      "Banking KYC Scam",
+      "Synthetic Voice Attack"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.04,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.96,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.04
+        }
+      },
+      "voicemod": {
+        "detected": false,
+        "comb_ripple": 0.08,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Banking KYC Scam",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-E1FE2C34]:\nCall from +91-98765-00112 (Bank Security) AUTO-TERMINATED (02:06 UTC).\nThreat: Banking KYC Scam, Synthetic Voice Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Bank Security on primary number."
+      },
+      "speaker_biometrics": {
+        "claimed": "Bank Security",
+        "identified_name": "Unknown",
+        "confidence_pct": 45.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-33445",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-E1FE2C34",
+        "timestamp": "10 Sep 2026, 02:06:02 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-E1FE2C34]:\nCall from +91-98765-00112 (Bank Security) AUTO-TERMINATED (02:06 UTC).\nThreat: Banking KYC Scam, Synthetic Voice Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Bank Security on primary number.",
+        "status": "QUEUED_FOR_DEVICE_SIM",
+        "success": true,
+        "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
+        "dispatch_metadata": {
+          "success": true,
+          "status": "QUEUED_FOR_DEVICE_SIM",
+          "channel": "ANDROID_SIM_CARRIER",
+          "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
+          "recipient": "+91-99887-33445",
+          "incident_id": "INC-E1FE2C34",
+          "char_count": 252,
+          "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-E1FE2C34]:\nCall from +91-98765-00112 (Bank Security) AUTO-TERMINATED (02:06 UTC).\nThreat: Banking KYC Scam, Synthetic Voice Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Bank Security on primary number.",
+          "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
+          "timestamp": "2026-09-10T02:06:02Z"
+        }
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "victim@securemail.org",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-98765-00112 Terminated - VoiceShield AI",
+        "status": "CONFIG_REQUIRED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "3df95a032fb940caab968a73ff30c0f0",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-E857616E",
+    "session_id": "CALL-1F7C9EE5",
+    "timestamp": "10 Sep 2026, 02:06:03 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "ANDROID_MOBILE",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-88888-99999",
+    "claimed_identity": "Unknown Caller",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 41.6,
+    "risk_level": "MEDIUM",
+    "threats_detected": [
+      "Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist",
+      "Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation",
+      "Voicemod Real-Time Voice Changer Detected"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.416,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.58,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.42
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.45,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-E857616E]:\nCall from +91-88888-99999 (Unknown Caller) AUTO-TERMINATED (02:06 UTC).\nThreat: Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation, Voicemod Real-Time Voice Changer Detected (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Unknown Caller on primary number."
+      },
+      "speaker_biometrics": {
+        "claimed": "Unknown Caller",
+        "identified_name": "Watchlist Extortionist",
+        "confidence_pct": 91.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": true,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-76655",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-E857616E",
+        "timestamp": "10 Sep 2026, 02:06:03 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-E857616E]:\nCall from +91-88888-99999 (Unknown Caller) AUTO-TERMINATED (02:06 UTC).\nThreat: Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation, Voicemod Real-Time Voice Changer Detected (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Unknown Caller on primary number.",
+        "status": "QUEUED_FOR_DEVICE_SIM",
+        "success": true,
+        "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
+        "dispatch_metadata": {
+          "success": true,
+          "status": "QUEUED_FOR_DEVICE_SIM",
+          "channel": "ANDROID_SIM_CARRIER",
+          "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
+          "recipient": "+91-99887-76655",
+          "incident_id": "INC-E857616E",
+          "char_count": 397,
+          "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-E857616E]:\nCall from +91-88888-99999 (Unknown Caller) AUTO-TERMINATED (02:06 UTC).\nThreat: Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist, Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation, Voicemod Real-Time Voice Changer Detected (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Unknown Caller on primary number.",
+          "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
+          "timestamp": "2026-09-10T02:06:03Z"
+        }
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "security-alert@user.org",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-88888-99999 Terminated - VoiceShield AI",
+        "status": "CONFIG_REQUIRED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "0e4faf4fc49e4a40887d1137343740d4",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-7B5D902A",
+    "session_id": "CALL-127373EF",
+    "timestamp": "10 Sep 2026, 02:06:12 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "ANDROID_MOBILE",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-140-776655",
+    "claimed_identity": "Anita Sharma (Mom)",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 4.0,
+    "risk_level": "LOW",
+    "threats_detected": [],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.04,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.96,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.04
+        }
+      },
+      "voicemod": {
+        "detected": false,
+        "comb_ripple": 0.08,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Impersonation Threat",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-7B5D902A]:\nCall from +91-140-776655 (Anita Sharma (Mom)) AUTO-TERMINATED (02:06 UTC).\nThreat: AI Voice Clone Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Anita Sharma (Mom) on primary number."
+      },
+      "speaker_biometrics": {
+        "claimed": "Anita Sharma (Mom)",
+        "identified_name": "Unknown",
+        "confidence_pct": 45.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-76655",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-7B5D902A",
+        "timestamp": "10 Sep 2026, 02:06:12 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-7B5D902A]:\nCall from +91-140-776655 (Anita Sharma (Mom)) AUTO-TERMINATED (02:06 UTC).\nThreat: AI Voice Clone Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Anita Sharma (Mom) on primary number.",
+        "status": "QUEUED_FOR_DEVICE_SIM",
+        "success": true,
+        "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
+        "dispatch_metadata": {
+          "success": true,
+          "status": "QUEUED_FOR_DEVICE_SIM",
+          "channel": "ANDROID_SIM_CARRIER",
+          "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
+          "recipient": "+91-99887-76655",
+          "incident_id": "INC-7B5D902A",
+          "char_count": 242,
+          "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-7B5D902A]:\nCall from +91-140-776655 (Anita Sharma (Mom)) AUTO-TERMINATED (02:06 UTC).\nThreat: AI Voice Clone Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Anita Sharma (Mom) on primary number.",
+          "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
+          "timestamp": "2026-09-10T02:06:12Z"
+        }
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "victim@domain.org",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-140-776655 Terminated - VoiceShield AI",
+        "status": "AUTH_FAILED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "dbe5d80ddac9442bbc2c69429313bcb6",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "INC-7636BCB2",
+    "session_id": "CALL-E5AFCE88",
+    "timestamp": "10 Sep 2026, 02:06:31 UTC",
+    "iso_timestamp": "2026-09-10T04:16:15Z",
+    "source": "ANDROID_MOBILE",
+    "event_type": "PHONE_CALL_DEFENSE",
+    "caller_or_file": "+91-140-776655",
+    "claimed_identity": "Anita Sharma (Mom)",
+    "verdict": "SCAM_CALL_DROPPED",
+    "risk_percentage": 4.0,
+    "risk_level": "LOW",
+    "threats_detected": [],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1840.0,
+        "spectral_rolloff_hz": 3950.0,
+        "pitch_mean_hz": 142.5,
+        "pitch_std_hz": 31.2,
+        "jitter_pct": 2.1,
+        "shimmer_pct": 4.8,
+        "hnr_db": 14.2,
+        "zero_crossing_rate": 0.082,
+        "formants": [
+          650.0,
+          1720.0,
+          2600.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.04,
+        "predicted_class": "HUMAN",
+        "entropy": 0.42
+      },
+      "ensemble_fusion": {
+        "predicted_class": "HUMAN",
+        "consensus_confidence_pct": 89.5,
+        "agreement_score": 0.88,
+        "probabilities": {
+          "human": 0.96,
+          "non_human": 0.05,
+          "voice_clone_attack": 0.04
+        }
+      },
+      "voicemod": {
+        "detected": false,
+        "comb_ripple": 0.08,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "Impersonation Threat",
+        "coercion_urgency_pct": 20.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-7636BCB2]:\nCall from +91-140-776655 (Anita Sharma (Mom)) AUTO-TERMINATED (02:06 UTC).\nThreat: AI Voice Clone Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Anita Sharma (Mom) on primary number."
+      },
+      "speaker_biometrics": {
+        "claimed": "Anita Sharma (Mom)",
+        "identified_name": "Unknown",
+        "confidence_pct": 45.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 5.8,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.042,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "alerts": {
+      "sms": {
+        "channel": "SMS",
+        "recipient": "+91-99887-76655",
+        "secondary_recipient": "+91-91234-56789",
+        "incident_id": "INC-7636BCB2",
+        "timestamp": "10 Sep 2026, 02:06:31 UTC",
+        "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-7636BCB2]:\nCall from +91-140-776655 (Anita Sharma (Mom)) AUTO-TERMINATED (02:06 UTC).\nThreat: AI Voice Clone Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Anita Sharma (Mom) on primary number.",
+        "status": "QUEUED_FOR_DEVICE_SIM",
+        "success": true,
+        "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
+        "dispatch_metadata": {
+          "success": true,
+          "status": "QUEUED_FOR_DEVICE_SIM",
+          "channel": "ANDROID_SIM_CARRIER",
+          "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
+          "recipient": "+91-99887-76655",
+          "incident_id": "INC-7636BCB2",
+          "char_count": 242,
+          "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-7636BCB2]:\nCall from +91-140-776655 (Anita Sharma (Mom)) AUTO-TERMINATED (02:06 UTC).\nThreat: AI Voice Clone Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Anita Sharma (Mom) on primary number.",
+          "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
+          "timestamp": "2026-09-10T02:06:31Z"
+        }
+      },
+      "email": {
+        "channel": "EMAIL",
+        "recipient": "victim@domain.org",
+        "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-140-776655 Terminated - VoiceShield AI",
+        "status": "AUTH_FAILED"
+      }
+    },
+    "compliance": {
+      "sha256_fingerprint": "5526397e266c4ff3a13a6859dfe04737",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  }
+]

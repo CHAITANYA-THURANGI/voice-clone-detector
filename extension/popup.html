@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VoiceShield AI - Real-Time Voice Guard</title>
+  <style>
+    :root {
+      --bg-dark: #090d16;
+      --card-bg: #111827;
+      --card-border: #1e293b;
+      --primary-cyan: #00e5ff;
+      --danger-red: #ef4444;
+      --safe-green: #10b981;
+      --warning-amber: #f59e0b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      width: 380px;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      padding: 16px;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .shield-icon {
+      width: 26px;
+      height: 26px;
+      fill: var(--primary-cyan);
+      filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.4));
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #00e5ff, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-subtitle {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #334155;
+      transition: .3s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary-cyan);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Status Card */
+    .status-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+
+    .status-card.threat {
+      border-color: var(--danger-red);
+      background: linear-gradient(180deg, rgba(239, 68, 68, 0.12), rgba(17, 24, 39, 0.95));
+    }
+
+    .status-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .status-safe {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--safe-green);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .status-danger {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.5);
+    }
+
+    .risk-circle-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px 0;
+    }
+
+    .risk-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--safe-green);
+    }
+
+    .risk-value.high {
+      color: var(--danger-red);
+      text-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+    }
+
+    .risk-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: -2px;
+      margin-bottom: 8px;
+    }
+
+    .threat-banner {
+      display: none;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .threat-banner.active {
+      display: block;
+    }
+
+    .threat-tag {
+      color: #f87171;
+      font-weight: 700;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .threat-info {
+      font-size: 11px;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+
+    /* Transcript Card */
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .transcript-box {
+      font-size: 11px;
+      color: #e2e8f0;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 8px;
+      border-radius: 6px;
+      min-height: 38px;
+      max-height: 60px;
+      overflow-y: auto;
+      line-height: 1.4;
+      font-style: italic;
+    }
+
+    /* Actions */
+    .btn-block-threat {
+      width: 100%;
+      background: var(--danger-red);
+      color: white;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.2s, transform 0.1s;
+      margin-bottom: 10px;
+    }
+
+    .btn-block-threat:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+    }
+
+    .btn-block-threat.unmute {
+      background: var(--safe-green);
+    }
+
+    .btn-block-threat.unmute:hover {
+      background: #059669;
+    }
+
+    /* Test Controls */
+    .test-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .select-sample {
+      flex: 1;
+      background: #1e293b;
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      outline: none;
+    }
+
+    .btn-scan {
+      background: rgba(0, 229, 255, 0.15);
+      color: var(--primary-cyan);
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-scan:hover {
+      background: rgba(0, 229, 255, 0.3);
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #64748b;
+      padding-top: 8px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .backend-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--safe-green);
+    }
+
+    .status-dot.offline {
+      background: var(--danger-red);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <svg class="shield-icon" viewBox="0 0 24 24">
+        <path d="M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm0 4a3 3 0 110 6 3 3 0 010-6zm4 11c-1.1-1.33-2.7-2-4-2s-2.9.67-4 2v1h8v-1z"/>
+      </svg>
+      <div>
+        <div class="brand-title">VoiceShield AI</div>
+        <div class="brand-subtitle">Real-Time Clone Blocker</div>
+      </div>
+    </div>
+    <label class="switch" title="Toggle Real-Time Shield">
+      <input type="checkbox" id="toggle-shield" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- Real-Time Status Card -->
+  <div class="status-card" id="status-card">
+    <div class="status-header">
+      <span class="status-pill status-safe" id="status-pill">🟢 PROTECTED</span>
+      <span style="font-size: 11px; color: #94a3b8;" id="status-category">Human Speech</span>
+    </div>
+
+    <div class="risk-circle-wrap">
+      <div class="risk-value" id="risk-value">4%</div>
+    </div>
+    <div class="risk-label" id="risk-label">Forensic Attack Risk: Low</div>
+
+    <div class="threat-banner" id="threat-banner">
+      <div class="threat-tag" id="threat-tag">🚨 ATTACK DETECTED</div>
+      <div class="threat-info" id="threat-info">
+        Synthetic Voice Clone detected via Conformer & Comb Filtering analysis.
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Transcript Card -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>Live Speech Transcript</span>
+      <span id="timing-badge" style="color: #38bdf8;">Whisper ASR</span>
+    </div>
+    <div class="transcript-box" id="transcript-box">
+      Listening for incoming voice notes, calls, or media...
+    </div>
+  </div>
+
+  <!-- Primary Defense Controls -->
+  <button class="btn-block-threat" id="btn-block-threat">
+    🛡️ Block & Mute Synthetic Audio
+  </button>
+
+  <div class="checkbox-row">
+    <input type="checkbox" id="chk-autoblock" checked>
+    <label for="chk-autoblock">Auto-block & mute high-risk synthetic threats</label>
+  </div>
+
+  <!-- Benchmark & Live Testing -->
+  <div class="section-card">
+    <div class="section-title">Forensic Engine Verification</div>
+    <div class="test-controls">
+      <select class="select-sample" id="select-sample">
+        <option value="3sec_social_media_family_clone.wav">3s Family Voice Note Clone</option>
+        <option value="3sec_voicemod_voice_changer.wav">3s Voicemod Voice Changer</option>
+        <option value="3sec_authentic_voice_note.wav">3s Authentic Voice Note</option>
+        <option value="scam_digital_arrest_sample.wav">Digital Arrest Extortion</option>
+        <option value="scam_cxo_wire_sample.wav">CXO Executive Wire Scam</option>
+        <option value="scam_bank_kyc_sample.wav">Bank KYC & OTP Fraud</option>
+        <option value="authentic_customer_service.wav">Authentic Customer Call</option>
+      </select>
+      <button class="btn-scan" id="btn-run-scan">Test Scan</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="backend-status">
+      <span class="status-dot" id="backend-dot"></span>
+      <span id="backend-text">Engine: Connecting...</span>
+    </div>
+    <div>SIH-2026 PS-26104</div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

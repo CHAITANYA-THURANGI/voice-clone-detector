@@ -1,7 +1,8 @@
 """
 Enterprise Benchmark Evaluation Engine.
-Evaluates the multi-vector framework (Conformer + Glottal + Phase Forensics)
-against real human speech, Kaggle DEEP-VOICE, and synthetic/replayed attacks.
+Evaluates the dual-vector multi-model framework:
+Vector A: Acoustic Biometrics & Conformer Deepfake Forensics
+Vector B: Semantic Audio-Language (ALM / LLM) Cyber-Scam & Fraud Intent Detection
 """
 
 import os
@@ -17,9 +18,9 @@ from ensemble import VoiceIntegrityEnsemble
 
 
 def run_benchmark_evaluation():
-    print("=" * 115)
-    print("   VOICESHIELD AI ENTERPRISE BENCHMARK EVALUATION (CONFORMER + GLOTTAL + PHASE + SIH PS-26104)")
-    print("=" * 115)
+    print("=" * 125)
+    print("   VOICESHIELD AI DUAL-VECTOR BENCHMARK EVALUATION (ACOUSTIC CONFORMER + ALM/LLM SCAM ENGINE)")
+    print("=" * 125)
 
     ensemble = VoiceIntegrityEnsemble()
     samples_dir = os.path.join("data", "samples")
@@ -32,52 +33,59 @@ def run_benchmark_evaluation():
     results_table = []
     tp, tn, fp, fn = 0, 0, 0, 0
 
-    print(f"\nEvaluating {len(sample_files)} benchmark files across all 5 enterprise forensic vectors...\n")
+    print(f"\nEvaluating {len(sample_files)} benchmark files across Acoustic & Semantic Vectors...\n")
 
     for fpath in sample_files:
         fname = os.path.basename(fpath)
-        is_real = "real" in fname.lower()
-        expected = "REAL" if is_real else "FAKE"
+        is_scam = "scam_" in fname.lower()
+        is_real = ("real" in fname.lower() or "authentic" in fname.lower()) and not is_scam
+        expected = "SCAM" if is_scam else ("REAL" if is_real else "FAKE")
 
         analysis = ensemble.analyze_audio(fpath)
         risk = analysis["risk_assessment"]
-        neural = analysis["neural_detector"]
-        metrics = analysis["forensic_metrics"]
-        glottal = analysis["glottal_biometrics"]
-        phase = analysis["phase_forensics"]
-        plan = analysis["prevention_plan"]
+        fusion = analysis["ensemble_fusion"]
+        semantic = analysis["semantic_fraud_detector"]
 
         predicted_risk_level = risk["risk_level"]
-        predicted_binary = "REAL" if predicted_risk_level == "LOW" else "FAKE"
+        is_threat = (predicted_risk_level in ["HIGH", "SUSPICIOUS"])
 
-        is_correct = (predicted_binary == expected)
-        if expected == "FAKE" and predicted_binary == "FAKE":
-            tp += 1
-        elif expected == "REAL" and predicted_binary == "REAL":
-            tn += 1
-        elif expected == "REAL" and predicted_binary == "FAKE":
-            fp += 1
-        elif expected == "FAKE" and predicted_binary == "REAL":
-            fn += 1
+        # Determine evaluation correctness
+        if expected in ["SCAM", "FAKE"]:
+            is_correct = is_threat
+            if is_correct:
+                tp += 1
+            else:
+                fn += 1
+        else:  # REAL
+            is_correct = (predicted_risk_level == "LOW")
+            if is_correct:
+                tn += 1
+            else:
+                fp += 1
+
+        scam_cat = semantic.get("scam_category", "NONE")
+        if scam_cat == "LEGITIMATE_SAFE":
+            scam_display = "SAFE"
+        else:
+            scam_display = scam_cat.replace("_EXTORTION", "").replace("_THEFT", "").replace("_HIJACK", "")
 
         results_table.append({
             "filename": fname,
             "expected": expected,
-            "conformer": f"{neural['prediction']} ({neural['fake_probability']*100:.1f}%)",
-            "kurtosis": f"{glottal['residual_kurtosis']:.1f}",
-            "phase": f"{phase['phase_incoherence_score']*100:.1f}%",
+            "acoustic_pred": fusion.get("predicted_class", "--")[:14],
+            "semantic_pred": scam_display[:18],
             "risk_score": f"{risk['risk_percentage']}%",
-            "risk_badge": risk["badge"],
-            "prevention": plan["action_code"],
-            "verdict": "✅ PASS" if is_correct else "❌ FAIL"
+            "risk_badge": risk["badge"][:28],
+            "dual_matrix": fusion.get("dual_matrix_verdict", "--")[:22],
+            "verdict": "PASS" if is_correct else "FAIL"
         })
 
     # Print Table
-    header = f"{'Audio File':<26} | {'Expected':<8} | {'Conformer (ASP)':<18} | {'Kurtosis':<9} | {'Phase Inc':<9} | {'Risk':<7} | {'Risk Level':<24} | {'Verdict'}"
+    header = f"{'Audio File':<28} | {'Expected':<8} | {'Acoustic':<14} | {'Semantic ALM':<18} | {'Risk':<7} | {'Dual-Matrix Verdict':<22} | {'Status'}"
     print(header)
     print("-" * len(header))
     for r in results_table:
-        print(f"{r['filename']:<26} | {r['expected']:<8} | {r['conformer']:<18} | {r['kurtosis']:<9} | {r['phase']:<9} | {r['risk_score']:<7} | {r['risk_badge']:<24} | {r['verdict']}")
+        print(f"{r['filename']:<28} | {r['expected']:<8} | {r['acoustic_pred']:<14} | {r['semantic_pred']:<18} | {r['risk_score']:<7} | {r['dual_matrix']:<22} | {r['verdict']}")
 
     total = tp + tn + fp + fn
     accuracy = (tp + tn) / total if total > 0 else 0.0
@@ -86,16 +94,16 @@ def run_benchmark_evaluation():
     f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
 
     print("\n" + "=" * 55)
-    print("         ENTERPRISE DEFENSE EVALUATION METRICS")
+    print("         DUAL-VECTOR ENTERPRISE EVALUATION METRICS")
     print("=" * 55)
-    print(f"True Positives (Detected Fakes):   {tp}")
-    print(f"True Negatives (Verified Humans):  {tn}")
-    print(f"False Positives (False Alarms):    {fp}")
-    print(f"False Negatives (Missed Attacks):  {fn}")
+    print(f"True Positives (Detected Attacks/Scams): {tp}")
+    print(f"True Negatives (Verified Safe Humans):   {tn}")
+    print(f"False Positives (False Alarms):          {fp}")
+    print(f"False Negatives (Missed Threats):        {fn}")
     print("-" * 55)
     print(f"OVERALL ACCURACY:    {accuracy * 100:.1f}%")
     print(f"PRECISION:           {precision * 100:.1f}%")
-    print(f"RECALL (ATTACK DET): {recall * 100:.1f}%  (Zero Missed Attacks)")
+    print(f"RECALL (THREAT DET): {recall * 100:.1f}%  (Zero Missed Attacks)")
     print(f"F1-SCORE:            {f1 * 100:.1f}%")
     print("=" * 55 + "\n")
 

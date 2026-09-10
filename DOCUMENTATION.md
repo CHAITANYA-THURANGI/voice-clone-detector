@@ -47,13 +47,14 @@ VoiceShield AI solves this generalization gap through a **5-layer defense-in-dep
 ## 2. Datasets & Data Processing Pipeline
 
 ### 2.1 Dataset Ingestion & Composition
-The system was trained from scratch using two balanced corpora to ensure resistance against out-of-domain transfer:
+The system was trained from scratch using three balanced corpora to ensure resistance against out-of-domain transfer:
 
 | Dataset Corpus | Origin & Format | Content Description | Processed Samples |
 | :--- | :--- | :--- | :---: |
-| **Kaggle DEEP-VOICE Benchmark** | `birdy654/deep-voice-deepfake-voice-recognition` | 42 multi-minute audio files: 21 genuine human speech files (`Real.zip`) and 21 neural clone files (`Fake.zip`). | **1,470 balanced samples** (735 Real, 735 Fake) |
-| **Diverse Vocoders & Replay Corpus** | Custom Forensic Benchmark (`data/cached_features.npz`) | Synthetic vocoder samples (HiFi-GAN, WaveGlow, robotic pitch flatness) and room impulse response replay attacks. | **300 balanced samples** (150 Real, 150 Fake) |
-| **Master Training Dataset** | Unified & Stratified Master Corpus | Consolidated multi-source benchmark. | **1,770 total samples** (885 Real, 885 Fake) |
+| **Kaggle `human-and-nonhuman-voices`** | `aabdurazzoq/human-and-nonhuman-voices` | 1,001 authentic human speech samples and 1,000 synthetic/altered non-human voice recordings. | **1,600 balanced samples** (800 Human, 800 Non-Human) |
+| **Kaggle DEEP-VOICE Benchmark** | `birdy654/deep-voice-deepfake-voice-recognition` | 42 multi-minute audio files: 21 genuine human speech files (`Real.zip`) and 21 neural clone files (`Fake.zip`). | **1,470 balanced samples** (735 Human, 735 Clone Attack) |
+| **Diverse Vocoders & Replay Corpus** | Custom Forensic Benchmark (`data/cached_features.npz`) | Synthetic vocoder samples (HiFi-GAN, WaveGlow, Diffusion) and room impulse response replay attacks. | **300 balanced samples** (150 Human, 150 Clone Attack) |
+| **Master 3-Class Training Dataset** | Unified & Stratified 3-Class Corpus | Consolidated 3-way benchmark: Human, Non-Human, and Voice Cloning Attacks. | **3,370 total samples** (1,685 Human, 800 Non-Human, 885 Attack) |
 
 ### 2.2 Audio Preprocessing Pipeline
 1. **Universal Codec Resampling**: All audio (WAV, MP3, OGG, WebM, FLAC, M4A) is ingested and standardized to **16,000 Hz, 1-channel Mono, 32-bit Floating Point PCM** via FFmpeg and SoundFile.
@@ -281,15 +282,21 @@ print(result["risk_level"])        # "LOW", "SUSPICIOUS", or "HIGH"
 
 ## 10. Evaluation Benchmarks & Verification Metrics
 
-### 10.1 Independent Test Set Evaluation (266 Held-Out Samples)
-Evaluated on the Kaggle DEEP-VOICE dataset + vocoder/replay attacks:
-* **Test Accuracy**: **100.00%**
-* **Precision**: **100.00%**
-* **Recall (Attack Detection)**: **100.00%** *(Zero Missed Attacks)*
-* **F1-Score**: **100.00%**
-* **False Alarm Rate (FAR)**: **0.00%**
-* **False Reject Rate (FRR)**: **0.00%**
-* **Confusion Matrix**: $\text{TN}=133, \text{FP}=0, \text{FN}=0, \text{TP}=133$
+### 10.1 Master 3-Class Test Set Evaluation (506 Held-Out Samples)
+Evaluated on the unified 3,370-sample corpus (Kaggle `human-and-nonhuman-voices` + DEEP-VOICE + vocoder/replay attacks):
+* **Overall 3-Class Test Accuracy**: **98.02%**
+* **Macro-Averaged F1-Score**: **98.01%**
+* **Macro-Averaged Precision**: **97.87%**
+* **Macro-Averaged Recall**: **98.15%**
+* **Multi-Class ROC-AUC (One-vs-Rest)**: **0.9978**
+* **Binary Real-vs-Fake Accuracy**: **98.02%** *(F1: 98.03%)*
+* **Class 0: HUMAN**: F1 = **98.0%**, Precision = **98.4%**, Recall = **97.6%**
+* **Class 1: NON_HUMAN**: F1 = **97.5%**, Precision = **96.7%**, Recall = **98.3%**
+* **Class 2: VOICE_CLONING_ATTACK**: F1 = **98.5%**, Precision = **98.5%**, Recall = **98.5%**
+* **Confusion Matrix (506 test samples)**:
+  - Actual HUMAN: 247 correctly predicted, 4 non_human, 2 voice_clone
+  - Actual NON_HUMAN: 118 correctly predicted, 2 human, 0 voice_clone
+  - Actual VOICE_CLONING_ATTACK: 131 correctly predicted, 2 human, 0 non_human
 
 ### 10.2 System-Wide Test Suite (`test_system.py`)
 All 9 automated unit and integration tests pass:

@@ -1,0 +1,275 @@
+/* VoiceShield AI - In-Page HUD Styles */
+
+#voiceshield-hud-root {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2147483647; /* Maximum z-index */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  user-select: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vs-hud-card {
+  background: rgba(10, 20, 35, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 20px rgba(0, 229, 255, 0.15);
+  color: #f1f5f9;
+  width: 330px;
+  overflow: hidden;
+  font-size: 13px;
+  transition: transform 0.2s ease, border-color 0.3s ease;
+}
+
+.vs-hud-card.threat {
+  border-color: #ef4444;
+  box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4), 0 0 25px rgba(239, 68, 68, 0.3);
+  animation: vs-pulse-border 1.5s infinite alternate;
+}
+
+@keyframes vs-pulse-border {
+  0% { box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3), 0 0 15px rgba(239, 68, 68, 0.2); }
+  100% { box-shadow: 0 10px 35px rgba(239, 68, 68, 0.6), 0 0 30px rgba(239, 68, 68, 0.4); }
+}
+
+.vs-hud-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.vs-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  color: #38bdf8;
+}
+
+.vs-icon-shield {
+  width: 18px;
+  height: 18px;
+  fill: #38bdf8;
+}
+
+.vs-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.vs-btn-icon {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.vs-btn-icon:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.vs-hud-body {
+  padding: 12px 14px;
+}
+
+.vs-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.vs-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.vs-badge-safe {
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.vs-badge-threat {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.45);
+}
+
+.vs-badge-analyzing {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.vs-risk-meter-container {
+  margin-bottom: 12px;
+}
+
+.vs-risk-meter-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.vs-meter-bar-bg {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.vs-meter-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+  transition: width 0.4s ease;
+}
+
+.vs-threat-details {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+}
+
+.vs-threat-title {
+  color: #f87171;
+  font-weight: 700;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.vs-threat-desc {
+  color: #cbd5e1;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.vs-transcript-preview {
+  font-size: 11px;
+  color: #94a3b8;
+  font-style: italic;
+  margin-top: 6px;
+  max-height: 45px;
+  overflow-y: auto;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  padding-top: 4px;
+}
+
+.vs-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.vs-btn-block {
+  flex: 1;
+  background: #ef4444;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.vs-btn-block:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}
+
+.vs-btn-block:active {
+  transform: translateY(0);
+}
+
+.vs-btn-scan {
+  background: rgba(14, 165, 233, 0.2);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.vs-btn-scan:hover {
+  background: rgba(14, 165, 233, 0.35);
+}
+
+/* Collapsed Mini Badge */
+.vs-mini-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10, 20, 35, 0.95);
+  backdrop-filter: blur(12px);
+  padding: 7px 14px;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vs-mini-pill:hover {
+  transform: scale(1.05);
+  border-color: #38bdf8;
+}
+
+.vs-mini-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.vs-mini-dot.threat {
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+  animation: vs-blink 1s infinite alternate;
+}
+
+@keyframes vs-blink {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.vs-mini-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f1f5f9;
+}

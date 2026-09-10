@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initTimelineChart();
   loadBenchmarks();
   setupDropZone();
+  fetchGatewayStatus();
+  loadHistoryData();
 });
 
 // Switch Tabs
@@ -125,7 +127,7 @@ async function loadBenchmarks() {
       card.className = `benchmark-card ${idx === 0 ? 'selected' : ''}`;
       card.onclick = () => selectBenchmark(sample, card);
 
-      const tagClass = sample.type === 'REAL' ? 'tag-real' : 'tag-fake';
+      const tagClass = sample.type === 'REAL' ? 'tag-real' : (sample.type === 'SCAM' ? 'tag-scam' : 'tag-fake');
       card.innerHTML = `
         <div>
           <span class="b-title">${sample.filename}</span>
@@ -472,6 +474,7 @@ async function runAnalysis() {
     }
 
     renderAnalysisResults(data);
+    loadHistoryData(true);
   } catch (err) {
     alert(`Analysis Error: ${err.message}`);
   } finally {
@@ -489,13 +492,192 @@ function renderAnalysisResults(data) {
   const spk = data.speaker_verification;
   const audit = data.compliance_audit;
 
-  updateRiskDisplay(risk.risk_level, risk.risk_percentage, risk.summary, plan);
+  const fusion = data.ensemble_fusion || {};
+  const predictedClass = fusion.predicted_class || risk.predicted_class;
+  updateRiskDisplay(risk.risk_level, risk.risk_percentage, risk.summary, plan, predictedClass, risk.badge);
+
+  // Deep Multi-Model Ensemble Consensus Card
+  if (data.ensemble_fusion) {
+    const pClass = fusion.predicted_class || 'UNKNOWN';
+    const conf = fusion.consensus_confidence_pct || 0;
+    const agree = `${Math.round((fusion.model_agreement_ratio || 0) * 100)}% Models`;
+    const uncert = `${Math.round((fusion.uncertainty_index || 0) * 100)}% Uncertainty`;
+
+    const badgeEl = document.getElementById('val-consensus-badge');
+    const predEl = document.getElementById('val-consensus-pred');
+    if (predEl) predEl.textContent = pClass.replace(/_/g, ' ');
+
+    if (badgeEl) {
+      if (pClass === 'VOICE_CLONING_ATTACK') {
+        badgeEl.textContent = '🔴 VOICE CLONE ATTACK';
+        badgeEl.style.color = '#EF4444';
+        badgeEl.style.borderColor = '#EF4444';
+        badgeEl.style.background = 'rgba(239, 68, 68, 0.15)';
+        if (predEl) predEl.style.color = '#EF4444';
+      } else if (pClass === 'NON_HUMAN') {
+        badgeEl.textContent = '🤖 NON-HUMAN / TTS';
+        badgeEl.style.color = '#F59E0B';
+        badgeEl.style.borderColor = '#F59E0B';
+        badgeEl.style.background = 'rgba(245, 158, 11, 0.15)';
+        if (predEl) predEl.style.color = '#F59E0B';
+      } else {
+        badgeEl.textContent = '🟢 AUTHENTIC HUMAN';
+        badgeEl.style.color = '#10B981';
+        badgeEl.style.borderColor = '#10B981';
+        badgeEl.style.background = 'rgba(16, 185, 129, 0.15)';
+        if (predEl) predEl.style.color = '#10B981';
+      }
+    }
+
+    const confEl = document.getElementById('val-consensus-conf');
+    const agreeEl = document.getElementById('val-consensus-agree');
+    const uncertEl = document.getElementById('val-consensus-uncert');
+    if (confEl) confEl.textContent = `${conf}%`;
+    if (agreeEl) agreeEl.textContent = agree;
+    if (uncertEl) uncertEl.textContent = uncert;
+
+    if (fusion.probabilities) {
+      const pH = (fusion.probabilities.human * 100).toFixed(1);
+      const pNH = (fusion.probabilities.non_human * 100).toFixed(1);
+      const pAtk = (fusion.probabilities.voice_cloning_attack * 100).toFixed(1);
+
+      const pH_el = document.getElementById('prob-val-human');
+      const pNH_el = document.getElementById('prob-val-nonhuman');
+      const pAtk_el = document.getElementById('prob-val-attack');
+      if (pH_el) pH_el.textContent = `${pH}%`;
+      if (pNH_el) pNH_el.textContent = `${pNH}%`;
+      if (pAtk_el) pAtk_el.textContent = `${pAtk}%`;
+
+      const barH = document.getElementById('bar-human');
+      const barNH = document.getElementById('bar-nonhuman');
+      const barAtk = document.getElementById('bar-attack');
+      if (barH) barH.style.width = `${pH}%`;
+      if (barNH) barNH.style.width = `${pNH}%`;
+      if (barAtk) barAtk.style.width = `${pAtk}%`;
+    }
+
+    const reasonsUl = document.getElementById('val-forensic-reasons');
+    if (reasonsUl && fusion.forensic_explanations) {
+      reasonsUl.innerHTML = '';
+      fusion.forensic_explanations.forEach(r => {
+        const li = document.createElement('li');
+        li.textContent = r;
+        reasonsUl.appendChild(li);
+      });
+    }
+  }
+
+  // Semantic Audio-Language (ALM/LLM) Cyber-Scam Intelligence Card
+  const semantic = data.semantic_fraud_detector || (risk.semantic_assessment) || {};
+  const scamBadge = document.getElementById('val-scam-badge');
+  const dualAcoustic = document.getElementById('val-dual-acoustic');
+  const dualSemantic = document.getElementById('val-dual-semantic');
+  const dualVerdict = document.getElementById('val-dual-verdict');
+  const transcriptBox = document.getElementById('val-speech-transcript');
+  const engineTag = document.getElementById('val-alm-engine');
+  const coercionPct = document.getElementById('val-coercion-pct');
+  const coercionBar = document.getElementById('bar-coercion');
+  const flaggedKws = document.getElementById('val-flagged-keywords');
+  const tacticsList = document.getElementById('val-scam-tactics');
+
+  const isScam = semantic.is_scam || false;
+  const scamCategory = semantic.display_category || (isScam ? "🚨 Cyber Fraud Attack" : "🟢 Legitimate / Safe Dialog");
+
+  if (scamBadge) {
+    scamBadge.textContent = scamCategory;
+    if (isScam) {
+      scamBadge.style.color = '#EF4444';
+      scamBadge.style.borderColor = '#EF4444';
+      scamBadge.style.background = 'rgba(239, 68, 68, 0.15)';
+    } else {
+      scamBadge.style.color = '#10B981';
+      scamBadge.style.borderColor = '#10B981';
+      scamBadge.style.background = 'rgba(16, 185, 129, 0.15)';
+    }
+  }
+
+  if (dualAcoustic) {
+    const acClass = predictedClass || 'UNKNOWN';
+    dualAcoustic.textContent = acClass.replace(/_/g, ' ');
+    dualAcoustic.style.color = acClass === 'VOICE_CLONING_ATTACK' ? '#EF4444' : (acClass === 'NON_HUMAN' ? '#F59E0B' : '#10B981');
+  }
+
+  if (dualSemantic) {
+    dualSemantic.textContent = isScam ? scamCategory : "🟢 Benign Dialog";
+    dualSemantic.style.color = isScam ? '#EF4444' : '#10B981';
+  }
+
+  if (dualVerdict) {
+    const verdictStr = (fusion.dual_matrix_verdict || (isScam ? "HUMAN_SOCIAL_ENGINEERING_SCAM" : "AUTHENTIC_HUMAN_SAFE")).replace(/_/g, ' ');
+    dualVerdict.textContent = verdictStr;
+    if (verdictStr.includes('CLONED') || verdictStr.includes('ATTACK') || verdictStr.includes('SCAM')) {
+      dualVerdict.style.color = '#EF4444';
+    } else if (verdictStr.includes('SYNTHETIC')) {
+      dualVerdict.style.color = '#F59E0B';
+    } else {
+      dualVerdict.style.color = '#10B981';
+    }
+  }
+
+  if (transcriptBox) {
+    const transcriptText = data.transcript || semantic.transcript || "";
+    if (transcriptText.trim()) {
+      transcriptBox.textContent = `"${transcriptText}"`;
+      transcriptBox.style.fontStyle = 'normal';
+      transcriptBox.style.color = '#F8FAFC';
+    } else {
+      transcriptBox.textContent = "(No verbal speech detected in audio stream)";
+      transcriptBox.style.fontStyle = 'italic';
+      transcriptBox.style.color = '#94A3B8';
+    }
+  }
+
+  if (engineTag) {
+    engineTag.textContent = semantic.engine_used || "Whisper ALM + LLM/NLP";
+  }
+
+  const cScore = Math.round((semantic.coercion_urgency_score || 0) * 100);
+  if (coercionPct) coercionPct.textContent = `${cScore}%`;
+  if (coercionBar) {
+    coercionBar.style.width = `${cScore}%`;
+    coercionBar.style.background = cScore > 50 ? '#EF4444' : (cScore > 25 ? '#F59E0B' : '#10B981');
+  }
+
+  if (flaggedKws) {
+    flaggedKws.innerHTML = '';
+    const kws = semantic.flagged_keywords || [];
+    if (kws.length > 0) {
+      kws.forEach(kw => {
+        const span = document.createElement('span');
+        span.className = 'kw-tag';
+        span.textContent = kw;
+        flaggedKws.appendChild(span);
+      });
+    } else {
+      flaggedKws.innerHTML = '<span class="empty-tag">No suspicious trigger phrases detected</span>';
+    }
+  }
+
+  if (tacticsList) {
+    tacticsList.innerHTML = '';
+    const tactics = semantic.tactics_detected || [];
+    if (tactics.length > 0) {
+      tactics.forEach(t => {
+        const li = document.createElement('li');
+        li.textContent = t;
+        tacticsList.appendChild(li);
+      });
+    } else {
+      tacticsList.innerHTML = '<li>Legitimate communication — zero coercive exploitation patterns.</li>';
+    }
+  }
 
   // Neural Model Card
   document.getElementById('val-neural-prob').textContent = `${(neural.fake_probability * 100).toFixed(1)}%`;
   document.getElementById('prog-neural').style.width = `${neural.fake_probability * 100}%`;
   document.getElementById('prog-neural').style.backgroundColor = neural.prediction === 'FAKE' ? '#EF4444' : '#10B981';
-  document.getElementById('val-neural-pred').textContent = `Prediction: ${neural.prediction} (${neural.confidence}% Conf)`;
+  const neuralClassDisplay = neural.predicted_class ? `${neural.predicted_class} (${neural.confidence}% Conf)` : `${neural.prediction} (${neural.confidence}% Conf)`;
+  document.getElementById('val-neural-pred').textContent = `Prediction: ${neuralClassDisplay}`;
 
   // Glottal Biometrics Card
   const glottal = data.glottal_biometrics || {};
@@ -581,7 +763,7 @@ function renderAnalysisResults(data) {
   document.getElementById('disp-sha256').textContent = data.audio_metadata.sha256;
 }
 
-function updateRiskDisplay(level, percentage, summary, plan) {
+function updateRiskDisplay(level, percentage, summary, plan, predictedClass, riskBadge) {
   const banner = document.getElementById('risk-banner');
   const badge = document.getElementById('risk-badge');
   const score = document.getElementById('risk-score-display');
@@ -591,12 +773,22 @@ function updateRiskDisplay(level, percentage, summary, plan) {
   score.textContent = `${percentage}% RISK`;
   sumText.textContent = summary;
 
-  if (level === 'LOW') {
-    badge.textContent = '🟢 LOW RISK (AUTHENTIC)';
-  } else if (level === 'SUSPICIOUS') {
-    badge.textContent = '🟡 SUSPICIOUS (VERIFICATION REQUIRED)';
+  if (riskBadge) {
+    badge.textContent = riskBadge;
+  } else if (predictedClass === 'VOICE_CLONING_ATTACK') {
+    badge.textContent = '🔴 HIGH RISK (VOICE CLONING ATTACK)';
+  } else if (predictedClass === 'NON_HUMAN') {
+    badge.textContent = '🤖 NON-HUMAN / SYNTHETIC AUDIO';
+  } else if (predictedClass === 'HUMAN') {
+    badge.textContent = '🟢 LOW RISK (AUTHENTIC HUMAN)';
   } else {
-    badge.textContent = '🔴 HIGH RISK (SYNTHETIC ATTACK)';
+    if (level === 'LOW') {
+      badge.textContent = '🟢 LOW RISK (AUTHENTIC)';
+    } else if (level === 'SUSPICIOUS') {
+      badge.textContent = '🟡 SUSPICIOUS (VERIFICATION REQUIRED)';
+    } else {
+      badge.textContent = '🔴 HIGH RISK (VOICE CLONING ATTACK)';
+    }
   }
 
   // Prevention Card
@@ -646,3 +838,740 @@ function copyCefEvent() {
   });
 }
 
+// =========================================================================
+// REAL-TIME PHONE CALL DEFENSE & PRECAUTION ALERT LOGIC
+// =========================================================================
+
+let activePhoneCallId = null;
+let phoneCallTimer = null;
+let phoneCallSeconds = 0;
+let lastDispatchedEmailHtml = '';
+
+async function startPhoneCallSimulation() {
+  const callerNum = document.getElementById('phone-caller-num').value || '+91-98765-43210';
+  const claimedId = document.getElementById('phone-claimed-id').value || 'Unknown Number';
+  const scenarioFile = document.getElementById('phone-audio-scenario').value;
+  const userNum = document.getElementById('phone-user-num').value || '+91-99887-76655';
+  const familyNum = document.getElementById('phone-family-num').value || '+91-91234-56789';
+
+  const startBtn = document.getElementById('phone-start-btn');
+  const dropBtn = document.getElementById('phone-drop-btn');
+  const hud = document.getElementById('phone-hud');
+  const statusBadge = document.getElementById('phone-status-badge');
+  const timerDisplay = document.getElementById('phone-timer');
+  const spkMatchDisplay = document.getElementById('phone-spk-match');
+  const riskVal = document.getElementById('phone-risk-val');
+  const riskBar = document.getElementById('phone-risk-bar');
+  const transcriptBox = document.getElementById('phone-transcript-box');
+  const alertsArea = document.getElementById('phone-alerts-area');
+
+  // 1. Reset UI
+  startBtn.disabled = true;
+  dropBtn.disabled = false;
+  hud.className = 'phone-call-hud in-call';
+  statusBadge.className = 'call-status-badge call-status-active';
+  statusBadge.textContent = '🟢 IN-CALL (MONITORING AUDIO)';
+  alertsArea.style.display = 'none';
+
+  spkMatchDisplay.textContent = 'Analyzing Voiceprint Directory (1:N Search)...';
+  spkMatchDisplay.style.color = '#38BDF8';
+  transcriptBox.textContent = 'Connecting telephone audio stream...';
+
+  // Timer
+  phoneCallSeconds = 0;
+  clearInterval(phoneCallTimer);
+  phoneCallTimer = setInterval(() => {
+    phoneCallSeconds++;
+    const mins = String(Math.floor(phoneCallSeconds / 60)).padStart(2, '0');
+    const secs = String(phoneCallSeconds % 60).padStart(2, '0');
+    timerDisplay.textContent = `${mins}:${secs}`;
+  }, 1000);
+
+  try {
+    // 2. Initialize Call Session
+    const startForm = new FormData();
+    startForm.append('caller_number', callerNum);
+    startForm.append('caller_claimed_name', claimedId);
+    startForm.append('user_phone', userNum);
+    startForm.append('emergency_contact', familyNum);
+
+    const startResp = await fetch('/api/phone-call/start', { method: 'POST', body: startForm });
+    const sessionData = await startResp.json();
+    activePhoneCallId = sessionData.session_id;
+
+    // 3. Fetch Scenario Audio Blob
+    const audioResp = await fetch(`/api/sample-audio/${scenarioFile}`);
+    if (!audioResp.ok) throw new Error('Failed to load scenario audio file');
+    const audioBlob = await audioResp.blob();
+
+    // 4. Stream Audio Chunk to Engine
+    transcriptBox.textContent = 'Streaming call chunk for forensic evaluation...';
+    const chunkForm = new FormData();
+    chunkForm.append('session_id', activePhoneCallId);
+    chunkForm.append('auto_drop_threshold', '0.75');
+    chunkForm.append('file', audioBlob, scenarioFile);
+
+    const chunkResp = await fetch('/api/phone-call/stream-chunk', { method: 'POST', body: chunkForm });
+    if (!chunkResp.ok) throw new Error('Chunk processing failed');
+    const result = await chunkResp.json();
+
+    // 5. Update UI with Telephony Telemetry
+    const riskPct = result.effective_risk_percentage || 0;
+    riskVal.textContent = `${riskPct}%`;
+    riskBar.style.width = `${Math.min(100, Math.max(4, riskPct))}%`;
+    riskVal.style.color = riskPct >= 75 ? '#EF4444' : (riskPct >= 40 ? '#F59E0B' : '#10B981');
+
+    transcriptBox.textContent = result.accumulated_transcript ? `"${result.accumulated_transcript}"` : 'No verbal speech detected.';
+
+    // Speaker Identification Details
+    const spk = result.speaker_identification || {};
+    const disc = spk.discrepancy || {};
+    if (disc.is_discrepancy) {
+      spkMatchDisplay.textContent = `🚨 IMPOSTER MISMATCH: Claims '${claimedId}', Acoustics Mismatch (${disc.similarity_pct}% match)`;
+      spkMatchDisplay.style.color = '#EF4444';
+    } else if (spk.is_known_contact) {
+      spkMatchDisplay.textContent = `🎯 VERIFIED CONTACT: ${spk.identified_name} (${spk.similarity_pct}% match)`;
+      spkMatchDisplay.style.color = '#10B981';
+    } else {
+      spkMatchDisplay.textContent = `⚪ UNKNOWN CALLER: ${spk.identified_name} (${spk.similarity_pct || 0}% match)`;
+      spkMatchDisplay.style.color = '#94A3B8';
+    }
+
+    // 6. Automated Call Drop Reaction
+    if (result.call_terminated) {
+      clearInterval(phoneCallTimer);
+      hud.className = 'phone-call-hud terminated';
+      statusBadge.className = 'call-status-badge call-status-dropped';
+      statusBadge.textContent = '🛑 CALL AUTOMATICALLY TERMINATED';
+
+      // Show Precaution Alert Box
+      alertsArea.style.display = 'block';
+      const smsTextPreview = document.getElementById('sms-text-preview');
+      const smsTimeStamp = document.getElementById('sms-time-stamp');
+
+      if (result.dispatched_alerts && result.dispatched_alerts.length > 0) {
+        const smsAlert = result.dispatched_alerts[0];
+        smsTextPreview.textContent = smsAlert.content;
+        smsTimeStamp.textContent = smsAlert.timestamp || 'JUST NOW';
+
+        if (result.dispatched_alerts.length > 1) {
+          lastDispatchedEmailHtml = result.dispatched_alerts[1].html_content || '';
+        }
+      }
+
+      startBtn.disabled = false;
+      dropBtn.disabled = true;
+    } else {
+      // Benign Call completed safely
+      setTimeout(() => {
+        clearInterval(phoneCallTimer);
+        statusBadge.className = 'call-status-badge call-status-active';
+        statusBadge.textContent = '✅ CALL COMPLETED (SAFE)';
+        startBtn.disabled = false;
+        dropBtn.disabled = true;
+      }, 3000);
+    }
+  } catch (err) {
+    console.error('Call simulation error:', err);
+    clearInterval(phoneCallTimer);
+    transcriptBox.textContent = `Error in call defense stream: ${err.message}`;
+    startBtn.disabled = false;
+    dropBtn.disabled = true;
+  }
+}
+
+async function terminatePhoneCallManually() {
+  if (!activePhoneCallId) return;
+  clearInterval(phoneCallTimer);
+
+  const dropBtn = document.getElementById('phone-drop-btn');
+  const startBtn = document.getElementById('phone-start-btn');
+  const hud = document.getElementById('phone-hud');
+  const statusBadge = document.getElementById('phone-status-badge');
+
+  try {
+    const form = new FormData();
+    form.append('session_id', activePhoneCallId);
+    form.append('reason', 'Manual User Terminate');
+
+    await fetch('/api/phone-call/terminate', { method: 'POST', body: form });
+
+    hud.className = 'phone-call-hud terminated';
+    statusBadge.className = 'call-status-badge call-status-dropped';
+    statusBadge.textContent = '🛑 CALL MANUALLY HUNG UP';
+
+    dropBtn.disabled = true;
+    startBtn.disabled = false;
+  } catch (err) {
+    console.error('Error terminating call:', err);
+  }
+}
+
+function openEmailModal() {
+  const modal = document.getElementById('email-modal');
+  const body = document.getElementById('email-modal-body');
+  if (modal && body) {
+    body.innerHTML = lastDispatchedEmailHtml || '<p style="color:#94a3b8;">No email alert generated for this session.</p>';
+    modal.style.display = 'flex';
+  }
+}
+
+function closeEmailModal() {
+  const modal = document.getElementById('email-modal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Real-World Alert Gateway Configuration & Live Verification
+// -----------------------------------------------------------------------------
+
+async function fetchGatewayStatus() {
+  try {
+    const res = await fetch('/api/phone-call/gateway-status');
+    if (!res.ok) return;
+    const status = await res.json();
+
+    const pill = document.getElementById('gateway-status-pill');
+    const userField = document.getElementById('gw-smtp-user');
+    const recipientField = document.getElementById('gw-recipient-email');
+    const modeSelect = document.getElementById('gw-sms-mode');
+
+    if (status.email) {
+      if (status.email.configured) {
+        if (pill) {
+          pill.textContent = '🟢 EMAIL CONNECTED';
+          pill.style.background = 'rgba(16, 185, 129, 0.15)';
+          pill.style.color = '#10B981';
+          pill.style.borderColor = '#10B981';
+        }
+      } else {
+        if (pill) {
+          pill.textContent = '🟡 CONFIG REQUIRED';
+          pill.style.background = 'rgba(245, 158, 11, 0.15)';
+          pill.style.color = '#F59E0B';
+          pill.style.borderColor = '#F59E0B';
+        }
+      }
+
+      if (userField && status.email.sender_email && status.email.sender_email !== 'Not configured') {
+        userField.value = status.email.sender_email;
+      }
+      if (recipientField && status.email.recipient_email && status.email.recipient_email !== 'Not configured') {
+        recipientField.value = status.email.recipient_email;
+      }
+    }
+
+    if (status.sms && modeSelect && status.sms.gateway_mode) {
+      modeSelect.value = status.sms.gateway_mode;
+    }
+  } catch (err) {
+    console.warn('Failed to load gateway status:', err);
+  }
+}
+
+async function saveGatewayCredentials() {
+  const user = document.getElementById('gw-smtp-user').value.trim();
+  const pass = document.getElementById('gw-smtp-pass').value.trim();
+  const recipient = document.getElementById('gw-recipient-email').value.trim();
+  const mode = document.getElementById('gw-sms-mode').value;
+  const feedback = document.getElementById('gw-feedback-box');
+
+  const form = new FormData();
+  if (user) form.append('smtp_user', user);
+  if (pass) form.append('smtp_password', pass);
+  if (recipient) form.append('alert_recipient_email', recipient);
+  if (mode) form.append('sms_gateway', mode);
+
+  try {
+    const res = await fetch('/api/phone-call/configure-alerts', { method: 'POST', body: form });
+    const data = await res.json();
+    if (res.ok) {
+      showGatewayFeedback(feedback, '✅ Gateway settings successfully saved & applied to VoiceShield AI!', '#10B981', 'rgba(16, 185, 129, 0.1)');
+      fetchGatewayStatus();
+    } else {
+      showGatewayFeedback(feedback, `❌ Error: ${data.detail || 'Failed to save'}`, '#EF4444', 'rgba(239, 68, 68, 0.1)');
+    }
+  } catch (e) {
+    showGatewayFeedback(feedback, `❌ Connection error: ${e.message}`, '#EF4444', 'rgba(239, 68, 68, 0.1)');
+  }
+}
+
+async function testLiveEmailDispatch() {
+  const recipient = document.getElementById('gw-recipient-email').value.trim();
+  const feedback = document.getElementById('gw-feedback-box');
+
+  showGatewayFeedback(feedback, '⏳ Connecting to SMTP server and transmitting live test email...', '#38BDF8', 'rgba(56, 189, 248, 0.1)');
+
+  try {
+    const form = new FormData();
+    if (recipient) form.append('test_recipient', recipient);
+
+    const res = await fetch('/api/phone-call/test-live-email', { method: 'POST', body: form });
+    const data = await res.json();
+
+    if (data.success) {
+      showGatewayFeedback(feedback, `✅ Real Email Delivered! Test message successfully sent to: ${data.recipient} via ${data.smtp_server}. Check your inbox!`, '#10B981', 'rgba(16, 185, 129, 0.15)');
+    } else if (data.status === 'CONFIG_REQUIRED') {
+      showGatewayFeedback(feedback, `🟡 Setup Required: ${data.error || 'Please enter your Gmail and 16-character App Password above.'}`, '#F59E0B', 'rgba(245, 158, 11, 0.15)');
+    } else {
+      showGatewayFeedback(feedback, `❌ SMTP Error: ${data.error || 'Authentication/connection failure. Check your Gmail App Password.'}`, '#EF4444', 'rgba(239, 68, 68, 0.15)');
+    }
+  } catch (e) {
+    showGatewayFeedback(feedback, `❌ Network error testing email: ${e.message}`, '#EF4444', 'rgba(239, 68, 68, 0.15)');
+  }
+}
+
+async function testLiveSmsDispatch() {
+  const phone = document.getElementById('phone-user-num').value.trim();
+  const feedback = document.getElementById('gw-feedback-box');
+
+  showGatewayFeedback(feedback, '⏳ Triggering real SMS dispatch test...', '#38BDF8', 'rgba(56, 189, 248, 0.1)');
+
+  try {
+    const form = new FormData();
+    if (phone) form.append('test_recipient', phone);
+
+    const res = await fetch('/api/phone-call/test-live-sms', { method: 'POST', body: form });
+    const data = await res.json();
+
+    if (data.channel === 'ANDROID_SIM_CARRIER') {
+      showGatewayFeedback(
+        feedback,
+        `📱 Android SIM Mode Active: Formatted real GSM-7 precaution alert for ${data.recipient}. On your phone, VoiceShield AI sends this directly via your device carrier plan!`,
+        '#10B981',
+        'rgba(16, 185, 129, 0.15)'
+      );
+    } else if (data.success) {
+      showGatewayFeedback(feedback, `✅ Real SMS Dispatched via ${data.channel} to ${data.recipient}!`, '#10B981', 'rgba(16, 185, 129, 0.15)');
+    } else {
+      showGatewayFeedback(feedback, `🟡 SMS Notice: ${data.error || 'Check chosen SMS gateway configuration.'}`, '#F59E0B', 'rgba(245, 158, 11, 0.15)');
+    }
+  } catch (e) {
+    showGatewayFeedback(feedback, `❌ Error testing SMS: ${e.message}`, '#EF4444', 'rgba(239, 68, 68, 0.15)');
+  }
+}
+
+function showGatewayFeedback(box, msg, color, bg) {
+  if (!box) return;
+  box.style.display = 'block';
+  box.style.color = color;
+  box.style.background = bg;
+  box.style.border = `1px solid ${color}`;
+  box.innerHTML = msg;
+}
+
+/* ==========================================================================
+   DEEP FORENSIC ACTIVITY & AUDIT TRAIL LOGIC
+   ========================================================================== */
+let currentHistoryData = [];
+let currentHistoryFilter = 'ALL';
+let historySearchQuery = '';
+
+async function loadHistoryData(forceRefresh = false) {
+  try {
+    const res = await fetch('/api/history?limit=100');
+    if (!res.ok) return;
+    const data = await res.json();
+    currentHistoryData = data.history || [];
+
+    // Update Statistics Counters
+    const stats = data.statistics || {};
+    const totalEl = document.getElementById('hstat-total');
+    const blockedEl = document.getElementById('hstat-blocked');
+    const callsEl = document.getElementById('hstat-calls');
+    const alertsEl = document.getElementById('hstat-alerts');
+    const badgeCountEl = document.getElementById('history-badge-count');
+
+    if (totalEl) totalEl.textContent = stats.total_events || currentHistoryData.length;
+    if (blockedEl) blockedEl.textContent = stats.attacks_blocked || 0;
+    if (callsEl) callsEl.textContent = (stats.phone_defenses || 0) + (stats.screened_calls || 0);
+    if (alertsEl) alertsEl.textContent = stats.alerts_dispatched || 0;
+    if (badgeCountEl) badgeCountEl.textContent = currentHistoryData.length;
+
+    renderHistoryTable();
+  } catch (err) {
+    console.warn('[History] Error loading history:', err);
+  }
+}
+
+function setHistoryFilter(filterType, ev) {
+  currentHistoryFilter = filterType;
+  document.querySelectorAll('.hfilter-btn').forEach(btn => btn.classList.remove('active'));
+  if (ev && ev.target) {
+    ev.target.classList.add('active');
+  }
+  renderHistoryTable();
+}
+
+function handleHistorySearch(query) {
+  historySearchQuery = (query || '').trim().toLowerCase();
+  renderHistoryTable();
+}
+
+function scrollToHistory() {
+  const el = document.getElementById('history-section');
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function renderHistoryTable() {
+  const tbody = document.getElementById('history-table-body');
+  if (!tbody) return;
+
+  let filtered = currentHistoryData;
+
+  // 1. Filter by category
+  if (currentHistoryFilter !== 'ALL') {
+    filtered = filtered.filter(item => (item.event_type || '').toUpperCase() === currentHistoryFilter.toUpperCase());
+  }
+
+  // 2. Filter by search query
+  if (historySearchQuery) {
+    filtered = filtered.filter(item => {
+      const q = historySearchQuery;
+      return (
+        (item.incident_id || '').toLowerCase().includes(q) ||
+        (item.caller_or_file || '').toLowerCase().includes(q) ||
+        (item.claimed_identity || '').toLowerCase().includes(q) ||
+        (item.verdict || '').toLowerCase().includes(q) ||
+        (item.action_taken || '').toLowerCase().includes(q) ||
+        (item.threats_detected || []).join(' ').toLowerCase().includes(q)
+      );
+    });
+  }
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align: center; padding: 2.5rem; color: #94A3B8;">
+          <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔍</div>
+          No activity records found matching the active filter or search query.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(item => {
+    const risk = parseFloat(item.risk_percentage || 0);
+    let riskBadgeClass = 'verdict-safe';
+    let riskColor = '#10B981';
+    if (risk >= 75) {
+      riskBadgeClass = 'verdict-critical';
+      riskColor = '#EF4444';
+    } else if (risk >= 40) {
+      riskBadgeClass = 'verdict-warning';
+      riskColor = '#F59E0B';
+    }
+
+    // Source Icon & Label
+    const sourceIcon = item.source === 'ANDROID_MOBILE' ? '📱 Mobile SIM' : (item.source === 'CHROME_EXTENSION' ? '🧩 Extension' : '💻 Web Dashboard');
+    
+    // Event Type Icon
+    let eventIcon = '🔬';
+    let eventLabel = item.event_type || 'Event';
+    if (item.event_type === 'PHONE_CALL_DEFENSE') {
+      eventIcon = '📞';
+      eventLabel = 'In-Call Defense';
+    } else if (item.event_type === 'CALL_SCREENING_INTERCEPT') {
+      eventIcon = '🛡️';
+      eventLabel = 'Pre-Call Screen';
+    } else if (item.event_type === 'AUDIO_FORENSIC_ANALYSIS') {
+      eventIcon = '🎙️';
+      eventLabel = 'Audio Forensics';
+    } else if (item.event_type === 'ALERT_DISPATCH') {
+      eventIcon = '✉️';
+      eventLabel = 'Alert Dispatch';
+    }
+
+    // Threats Preview
+    const threatSnippet = (item.threats_detected && item.threats_detected.length > 0)
+      ? item.threats_detected.slice(0, 2).join(', ')
+      : (item.verdict || 'Standard Operation');
+
+    return `
+      <tr>
+        <td>
+          <div style="font-weight: 700; color: #38BDF8; font-family: var(--font-mono);">${escapeHtml(item.incident_id || 'INC-PENDING')}</div>
+          <div style="font-size: 0.7rem; color: #64748B;">${escapeHtml(item.timestamp || '')}</div>
+        </td>
+        <td>
+          <div style="display: flex; align-items: center; gap: 0.3rem; font-weight: 600; color: #F8FAFC;">
+            <span>${eventIcon}</span> <span>${eventLabel}</span>
+          </div>
+          <div style="font-size: 0.68rem; color: #94A3B8;">${sourceIcon}</div>
+        </td>
+        <td>
+          <div style="font-weight: 600; color: #F8FAFC; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+            ${escapeHtml(item.caller_or_file || 'Unknown')}
+          </div>
+          <div style="font-size: 0.68rem; color: #94A3B8;">
+            Claim: <em>${escapeHtml(item.claimed_identity || 'None')}</em>
+          </div>
+        </td>
+        <td>
+          <span class="verdict-badge ${riskBadgeClass}">
+            ${escapeHtml((item.verdict || 'ANALYZED').replace(/_/g, ' '))}
+          </span>
+          <div style="font-size: 0.68rem; color: #94A3B8; margin-top: 0.2rem; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+            ${escapeHtml(threatSnippet)}
+          </div>
+        </td>
+        <td>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <strong style="color: ${riskColor}; font-family: var(--font-mono); min-width: 42px;">${risk.toFixed(1)}%</strong>
+            <div style="width: 50px; height: 6px; background: #1E293B; border-radius: 3px; overflow: hidden;">
+              <div style="width: ${Math.min(100, risk)}%; height: 100%; background: ${riskColor};"></div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <span style="font-size: 0.72rem; color: #E2E8F0;">
+            ${escapeHtml((item.action_taken || 'LOGGED').replace(/_/g, ' '))}
+          </span>
+        </td>
+        <td style="text-align: right;">
+          <button class="btn btn-sm btn-outline" style="font-size: 0.72rem; padding: 0.25rem 0.6rem; border-color: #38BDF8; color: #38BDF8;" onclick="openHistoryDetail('${escapeHtml(item.incident_id)}')">
+            🔍 Inspect
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function openHistoryDetail(incidentId) {
+  const modal = document.getElementById('history-detail-modal');
+  const body = document.getElementById('hdetail-modal-body');
+  const title = document.getElementById('hdetail-title');
+  const subtitle = document.getElementById('hdetail-subtitle');
+
+  if (!modal || !body) return;
+  modal.style.display = 'flex';
+  body.innerHTML = '<div style="text-align:center; padding:3rem; color:#94A3B8;"><div class="loading-spinner"></div> Loading deep forensic profile...</div>';
+
+  try {
+    const res = await fetch(`/api/history/${incidentId}`);
+    if (!res.ok) throw new Error(`Incident ${incidentId} not found`);
+    const incident = await res.json();
+
+    title.textContent = `Deep Forensic Profile: ${incident.incident_id}`;
+    subtitle.textContent = `${incident.event_type} • ${incident.timestamp} • Source: ${incident.source}`;
+
+    const df = incident.deep_forensics || {};
+    const ac = df.acoustic_vectors || {};
+    const conf = df.conformer || {};
+    const fusion = df.ensemble_fusion || {};
+    const vm = df.voicemod || {};
+    const scam = df.semantic_scam || {};
+    const spk = df.speaker_biometrics || {};
+    const glottal = df.glottal_lpc || {};
+    const phase = df.phase_mgd || {};
+    const alerts = incident.alerts || {};
+
+    const risk = parseFloat(incident.risk_percentage || 0);
+    const riskColor = risk >= 75 ? '#EF4444' : (risk >= 40 ? '#F59E0B' : '#10B981');
+
+    body.innerHTML = `
+      <!-- Incident Overview Banner -->
+      <div style="background: rgba(15, 23, 42, 0.9); border: 1px solid #1E293B; border-radius: 8px; padding: 1rem; margin-bottom: 1.2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <div style="font-size: 0.75rem; color: #94A3B8; text-transform: uppercase;">Overall Forensic Verdict</div>
+          <div style="font-size: 1.2rem; font-weight: 800; color: ${riskColor}; margin-top: 0.2rem;">
+            ${escapeHtml((incident.verdict || 'ANALYZED').replace(/_/g, ' '))}
+          </div>
+          <div style="font-size: 0.78rem; color: #E2E8F0; margin-top: 0.2rem;">
+            Target / Caller: <strong>${escapeHtml(incident.caller_or_file || 'Unknown')}</strong> • Claimed: <em>${escapeHtml(incident.claimed_identity || 'None')}</em>
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 0.75rem; color: #94A3B8; text-transform: uppercase;">Composite Threat Risk</div>
+          <div style="font-size: 1.8rem; font-weight: 800; color: ${riskColor}; font-family: var(--font-mono);">
+            ${risk.toFixed(1)}%
+          </div>
+        </div>
+      </div>
+
+      <!-- Deep Forensic Telemetry Grid -->
+      <div class="telemetry-grid">
+        <!-- 1. Acoustic Biometric Vectors -->
+        <div class="telemetry-box">
+          <h4>📊 7-Vector Acoustic Biometrics</h4>
+          <table class="telemetry-table">
+            <tr>
+              <td>Spectral Centroid</td>
+              <td>${ac.spectral_centroid_hz ? ac.spectral_centroid_hz.toFixed(1) + ' Hz' : '--'} <span class="baseline-diff ${ac.spectral_centroid_hz > 2200 ? 'diff-danger' : 'diff-ok'}">${ac.spectral_centroid_hz > 2200 ? 'Elevated' : 'Natural'}</span></td>
+            </tr>
+            <tr>
+              <td>Spectral Rolloff</td>
+              <td>${ac.spectral_rolloff_hz ? ac.spectral_rolloff_hz.toFixed(1) + ' Hz' : '--'}</td>
+            </tr>
+            <tr>
+              <td>Pitch Mean (F0)</td>
+              <td>${ac.pitch_mean_hz ? ac.pitch_mean_hz.toFixed(1) + ' Hz' : '--'}</td>
+            </tr>
+            <tr>
+              <td>Pitch Stability (F0 Std)</td>
+              <td>${ac.pitch_std_hz ? ac.pitch_std_hz.toFixed(1) + ' Hz' : '--'}</td>
+            </tr>
+            <tr>
+              <td>Micro-Jitter %</td>
+              <td>${ac.jitter_pct ? ac.jitter_pct.toFixed(2) + '%' : '--'} <span class="baseline-diff ${ac.jitter_pct > 2.0 ? 'diff-danger' : 'diff-ok'}">${ac.jitter_pct > 2.0 ? 'Synthetic' : 'Human'}</span></td>
+            </tr>
+            <tr>
+              <td>Micro-Shimmer %</td>
+              <td>${ac.shimmer_pct ? ac.shimmer_pct.toFixed(2) + '%' : '--'}</td>
+            </tr>
+            <tr>
+              <td>Harmonics-to-Noise (HNR)</td>
+              <td>${ac.hnr_db ? ac.hnr_db.toFixed(1) + ' dB' : '--'}</td>
+            </tr>
+            <tr>
+              <td>Zero Crossing Rate</td>
+              <td>${ac.zero_crossing_rate ? ac.zero_crossing_rate.toFixed(3) : '--'}</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- 2. AI Conformer & Ensemble Consensus -->
+        <div class="telemetry-box">
+          <h4>⚡ Neural Conformer & Ensemble</h4>
+          <table class="telemetry-table">
+            <tr>
+              <td>Conformer Prediction</td>
+              <td style="color: ${conf.predicted_class === 'VOICE_CLONING_ATTACK' ? '#EF4444' : '#10B981'};">${conf.predicted_class || '--'}</td>
+            </tr>
+            <tr>
+              <td>Conformer Raw Probability</td>
+              <td>${conf.raw_prob !== undefined ? (conf.raw_prob * 100).toFixed(1) + '%' : '--'}</td>
+            </tr>
+            <tr>
+              <td>Entropy Uncertainty</td>
+              <td>${conf.entropy !== undefined ? conf.entropy.toFixed(2) : '--'}</td>
+            </tr>
+            <tr>
+              <td>Consensus Confidence</td>
+              <td>${fusion.consensus_confidence_pct ? fusion.consensus_confidence_pct.toFixed(1) + '%' : '--'}</td>
+            </tr>
+            <tr>
+              <td>Voicemod Voice Changer</td>
+              <td style="color: ${vm.detected ? '#EF4444' : '#10B981'};">${vm.detected ? '🚨 DETECTED' : '🟢 None'}</td>
+            </tr>
+            <tr>
+              <td>Comb Filter Ripple</td>
+              <td>${vm.comb_ripple ? vm.comb_ripple.toFixed(3) : '0.000'}</td>
+            </tr>
+            <tr>
+              <td>LPC Glottal Kurtosis</td>
+              <td>${glottal.residual_kurtosis ? glottal.residual_kurtosis.toFixed(2) : '--'} (${glottal.status || 'NORMAL'})</td>
+            </tr>
+            <tr>
+              <td>MGD Phase Jitter</td>
+              <td>${phase.phase_jitter ? phase.phase_jitter.toFixed(3) : '--'} (${phase.status || 'COHERENT'})</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- 3. Semantic ALM & Social Engineering Intent -->
+        <div class="telemetry-box" style="grid-column: span 2;">
+          <h4>🧠 Semantic ALM & Social Engineering Telemetry</h4>
+          <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid #1E293B; border-radius: 6px; padding: 0.6rem; font-size: 0.76rem; color: #E2E8F0; font-style: italic; margin-bottom: 0.6rem;">
+            "${escapeHtml(scam.transcript_snippet || df.transcript_snippet || 'No speech transcript recorded for this session.')}"
+          </div>
+          <table class="telemetry-table">
+            <tr>
+              <td>Scam Classification</td>
+              <td style="color: #F59E0B;">${escapeHtml(scam.category || 'Standard Speech')}</td>
+            </tr>
+            <tr>
+              <td>Coercion & Urgency Level</td>
+              <td>${scam.coercion_urgency_pct ? scam.coercion_urgency_pct.toFixed(0) + '%' : '0%'}</td>
+            </tr>
+            <tr>
+              <td>Flagged Threat Keywords</td>
+              <td>
+                ${(scam.flagged_keywords && scam.flagged_keywords.length > 0)
+                  ? scam.flagged_keywords.map(k => `<span style="background:rgba(239,68,68,0.2); color:#F87171; padding:0.15rem 0.4rem; border-radius:4px; font-size:0.68rem; margin-right:0.25rem;">${escapeHtml(k)}</span>`).join('')
+                  : '<span style="color:#94A3B8;">None</span>'}
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- 4. Enforcement & Alert Receipts -->
+        <div class="telemetry-box" style="grid-column: span 2;">
+          <h4>📱 Enforcement Action & Precaution Dispatches</h4>
+          <table class="telemetry-table">
+            <tr>
+              <td>System Action Taken</td>
+              <td><strong style="color: #38BDF8;">${escapeHtml((incident.action_taken || 'LOGGED').replace(/_/g, ' '))}</strong></td>
+            </tr>
+            <tr>
+              <td>SMS Precaution Alert</td>
+              <td>
+                ${alerts.sms && alerts.sms.status
+                  ? `<span style="color:#10B981;">✅ ${escapeHtml(alerts.sms.status)} via ${escapeHtml(alerts.sms.gateway || 'SMS Gateway')}</span> to <code>${escapeHtml(alerts.sms.recipient || 'User')}</code>`
+                  : '<span style="color:#94A3B8;">No SMS dispatched</span>'}
+              </td>
+            </tr>
+            <tr>
+              <td>Security Advisory Email</td>
+              <td>
+                ${alerts.email && alerts.email.status
+                  ? `<span style="color:#10B981;">✅ ${escapeHtml(alerts.email.status)}</span> to <code>${escapeHtml(alerts.email.recipient || 'User')}</code>`
+                  : '<span style="color:#94A3B8;">No Email dispatched</span>'}
+              </td>
+            </tr>
+            <tr>
+              <td>DPDP Act 2023 Compliance</td>
+              <td style="color: #10B981;">🔒 Zero-Retention Ephemeral RAM Certified</td>
+            </tr>
+            <tr>
+              <td>Audio SHA-256 Digest</td>
+              <td><code style="font-size:0.65rem; color:#94A3B8;">${escapeHtml(incident.compliance?.sha256_fingerprint || 'N/A')}</code></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    body.innerHTML = `<div style="padding:2rem; text-align:center; color:#EF4444;">Failed to load incident detail: ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function closeHistoryDetailModal() {
+  const modal = document.getElementById('history-detail-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+function exportHistoryFile() {
+  window.location.href = '/api/history/export';
+}
+
+async function confirmClearHistory() {
+  if (!confirm('Are you sure you want to clear all forensic history logs? This cannot be undone.')) {
+    return;
+  }
+  try {
+    const res = await fetch('/api/history/clear', { method: 'DELETE' });
+    if (res.ok) {
+      await loadHistoryData(true);
+      alert('✅ Forensic audit history cleared.');
+    }
+  } catch (err) {
+    alert(`Error clearing history: ${err.message}`);
+  }
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}

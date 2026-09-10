@@ -23,6 +23,9 @@
       </div>
     </div>
     <div class="nav-badges">
+      <button class="badge badge-cyber" onclick="scrollToHistory()" style="cursor:pointer; background:rgba(56,189,248,0.15); border:1px solid #38BDF8; color:#38BDF8; font-weight:600; padding:0.35rem 0.75rem; transition:all 0.2s;">
+        📜 AUDIT HISTORY (<span id="history-badge-count">--</span>)
+      </button>
       <span class="badge badge-cyber">AICTE CYBER SECURITY CELL</span>
       <span class="badge badge-privacy">🔒 DPDP ACT 2023 ZERO-RETENTION</span>
       <span class="status-indicator"><span class="dot"></span> ENGINE ONLINE</span>
@@ -39,6 +42,7 @@
         <button class="tab-btn active" onclick="switchTab('benchmarks', event)">⚡ Benchmarks</button>
         <button class="tab-btn" onclick="switchTab('upload', event)">📁 Upload Audio</button>
         <button class="tab-btn" onclick="switchTab('record', event)">🔴 Live Mic Stream</button>
+        <button class="tab-btn" onclick="switchTab('phone', event)">📞 Phone Call Defense</button>
       </div>
 
       <!-- Tab 1: One-Click Benchmarks -->
@@ -74,6 +78,164 @@
             <span id="record-timer" class="record-timer">00:00</span>
           </div>
           <p class="mic-hint">Near real-time 3-second sliding window stream analysis with consecutive anomaly detection.</p>
+        </div>
+      </div>
+
+      <!-- Tab 4: Phone Call Defense (Auto-Drop & Precaution Alert) -->
+      <div id="tab-phone" class="tab-content">
+        <div class="phone-defense-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+            <strong style="font-size:0.85rem; color:#38BDF8;">📞 Live Phone Call Interception</strong>
+            <span class="badge badge-cyber">AUTO-DROP AT 75% RISK</span>
+          </div>
+
+          <div class="phone-input-grid">
+            <div class="phone-input-group">
+              <label>Incoming Caller Number</label>
+              <input type="text" id="phone-caller-num" value="+91-98765-43210">
+            </div>
+            <div class="phone-input-group">
+              <label>Claimed Identity</label>
+              <select id="phone-claimed-id">
+                <option value="Mom">Mom (Anita Sharma) [Family]</option>
+                <option value="Son">Son (Rahul Sharma) [Family]</option>
+                <option value="Vikram Malhotra">Vikram Malhotra (CEO) [Executive]</option>
+                <option value="Unknown Number" selected>Unknown Number / Unregistered</option>
+              </select>
+            </div>
+            <div class="phone-input-group" style="grid-column: span 2;">
+              <label>Incoming Audio Stream Scenario</label>
+              <select id="phone-audio-scenario">
+                <option value="3sec_social_media_family_clone.wav">🚨 3s Social Media Family Clone ("Mom broke phone, send $500")</option>
+                <option value="scam_digital_arrest_police.wav">🚨 Digital Arrest CBI Extortion ("Arrest warrant issued")</option>
+                <option value="scam_bank_kyc_otp_theft.wav">🚨 Bank KYC & OTP Theft ("Share netbanking OTP")</option>
+                <option value="3sec_voicemod_voice_changer.wav">🎛️ 3s Voicemod Voice Changer ("Sending login password")</option>
+                <option value="3sec_authentic_voice_note.wav">🟢 3s Authentic Voice Note (Genuine Mom Speech)</option>
+                <option value="real_human_02.wav">🟢 Authentic Executive Call (Genuine CEO Speech)</option>
+              </select>
+            </div>
+            <div class="phone-input-group">
+              <label>User Phone (For Precaution SMS)</label>
+              <input type="text" id="phone-user-num" value="+91-99887-76655">
+            </div>
+            <div class="phone-input-group">
+              <label>Family Emergency Contact</label>
+              <input type="text" id="phone-family-num" value="+91-91234-56789">
+            </div>
+          </div>
+
+          <div style="display:flex; gap:0.6rem;">
+            <button id="phone-start-btn" class="btn btn-primary" style="flex:2;" onclick="startPhoneCallSimulation()">
+              📞 Simulate Incoming Call
+            </button>
+            <button id="phone-drop-btn" class="btn btn-danger" style="flex:1;" onclick="terminatePhoneCallManually()" disabled>
+              🛑 Force Hangup
+            </button>
+          </div>
+
+          <!-- Active Phone Call Live HUD -->
+          <div id="phone-hud" class="phone-call-hud">
+            <div class="call-hud-top">
+              <span id="phone-status-badge" class="call-status-badge call-status-idle">⚪ STANDBY (NO ACTIVE CALL)</span>
+              <span id="phone-timer" class="call-timer">00:00</span>
+            </div>
+
+            <div class="spk-match-pill">
+              <span>1:N Biometric Speaker Match:</span>
+              <span id="phone-spk-match" class="spk-match-name">Awaiting Call Stream...</span>
+            </div>
+
+            <!-- Rolling Threat Risk Bar -->
+            <div style="margin-bottom:0.6rem;">
+              <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#94A3B8; margin-bottom:0.25rem;">
+                <span>Call Threat Risk (Drop Threshold: 75%)</span>
+                <strong id="phone-risk-val" style="color:#10B981;">0.0%</strong>
+              </div>
+              <div class="coercion-progress-bar">
+                <div id="phone-risk-bar" style="width:0%; background:linear-gradient(90deg, #10B981, #F59E0B, #EF4444);"></div>
+              </div>
+            </div>
+
+            <!-- Live Call Transcript -->
+            <div style="font-size:0.72rem; color:#94A3B8; text-transform:uppercase; margin-bottom:0.25rem;">Live Audio Intercept Transcript:</div>
+            <div id="phone-transcript-box" style="background:rgba(0,0,0,0.3); border:1px solid #1E293B; border-radius:6px; padding:0.5rem; font-size:0.76rem; color:#E2E8F0; min-height:36px; max-height:55px; overflow-y:auto; font-style:italic;">
+              Awaiting caller audio stream...
+            </div>
+
+            <!-- Precaution Dispatched Alert Area -->
+            <div id="phone-alerts-area" style="display:none;">
+              <div class="sms-alert-preview">
+                <div class="sms-header">
+                  <span>📱 EMERGENCY SMS DISPATCHED</span>
+                  <span id="sms-time-stamp">JUST NOW</span>
+                </div>
+                <div class="sms-body" id="sms-text-preview">
+                  Alert dispatched to user & family.
+                </div>
+              </div>
+
+              <button class="btn btn-sm btn-outline" style="width:100%; margin-top:0.6rem; border-color:#38BDF8; color:#38BDF8;" onclick="openEmailModal()">
+                📧 View Dispatched Security Advisory Email
+              </button>
+            </div>
+
+            <!-- Real-World Alert Gateway & Live Testing Panel -->
+            <div class="gateway-config-card" style="margin-top: 0.8rem; background: rgba(15, 23, 42, 0.7); border: 1px solid #1E293B; border-radius: 8px; padding: 0.75rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                  <span style="font-size: 1rem;">🌐</span>
+                  <strong style="font-size: 0.82rem; color: #F8FAFC;">Real-World Alert Gateways & Live Testing</strong>
+                </div>
+                <span id="gateway-status-pill" class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid #10B981; font-size: 0.65rem;">CHECKING...</span>
+              </div>
+
+              <!-- Collapsible Settings & Testing Content -->
+              <div id="gateway-config-body" style="margin-top: 0.7rem;">
+                <div style="font-size: 0.73rem; color: #94A3B8; margin-bottom: 0.6rem; line-height: 1.4;">
+                  Connect your real <strong>Gmail Account (with 16-character App Password)</strong> to receive actual security reports in your personal inbox, and test real-world <strong>Android SIM / Cloud SMS</strong> alerts.
+                </div>
+
+                <div class="phone-input-grid" style="grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.6rem;">
+                  <div class="phone-input-group">
+                    <label style="font-size: 0.7rem; color: #94A3B8;">Sender Gmail Address</label>
+                    <input type="email" id="gw-smtp-user" placeholder="your_email@gmail.com" style="background: #1E293B; border: 1px solid #334155; color: #fff; padding: 0.35rem; border-radius: 4px; font-size: 0.75rem; width: 100%;">
+                  </div>
+                  <div class="phone-input-group">
+                    <label style="font-size: 0.7rem; color: #94A3B8;">Gmail 16-Digit App Password</label>
+                    <input type="password" id="gw-smtp-pass" placeholder="abcd efgh ijkl mnop" style="background: #1E293B; border: 1px solid #334155; color: #fff; padding: 0.35rem; border-radius: 4px; font-size: 0.75rem; width: 100%;">
+                  </div>
+                  <div class="phone-input-group">
+                    <label style="font-size: 0.7rem; color: #94A3B8;">Recipient Email (Your Inbox)</label>
+                    <input type="email" id="gw-recipient-email" placeholder="recipient@example.com" style="background: #1E293B; border: 1px solid #334155; color: #fff; padding: 0.35rem; border-radius: 4px; font-size: 0.75rem; width: 100%;">
+                  </div>
+                  <div class="phone-input-group">
+                    <label style="font-size: 0.7rem; color: #94A3B8;">SMS Gateway Mode</label>
+                    <select id="gw-sms-mode" style="background: #1E293B; border: 1px solid #334155; color: #fff; padding: 0.35rem; border-radius: 4px; font-size: 0.75rem; width: 100%;">
+                      <option value="android_sim">📱 Android SIM Card (Device Free Quota)</option>
+                      <option value="twilio">🌐 Twilio Cloud Gateway</option>
+                      <option value="fast2sms">⚡ Fast2SMS Gateway (India)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style="display: flex; gap: 0.4rem; margin-bottom: 0.6rem;">
+                  <button class="btn btn-sm" style="flex: 1; background: #2563EB; color: white; font-size: 0.72rem; padding: 0.35rem;" onclick="saveGatewayCredentials()">
+                    💾 Save Credentials
+                  </button>
+                  <button class="btn btn-sm" style="flex: 1.2; background: #059669; color: white; font-size: 0.72rem; padding: 0.35rem;" onclick="testLiveEmailDispatch()">
+                    ✉️ Test Real Email to My Inbox
+                  </button>
+                  <button class="btn btn-sm" style="flex: 1.1; background: #D97706; color: white; font-size: 0.72rem; padding: 0.35rem;" onclick="testLiveSmsDispatch()">
+                    📱 Test Real SMS
+                  </button>
+                </div>
+
+                <!-- Test Feedback Notification Box -->
+                <div id="gw-feedback-box" style="display: none; padding: 0.5rem; border-radius: 6px; font-size: 0.72rem; margin-top: 0.4rem;">
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -125,6 +287,113 @@
           <div class="risk-score-display" id="risk-score-display">0.0% RISK</div>
         </div>
         <p id="risk-summary" class="risk-summary">Select an audio benchmark or upload a recording to evaluate voice authenticity.</p>
+      <!-- Deep Multi-Model Ensemble Consensus Card ("In-Deep Mode") -->
+      <div id="ensemble-consensus-card" class="ensemble-consensus-card">
+        <div class="ensemble-consensus-header">
+          <div class="consensus-title">
+            <span class="icon">⚡</span> <strong>Deep Multi-Model Ensemble Consensus ("In-Deep Mode")</strong>
+          </div>
+          <div class="consensus-class-badge" id="val-consensus-badge">AWAITING INPUT</div>
+        </div>
+        <div class="consensus-grid">
+          <div class="consensus-col">
+            <span class="label">3-Class Prediction:</span>
+            <strong id="val-consensus-pred">--</strong>
+          </div>
+          <div class="consensus-col">
+            <span class="label">Consensus Conf:</span>
+            <strong id="val-consensus-conf">--%</strong>
+          </div>
+          <div class="consensus-col">
+            <span class="label">Model Agreement:</span>
+            <strong id="val-consensus-agree">--</strong>
+          </div>
+          <div class="consensus-col">
+            <span class="label">Entropy Uncertainty:</span>
+            <strong id="val-consensus-uncert">--</strong>
+          </div>
+        </div>
+        <!-- 3-Class Probability Distribution Bar -->
+        <div class="prob-distribution-wrap">
+          <div class="prob-labels">
+            <span style="color:#10B981">🟢 Human: <b id="prob-val-human">--%</b></span>
+            <span style="color:#F59E0B">🤖 Non-Human TTS: <b id="prob-val-nonhuman">--%</b></span>
+            <span style="color:#EF4444">🚨 Voice Clone Attack: <b id="prob-val-attack">--%</b></span>
+          </div>
+          <div class="tri-progress-bar">
+            <div id="bar-human" style="width: 33.3%; background: #10B981;"></div>
+            <div id="bar-nonhuman" style="width: 33.3%; background: #F59E0B;"></div>
+            <div id="bar-attack" style="width: 33.4%; background: #EF4444;"></div>
+          </div>
+        </div>
+        <!-- Forensic Attribution Evidence -->
+        <div class="forensic-reasons" id="forensic-reasons-wrap">
+          <ul id="val-forensic-reasons">
+            <li>Awaiting audio analysis to generate forensic attribution evidence.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Semantic Audio-Language (ALM/LLM) Cyber-Scam Intelligence Card -->
+      <div id="semantic-scam-card" class="semantic-scam-card">
+        <div class="semantic-header">
+          <div class="semantic-title">
+            <span class="icon">🧠</span> <strong>Semantic Audio-Language (ALM / LLM) Cyber-Fraud Intelligence</strong>
+          </div>
+          <div class="semantic-threat-badge" id="val-scam-badge">AWAITING INPUT</div>
+        </div>
+
+        <!-- Dual-Matrix Threat Cross-Correlation Row -->
+        <div class="dual-matrix-banner">
+          <div class="dual-col">
+            <span class="label">Acoustic Vector (Deepfake):</span>
+            <strong id="val-dual-acoustic">--</strong>
+          </div>
+          <div class="dual-col">
+            <span class="label">Semantic Vector (ALM/LLM):</span>
+            <strong id="val-dual-semantic">--</strong>
+          </div>
+          <div class="dual-col verdict-col">
+            <span class="label">Dual-Matrix Cyber Verdict:</span>
+            <strong id="val-dual-verdict">--</strong>
+          </div>
+        </div>
+
+        <!-- Speech-to-Text Transcription Box -->
+        <div class="transcript-container">
+          <div class="transcript-header">
+            <span>🎙️ Speech-to-Text Transcript (Whisper ALM):</span>
+            <span class="engine-tag" id="val-alm-engine">Whisper ALM + LLM/NLP</span>
+          </div>
+          <div class="transcript-box" id="val-speech-transcript">
+            Awaiting speech input to transcribe and analyze semantic conversation contents...
+          </div>
+        </div>
+
+        <!-- Threat Intent, Coercion Urgency & Social Engineering Tactics -->
+        <div class="scam-details-grid">
+          <div class="coercion-wrap">
+            <div class="coercion-header">
+              <span>Coercion & Urgency Level:</span>
+              <strong id="val-coercion-pct">0%</strong>
+            </div>
+            <div class="coercion-progress-bar">
+              <div id="bar-coercion" style="width: 0%; background: #10B981;"></div>
+            </div>
+            <div class="keywords-wrap">
+              <span class="label">Flagged Intent Markers:</span>
+              <div id="val-flagged-keywords" class="keyword-tags">
+                <span class="empty-tag">None</span>
+              </div>
+            </div>
+          </div>
+          <div class="tactics-wrap">
+            <span class="label">Social Engineering Tactics:</span>
+            <ul id="val-scam-tactics" class="tactics-list">
+              <li>Awaiting conversation analysis to identify coercive tactics.</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
       <!-- Actionable Fraud Prevention Protocol -->
@@ -281,6 +550,113 @@
     </section>
   </main>
 
-  <script src="app.js?v=2.3"></script>
+  <!-- Deep Forensic Activity & Audit Trail Section -->
+  <section class="history-container" id="history-section" style="max-width: 1440px; margin: 2rem auto; padding: 0 1.5rem;">
+    <div class="card history-panel" style="background: #111827; border: 1px solid #1E293B; border-radius: 12px; padding: 1.5rem;">
+      <div class="history-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+        <div class="history-title-group">
+          <h2 style="margin: 0; font-size: 1.35rem; color: #F8FAFC; display: flex; align-items: center; gap: 0.5rem;">
+            <span>📜</span> Deep Forensic Activity & Audit Trail
+          </h2>
+          <p style="margin: 0.25rem 0 0 0; font-size: 0.78rem; color: #94A3B8;">
+            Complete chronological record of 7-vector acoustic metrics, phone call defenses, pre-call screenings, and real-world alert dispatches.
+          </p>
+        </div>
+        <div class="history-actions" style="display: flex; gap: 0.5rem; align-items: center;">
+          <button class="btn btn-sm btn-outline" style="border-color: #38BDF8; color: #38BDF8;" onclick="loadHistoryData(true)">🔄 Refresh Live</button>
+          <button class="btn btn-sm btn-primary" onclick="exportHistoryFile()">📥 Export JSON Audit</button>
+          <button class="btn btn-sm btn-danger" onclick="confirmClearHistory()">🗑️ Clear Log</button>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Counters -->
+      <div class="history-stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+        <div class="hstat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid #1E293B; border-radius: 8px; padding: 0.9rem;">
+          <div style="font-size: 0.72rem; color: #94A3B8; text-transform: uppercase;">Total Forensic Events</div>
+          <div class="hstat-val" id="hstat-total" style="font-size: 1.6rem; font-weight: 700; color: #F8FAFC; margin-top: 0.2rem;">--</div>
+        </div>
+        <div class="hstat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 0.9rem;">
+          <div style="font-size: 0.72rem; color: #EF4444; text-transform: uppercase;">Attacks Neutralized</div>
+          <div class="hstat-val" id="hstat-blocked" style="font-size: 1.6rem; font-weight: 700; color: #EF4444; margin-top: 0.2rem;">--</div>
+        </div>
+        <div class="hstat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 0.9rem;">
+          <div style="font-size: 0.72rem; color: #38BDF8; text-transform: uppercase;">Phone Call Defenses</div>
+          <div class="hstat-val" id="hstat-calls" style="font-size: 1.6rem; font-weight: 700; color: #38BDF8; margin-top: 0.2rem;">--</div>
+        </div>
+        <div class="hstat-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 0.9rem;">
+          <div style="font-size: 0.72rem; color: #10B981; text-transform: uppercase;">Alerts Dispatched</div>
+          <div class="hstat-val" id="hstat-alerts" style="font-size: 1.6rem; font-weight: 700; color: #10B981; margin-top: 0.2rem;">--</div>
+        </div>
+      </div>
+
+      <!-- Filter Controls & Search -->
+      <div class="history-controls-row" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.2rem;">
+        <div class="history-filter-tabs" style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+          <button class="hfilter-btn active" onclick="setHistoryFilter('ALL', event)">All Activities</button>
+          <button class="hfilter-btn" onclick="setHistoryFilter('PHONE_CALL_DEFENSE', event)">📞 Phone Calls</button>
+          <button class="hfilter-btn" onclick="setHistoryFilter('CALL_SCREENING_INTERCEPT', event)">🛡️ Call Screenings</button>
+          <button class="hfilter-btn" onclick="setHistoryFilter('AUDIO_FORENSIC_ANALYSIS', event)">🎙️ Audio Analyses</button>
+          <button class="hfilter-btn" onclick="setHistoryFilter('ALERT_DISPATCH', event)">✉️ Alerts & Tests</button>
+        </div>
+        <div class="history-search-wrap" style="flex: 1; max-width: 380px;">
+          <input type="text" id="history-search-input" placeholder="🔍 Search caller, file, incident ID, or threat..." oninput="handleHistorySearch(this.value)" style="width: 100%; background: #1E293B; border: 1px solid #334155; color: #fff; padding: 0.5rem 0.8rem; border-radius: 6px; font-size: 0.8rem;">
+        </div>
+      </div>
+
+      <!-- Live History Table / Feed -->
+      <div class="history-table-wrapper" style="overflow-x: auto; border: 1px solid #1E293B; border-radius: 8px;">
+        <table class="history-table" style="width: 100%; border-collapse: collapse; font-size: 0.78rem; text-align: left;">
+          <thead>
+            <tr style="background: #0B1120; color: #94A3B8; border-bottom: 1px solid #1E293B;">
+              <th style="padding: 0.75rem 1rem;">Timestamp & ID</th>
+              <th style="padding: 0.75rem 1rem;">Source & Event</th>
+              <th style="padding: 0.75rem 1rem;">Target / Caller</th>
+              <th style="padding: 0.75rem 1rem;">Verdict & Classification</th>
+              <th style="padding: 0.75rem 1rem;">Risk %</th>
+              <th style="padding: 0.75rem 1rem;">Action Taken</th>
+              <th style="padding: 0.75rem 1rem; text-align: right;">Deep Telemetry</th>
+            </tr>
+          </thead>
+          <tbody id="history-table-body">
+            <tr><td colspan="7" style="text-align: center; padding: 2rem; color: #94A3B8;">Loading forensic activity trail...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deep Forensic Inspection Modal -->
+  <div id="history-detail-modal" class="modal-backdrop" style="display: none;">
+    <div class="modal-content" style="max-width: 860px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1E293B; padding-bottom: 0.8rem;">
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <span style="font-size: 1.4rem;">🔬</span>
+          <div>
+            <h3 id="hdetail-title" style="margin: 0; font-size: 1.1rem; color: #F8FAFC;">Deep Forensic Telemetry Profile</h3>
+            <span id="hdetail-subtitle" style="font-size: 0.75rem; color: #94A3B8;">Incident INC-XXXX • 10 Sep 2026</span>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-danger" onclick="closeHistoryDetailModal()">✕</button>
+      </div>
+      <div class="modal-body" id="hdetail-modal-body" style="padding-top: 1rem;">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Precaution Email Advisory Preview Modal -->
+  <div id="email-modal" class="modal-backdrop" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>🛡️ Dispatched Precautionary Email Security Advisory</h3>
+        <button class="btn btn-sm btn-danger" onclick="closeEmailModal()">✕</button>
+      </div>
+      <div class="modal-body" id="email-modal-body">
+        <div class="loading-spinner">Loading email preview...</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=2.4"></script>
 </body>
 </html>

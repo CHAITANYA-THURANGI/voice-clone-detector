@@ -16,6 +16,7 @@ from core.privacy import PrivacyComplianceGuard
 
 from core.glottal_forensics import analyze_glottal_biometrics
 from core.spectral_phase import analyze_phase_coherence
+from core.voicemod_detector import analyze_voicemod_and_microclip
 from core.enterprise_telemetry import EnterpriseTelemetryEngine
 
 
@@ -65,12 +66,15 @@ class RealTimeStreamDetector:
         # 4. Vector 3: Phase-Aware Modified Group Delay (MGD) Analysis
         phase_res = analyze_phase_coherence(chunk_waveform, sr=16000)
 
-        # 5. Vector 5: Optional speaker identity verification
+        # 5. Vector 4: Voicemod / Real-Time Voice Changer & Micro-Clip Analysis
+        voicemod_res = analyze_voicemod_and_microclip(chunk_waveform, sr=16000)
+
+        # 6. Vector 5: Optional speaker identity verification
         spk_res = None
         if self.claimed_speaker_id:
             spk_res = self.speaker_verifier.verify(self.claimed_speaker_id, chunk_waveform)
 
-        # 6. Dynamic 5-Vector Risk Engine Evaluation
+        # 7. Dynamic Risk Engine Evaluation
         risk_eval = self.risk_engine.evaluate_risk(
             neural_fake_prob=neural_fake_prob,
             forensic_metrics=forensic["metrics"],
@@ -81,8 +85,10 @@ class RealTimeStreamDetector:
         )
 
         chunk_risk = risk_eval["risk_score"]
+        if voicemod_res.get("is_voicemod_suspicious", False):
+            chunk_risk = max(chunk_risk, float(voicemod_res.get("voicemod_confidence", 0.85)))
 
-        # 7. Temporal aggregation heuristics
+        # 8. Temporal aggregation heuristics
         self.max_observed_risk = max(self.max_observed_risk, chunk_risk)
 
         if not self.chunk_history:
@@ -140,6 +146,7 @@ class RealTimeStreamDetector:
             "metrics": forensic["metrics"],
             "glottal": glottal_res,
             "phase": phase_res,
+            "voicemod": voicemod_res,
             "sha256": audio_fingerprint[:16] + "..."
         }
         self.chunk_history.append(chunk_record)
@@ -159,6 +166,7 @@ class RealTimeStreamDetector:
             "forensic_metrics": forensic["metrics"],
             "glottal_biometrics": glottal_res,
             "phase_forensics": phase_res,
+            "voicemod_forensics": voicemod_res,
             "prevention_plan": prevention_plan,
             "enterprise_telemetry": {
                 "mitre_attack": EnterpriseTelemetryEngine.MITRE_MAPPING,

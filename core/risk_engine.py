@@ -111,10 +111,12 @@ class RiskEngine:
         glottal_assessment: Optional[Dict[str, Any]] = None,
         phase_assessment: Optional[Dict[str, Any]] = None,
         foundation_assessment: Optional[Dict[str, Any]] = None,
-        context: Optional[Dict[str, Any]] = None
+        context: Optional[Dict[str, Any]] = None,
+        ensemble_fusion: Optional[Dict[str, Any]] = None,
+        semantic_assessment: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
-        Fuses multi-vector signals and contextual factors into a unified enterprise risk assessment.
+        Fuses multi-vector signals, ensemble fusion, contextual factors, and semantic cyberthreats into a unified enterprise risk assessment.
         """
         # 1. Forensic sub-scores
         spectral_score = self.compute_spectral_anomaly_score(forensic_metrics)
@@ -161,7 +163,7 @@ class RiskEngine:
             (norm_w_speaker * speaker_risk)
         )
 
-        # 4. Contextual Risk Factor
+        # 6. Contextual Risk Factor
         context_multiplier = 1.0
         context_flags = []
         if context:
@@ -183,26 +185,59 @@ class RiskEngine:
 
         final_score = min(1.0, base_score * context_multiplier)
 
-        # 5. Determine Actionable Risk Tier
-        # If the Deep Conformer neural backbone is confident (>75%) that the voice is cloned,
-        # or composite score exceeds high-risk threshold, elevate to HIGH RISK
-        is_neural_attack = (neural_fake_prob >= 0.75)
-        
-        if final_score >= 0.65 or is_neural_attack:
+        # 7. Multi-Class & Cybersecurity Threat Intelligence
+        predicted_class = "UNKNOWN"
+        fusion_probabilities = {}
+        if ensemble_fusion:
+            predicted_class = ensemble_fusion.get("predicted_class", "UNKNOWN")
+            fusion_probabilities = ensemble_fusion.get("probabilities", {})
+
+        p_attack = fusion_probabilities.get("voice_cloning_attack", 0.0)
+        is_voice_cloning_attack = (predicted_class == "VOICE_CLONING_ATTACK" or p_attack >= 0.50)
+        is_non_human = (predicted_class == "NON_HUMAN")
+
+        # 8. Semantic Cyberthreat Cross-Correlation
+        is_scam = False
+        scam_cat_display = ""
+        scam_score = 0.0
+        if semantic_assessment and semantic_assessment.get("is_scam"):
+            is_scam = True
+            scam_cat_display = semantic_assessment.get("display_category", "Scam Attack")
+            scam_score = semantic_assessment.get("scam_score", 0.75)
+
+        if is_voice_cloning_attack and is_scam:
             risk_level = "HIGH"
-            badge = "🔴 HIGH RISK (ATTACK)"
-            summary = "Strong synthetic / cloned speech signatures detected. Potential active social engineering attack."
-            # Ensure final risk score reflects the severity of confirmed AI deepfake
-            if is_neural_attack:
-                final_score = max(final_score, min(0.99, neural_fake_prob * 0.95))
+            badge = "🚨 CRITICAL: CLONED VISHING ATTACK"
+            summary = f"CRITICAL DUAL-VECTOR ATTACK: Generative AI voice cloning impersonation combined with active {scam_cat_display}. Coercive financial fraud/extortion in progress."
+            final_score = max(final_score, 0.96)
+        elif is_voice_cloning_attack:
+            risk_level = "HIGH"
+            badge = "🔴 HIGH RISK (VOICE CLONING ATTACK)"
+            summary = "Targeted generative AI voice cloning attack detected. Acoustic biometric violation & vocoder phase dispersion confirm impersonation."
+            final_score = max(final_score, min(0.99, max(0.85, neural_fake_prob * 0.95)))
+        elif is_scam:
+            risk_level = "HIGH"
+            badge = f"⚠️ HIGH RISK ({scam_cat_display.upper()})"
+            summary = f"FRAUD CALL DETECTED: Active {scam_cat_display}. Conversational speech contains coercive social engineering threats, credential harvesting, or extortion."
+            final_score = max(final_score, max(0.85, scam_score * 0.92))
+        elif is_non_human:
+            risk_level = "SUSPICIOUS"
+            badge = "🤖 NON-HUMAN SYNTHETIC AUDIO"
+            summary = "Synthetic audio / robotic speech detected. Lacks organic human prosody and natural glottal variation."
+            final_score = max(final_score, 0.55)
+        elif final_score >= 0.65 or neural_fake_prob >= 0.75:
+            risk_level = "HIGH"
+            badge = "🔴 HIGH RISK (SYNTHETIC ATTACK)"
+            summary = "Strong synthetic speech signatures detected. Potential active social engineering attack."
+            final_score = max(final_score, min(0.99, neural_fake_prob * 0.95))
         elif final_score >= 0.38 or neural_fake_prob >= 0.50:
             risk_level = "SUSPICIOUS"
             badge = "🟡 SUSPICIOUS - VERIFY"
             summary = "Borderline or conflicting acoustic/prosodic indicators. Secondary out-of-band verification required."
         else:
             risk_level = "LOW"
-            badge = "🟢 LOW RISK"
-            summary = "Bona fide human speech verified. No significant cloning indicators detected."
+            badge = "🟢 LOW RISK (AUTHENTIC HUMAN)"
+            summary = "Bona fide human speech verified. No significant cloning or synthetic indicators detected."
 
         return {
             "risk_score": round(final_score, 4),
@@ -210,14 +245,20 @@ class RiskEngine:
             "risk_level": risk_level,
             "badge": badge,
             "summary": summary,
+            "predicted_class": predicted_class,
+            "fusion_probabilities": fusion_probabilities,
+            "is_voice_cloning_attack": is_voice_cloning_attack,
+            "is_semantic_scam": is_scam,
             "sub_scores": {
                 "neural_spoof_prob": round(neural_fake_prob, 4),
                 "spectral_artifact_score": round(spectral_score, 4),
                 "prosody_unnatural_score": round(prosody_score, 4),
                 "glottal_anomaly_score": round(glottal_score, 4),
                 "phase_incoherence_score": round(phase_score, 4),
-                "speaker_mismatch_score": round(speaker_risk, 4) if w_spk > 0 else None
+                "speaker_mismatch_score": round(speaker_risk, 4) if w_spk > 0 else None,
+                "semantic_scam_score": round(scam_score, 4) if semantic_assessment else None
             },
             "context_flags": context_flags,
-            "context_multiplier": round(context_multiplier, 2)
+            "context_multiplier": round(context_multiplier, 2),
+            "semantic_assessment": semantic_assessment
         }

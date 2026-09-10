@@ -54,3 +54,13 @@ desktop.ini
 .idea/
 *.swp
 *.swo
+
+# Android build outputs & local caches
+android/.gradle/
+android/.idea/
+android/local.properties
+android/**/build/
+android/build/
+*.apk
+*.aab
+
