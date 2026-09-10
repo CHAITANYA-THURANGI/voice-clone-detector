@@ -1,17 +1,20 @@
 [
   {
-    "incident_id": "AUD-1ACA99E8",
-    "session_id": "SESSION-98EBA8",
-    "timestamp": "10 Sep 2026, 06:23:46 UTC",
-    "iso_timestamp": "2026-09-10T06:23:46Z",
-    "source": "WEB_DASHBOARD",
+    "incident_id": "AUD-3061E865",
+    "session_id": "SESSION-D91C99",
+    "timestamp": "10 Sep 2026, 06:41:21 UTC",
+    "iso_timestamp": "2026-09-10T06:41:21Z",
+    "source": "CHROME_EXTENSION",
     "event_type": "AUDIO_FORENSIC_ANALYSIS",
-    "caller_or_file": "test_voice.mpeg",
+    "caller_or_file": "Browser_Tab_Audio_Capture",
     "claimed_identity": "Unspecified Speaker",
-    "verdict": "AUTHENTIC_HUMAN",
-    "risk_percentage": 3.9,
-    "risk_level": "LOW",
-    "threats_detected": [],
+    "verdict": "VOICE_CLONING_ATTACK",
+    "risk_percentage": 85.0,
+    "risk_level": "HIGH",
+    "threats_detected": [
+      "Synthetic Voice Clone Impersonation",
+      "Real-Time Pitch/Formant Voicemod Alteration"
+    ],
     "deep_forensics": {
       "acoustic_vectors": {
         "spectral_centroid_hz": 1750.0,
@@ -34,97 +37,18 @@
         "entropy": 0.15
       },
       "ensemble_fusion": {
-        "predicted_class": "HUMAN",
-        "consensus_confidence_pct": 77.9,
+        "predicted_class": "VOICE_CLONING_ATTACK",
+        "consensus_confidence_pct": 76.0,
         "agreement_score": 0.9,
         "probabilities": {
-          "human": 0.95,
+          "human": 0.05,
           "non_human": 0.02,
-          "voice_clone_attack": 0.03
+          "voice_clone_attack": 0.93
         }
       },
       "voicemod": {
-        "detected": false,
-        "comb_ripple": 0.5144,
-        "is_micro_clip": false
-      },
-      "semantic_scam": {
-        "category": "Safe Conversation",
-        "coercion_urgency_pct": 0.0,
-        "flagged_keywords": [],
-        "transcript_snippet": ""
-      },
-      "speaker_biometrics": {
-        "claimed": "None",
-        "identified_name": "Unenrolled",
-        "confidence_pct": 0.0,
-        "is_known_contact": false,
-        "is_scammer_watchlist": false,
-        "is_discrepancy": false
-      },
-      "glottal_lpc": {
-        "residual_kurtosis": 35.71,
-        "status": "NORMAL_BIOLOGICAL"
-      },
-      "phase_mgd": {
-        "phase_jitter": 0.02,
-        "status": "PHASE_COHERENT"
-      }
-    },
-    "action_taken": "VERIFIED_AUTHENTIC",
-    "alerts": {},
-    "compliance": {
-      "sha256_fingerprint": "ed4253aaf1014c09a78765830acfe600",
-      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
-    }
-  },
-  {
-    "incident_id": "AUD-799637D7",
-    "session_id": "SESSION-18A726",
-    "timestamp": "10 Sep 2026, 06:23:45 UTC",
-    "iso_timestamp": "2026-09-10T06:23:45Z",
-    "source": "WEB_DASHBOARD",
-    "event_type": "AUDIO_FORENSIC_ANALYSIS",
-    "caller_or_file": "real_sample.wav",
-    "claimed_identity": "Unspecified Speaker",
-    "verdict": "AUTHENTIC_HUMAN",
-    "risk_percentage": 5.3,
-    "risk_level": "LOW",
-    "threats_detected": [],
-    "deep_forensics": {
-      "acoustic_vectors": {
-        "spectral_centroid_hz": 1750.0,
-        "spectral_rolloff_hz": 3800.0,
-        "pitch_mean_hz": 145.0,
-        "pitch_std_hz": 28.5,
-        "jitter_pct": 1.2,
-        "shimmer_pct": 3.4,
-        "hnr_db": 16.8,
-        "zero_crossing_rate": 0.075,
-        "formants": [
-          700.0,
-          1800.0,
-          2700.0
-        ]
-      },
-      "conformer": {
-        "raw_prob": 0.05,
-        "predicted_class": "HUMAN",
-        "entropy": 0.15
-      },
-      "ensemble_fusion": {
-        "predicted_class": "HUMAN",
-        "consensus_confidence_pct": 72.1,
-        "agreement_score": 0.9,
-        "probabilities": {
-          "human": 0.95,
-          "non_human": 0.02,
-          "voice_clone_attack": 0.03
-        }
-      },
-      "voicemod": {
-        "detected": false,
-        "comb_ripple": 0.086,
+        "detected": true,
+        "comb_ripple": 0.6114,
         "is_micro_clip": true
       },
       "semantic_scam": {
@@ -142,171 +66,37 @@
         "is_discrepancy": false
       },
       "glottal_lpc": {
-        "residual_kurtosis": 55.52,
+        "residual_kurtosis": 108.74,
         "status": "NORMAL_BIOLOGICAL"
       },
       "phase_mgd": {
         "phase_jitter": 0.02,
         "status": "PHASE_COHERENT"
-      }
-    },
-    "action_taken": "VERIFIED_AUTHENTIC",
-    "alerts": {},
-    "compliance": {
-      "sha256_fingerprint": "9510f3c6c52648cdbc871917f82349dd",
-      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
-    }
-  },
-  {
-    "incident_id": "SCR-52FAF910",
-    "session_id": "SCREEN-7D2855",
-    "timestamp": "10 Sep 2026, 06:23:03 UTC",
-    "iso_timestamp": "2026-09-10T06:23:03Z",
-    "source": "ANDROID_MOBILE",
-    "event_type": "CALL_SCREENING_INTERCEPT",
-    "caller_or_file": "+91-140-776655",
-    "claimed_identity": "Screened Incoming Call",
-    "verdict": "CALL_SCREENED_BLOCKED",
-    "risk_percentage": 99.0,
-    "risk_level": "CRITICAL",
-    "threats_detected": [
-      "Known Watchlist Fraudster Pre-Call Block"
-    ],
-    "deep_forensics": {
-      "screening_decision": "REJECTED",
-      "reason": "Known Watchlist Fraudster Pre-Call Block",
-      "sms_precaution_dispatched": true,
-      "acoustic_vectors": {
-        "spectral_centroid_hz": 1800.0,
-        "spectral_rolloff_hz": 3900.0,
-        "pitch_mean_hz": 138.0,
-        "pitch_std_hz": 29.0,
-        "jitter_pct": 2.5,
-        "shimmer_pct": 5.0,
-        "hnr_db": 13.5,
-        "zero_crossing_rate": 0.08,
-        "formants": [
-          680.0,
-          1750.0,
-          2650.0
-        ]
-      }
-    },
-    "action_taken": "PRE_CALL_BLOCKED_AND_SILENCED",
-    "alerts": {
-      "sms": {
-        "sent": true,
-        "gateway": "Android Native SIM Card Quota",
-        "status": "SENT_VIA_DEVICE_SIM"
-      }
-    },
-    "compliance": {
-      "sha256_fingerprint": "ac36ad73a52947248cdcedfab40473f5",
-      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
-    }
-  },
-  {
-    "incident_id": "AUD-D36B57DE",
-    "session_id": "CALL-UNITTEST",
-    "timestamp": "10 Sep 2026, 06:23:03 UTC",
-    "iso_timestamp": "2026-09-10T06:23:03Z",
-    "source": "WEB_DASHBOARD",
-    "event_type": "AUDIO_FORENSIC_ANALYSIS",
-    "caller_or_file": "3sec_scam_arrest_call.wav",
-    "claimed_identity": "Unknown Caller",
-    "verdict": "VOICE_CLONING_ATTACK",
-    "risk_percentage": 92.0,
-    "risk_level": "CRITICAL",
-    "threats_detected": [
-      "Synthetic Voice Clone Impersonation",
-      "Real-Time Pitch/Formant Voicemod Alteration",
-      "Conversational Scam: Digital Arrest Extortion",
-      "Biometric Imposter: Acoustics mismatch claimed Unknown Caller"
-    ],
-    "deep_forensics": {
-      "acoustic_vectors": {
-        "spectral_centroid_hz": 1950.4,
-        "spectral_rolloff_hz": 4120.0,
-        "pitch_mean_hz": 155.2,
-        "pitch_std_hz": 34.1,
-        "jitter_pct": 2.45,
-        "shimmer_pct": 5.12,
-        "hnr_db": 13.8,
-        "zero_crossing_rate": 0.089,
-        "formants": [
-          680.0,
-          1780.0,
-          2720.0
-        ]
-      },
-      "conformer": {
-        "raw_prob": 0.93,
-        "predicted_class": "VOICE_CLONING_ATTACK",
-        "entropy": 0.22
-      },
-      "ensemble_fusion": {
-        "predicted_class": "VOICE_CLONING_ATTACK",
-        "consensus_confidence_pct": 94.2,
-        "agreement_score": 0.95,
-        "probabilities": {
-          "human": 0.04,
-          "non_human": 0.04,
-          "voice_clone_attack": 0.92
-        }
-      },
-      "voicemod": {
-        "detected": true,
-        "comb_ripple": 0.52,
-        "is_micro_clip": false
-      },
-      "semantic_scam": {
-        "category": "Digital Arrest Extortion",
-        "coercion_urgency_pct": 90.0,
-        "flagged_keywords": [
-          "arrest",
-          "police",
-          "cbi",
-          "warrant"
-        ],
-        "transcript_snippet": "This is CBI Police. An arrest warrant has been issued against your Aadhaar."
-      },
-      "speaker_biometrics": {
-        "claimed": "Unknown Caller",
-        "identified_name": "Unenrolled Target",
-        "confidence_pct": 12.0,
-        "is_known_contact": false,
-        "is_scammer_watchlist": false,
-        "is_discrepancy": true
-      },
-      "glottal_lpc": {
-        "residual_kurtosis": 6.4,
-        "status": "SUSPICIOUS_UNNATURAL"
-      },
-      "phase_mgd": {
-        "phase_jitter": 0.048,
-        "status": "DISCONTINUOUS"
       }
     },
     "action_taken": "FLAGGED_AS_HIGH_RISK_ATTACK",
     "alerts": {},
     "compliance": {
-      "sha256_fingerprint": "abcdef1234567890abcdef1234567890",
+      "sha256_fingerprint": "5f203fdf67c142d89e32a90a4b9e6f0c",
       "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
     }
   },
   {
-    "incident_id": "AUD-422C1A16",
-    "session_id": "SESSION-1A91A3",
-    "timestamp": "10 Sep 2026, 06:15:26 UTC",
-    "iso_timestamp": "2026-09-10T06:15:26Z",
-    "source": "WEB_DASHBOARD",
+    "incident_id": "AUD-DD923CE7",
+    "session_id": "SESSION-20DBB3",
+    "timestamp": "10 Sep 2026, 06:40:03 UTC",
+    "iso_timestamp": "2026-09-10T06:40:03Z",
+    "source": "CHROME_EXTENSION",
     "event_type": "AUDIO_FORENSIC_ANALYSIS",
-    "caller_or_file": "test_voice.mpeg",
+    "caller_or_file": "Browser_Tab_Audio_Capture",
     "claimed_identity": "Unspecified Speaker",
-    "verdict": "AUTHENTIC_HUMAN",
-    "risk_percentage": 3.9,
-    "risk_level": "LOW",
-    "threats_detected": [],
+    "verdict": "VOICE_CLONING_ATTACK",
+    "risk_percentage": 85.0,
+    "risk_level": "HIGH",
+    "threats_detected": [
+      "Synthetic Voice Clone Impersonation",
+      "Real-Time Pitch/Formant Voicemod Alteration"
+    ],
     "deep_forensics": {
       "acoustic_vectors": {
         "spectral_centroid_hz": 1750.0,
@@ -329,97 +119,18 @@
         "entropy": 0.15
       },
       "ensemble_fusion": {
-        "predicted_class": "HUMAN",
-        "consensus_confidence_pct": 77.9,
+        "predicted_class": "VOICE_CLONING_ATTACK",
+        "consensus_confidence_pct": 76.0,
         "agreement_score": 0.9,
         "probabilities": {
-          "human": 0.95,
+          "human": 0.05,
           "non_human": 0.02,
-          "voice_clone_attack": 0.03
+          "voice_clone_attack": 0.93
         }
       },
       "voicemod": {
-        "detected": false,
-        "comb_ripple": 0.5144,
-        "is_micro_clip": false
-      },
-      "semantic_scam": {
-        "category": "Safe Conversation",
-        "coercion_urgency_pct": 0.0,
-        "flagged_keywords": [],
-        "transcript_snippet": ""
-      },
-      "speaker_biometrics": {
-        "claimed": "None",
-        "identified_name": "Unenrolled",
-        "confidence_pct": 0.0,
-        "is_known_contact": false,
-        "is_scammer_watchlist": false,
-        "is_discrepancy": false
-      },
-      "glottal_lpc": {
-        "residual_kurtosis": 35.71,
-        "status": "NORMAL_BIOLOGICAL"
-      },
-      "phase_mgd": {
-        "phase_jitter": 0.02,
-        "status": "PHASE_COHERENT"
-      }
-    },
-    "action_taken": "VERIFIED_AUTHENTIC",
-    "alerts": {},
-    "compliance": {
-      "sha256_fingerprint": "0d0879a575c8455c95a1401b8384888a",
-      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
-    }
-  },
-  {
-    "incident_id": "AUD-CF30395E",
-    "session_id": "SESSION-AA813F",
-    "timestamp": "10 Sep 2026, 06:15:25 UTC",
-    "iso_timestamp": "2026-09-10T06:15:25Z",
-    "source": "WEB_DASHBOARD",
-    "event_type": "AUDIO_FORENSIC_ANALYSIS",
-    "caller_or_file": "real_sample.wav",
-    "claimed_identity": "Unspecified Speaker",
-    "verdict": "AUTHENTIC_HUMAN",
-    "risk_percentage": 5.3,
-    "risk_level": "LOW",
-    "threats_detected": [],
-    "deep_forensics": {
-      "acoustic_vectors": {
-        "spectral_centroid_hz": 1750.0,
-        "spectral_rolloff_hz": 3800.0,
-        "pitch_mean_hz": 145.0,
-        "pitch_std_hz": 28.5,
-        "jitter_pct": 1.2,
-        "shimmer_pct": 3.4,
-        "hnr_db": 16.8,
-        "zero_crossing_rate": 0.075,
-        "formants": [
-          700.0,
-          1800.0,
-          2700.0
-        ]
-      },
-      "conformer": {
-        "raw_prob": 0.05,
-        "predicted_class": "HUMAN",
-        "entropy": 0.15
-      },
-      "ensemble_fusion": {
-        "predicted_class": "HUMAN",
-        "consensus_confidence_pct": 72.1,
-        "agreement_score": 0.9,
-        "probabilities": {
-          "human": 0.95,
-          "non_human": 0.02,
-          "voice_clone_attack": 0.03
-        }
-      },
-      "voicemod": {
-        "detected": false,
-        "comb_ripple": 0.086,
+        "detected": true,
+        "comb_ripple": 0.6114,
         "is_micro_clip": true
       },
       "semantic_scam": {
@@ -437,7 +148,7 @@
         "is_discrepancy": false
       },
       "glottal_lpc": {
-        "residual_kurtosis": 55.52,
+        "residual_kurtosis": 108.74,
         "status": "NORMAL_BIOLOGICAL"
       },
       "phase_mgd": {
@@ -445,284 +156,689 @@
         "status": "PHASE_COHERENT"
       }
     },
-    "action_taken": "VERIFIED_AUTHENTIC",
+    "action_taken": "FLAGGED_AS_HIGH_RISK_ATTACK",
     "alerts": {},
     "compliance": {
-      "sha256_fingerprint": "ec347077722649b4a7dbb54c4a4d06d3",
+      "sha256_fingerprint": "1d55575e2b3d45b594de1c4257f89c39",
       "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
     }
   },
   {
-    "incident_id": "SCR-79E1F4F9",
-    "session_id": "SCREEN-B4DFD8",
-    "timestamp": "10 Sep 2026, 06:15:16 UTC",
-    "iso_timestamp": "2026-09-10T06:15:16Z",
-    "source": "ANDROID_MOBILE",
-    "event_type": "CALL_SCREENING_INTERCEPT",
-    "caller_or_file": "+91-140-776655",
-    "claimed_identity": "Screened Incoming Call",
-    "verdict": "CALL_SCREENED_BLOCKED",
-    "risk_percentage": 99.0,
-    "risk_level": "CRITICAL",
-    "threats_detected": [
-      "Known Watchlist Fraudster Pre-Call Block"
-    ],
-    "deep_forensics": {
-      "screening_decision": "REJECTED",
-      "reason": "Known Watchlist Fraudster Pre-Call Block",
-      "sms_precaution_dispatched": true,
-      "acoustic_vectors": {
-        "spectral_centroid_hz": 1800.0,
-        "spectral_rolloff_hz": 3900.0,
-        "pitch_mean_hz": 138.0,
-        "pitch_std_hz": 29.0,
-        "jitter_pct": 2.5,
-        "shimmer_pct": 5.0,
-        "hnr_db": 13.5,
-        "zero_crossing_rate": 0.08,
-        "formants": [
-          680.0,
-          1750.0,
-          2650.0
-        ]
-      }
-    },
-    "action_taken": "PRE_CALL_BLOCKED_AND_SILENCED",
-    "alerts": {
-      "sms": {
-        "sent": true,
-        "gateway": "Android Native SIM Card Quota",
-        "status": "SENT_VIA_DEVICE_SIM"
-      }
-    },
-    "compliance": {
-      "sha256_fingerprint": "0d3e92a8aca94e90949c45bffb762e74",
-      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
-    }
-  },
-  {
-    "incident_id": "AUD-1A106180",
-    "session_id": "CALL-UNITTEST",
-    "timestamp": "10 Sep 2026, 06:15:16 UTC",
-    "iso_timestamp": "2026-09-10T06:15:16Z",
-    "source": "WEB_DASHBOARD",
+    "incident_id": "AUD-E1A55D0A",
+    "session_id": "SESSION-F3EE19",
+    "timestamp": "10 Sep 2026, 06:27:55 UTC",
+    "iso_timestamp": "2026-09-10T06:27:55Z",
+    "source": "CHROME_EXTENSION",
     "event_type": "AUDIO_FORENSIC_ANALYSIS",
-    "caller_or_file": "3sec_scam_arrest_call.wav",
-    "claimed_identity": "Unknown Caller",
+    "caller_or_file": "Browser_Tab_Audio_Capture",
+    "claimed_identity": "Unspecified Speaker",
     "verdict": "VOICE_CLONING_ATTACK",
-    "risk_percentage": 92.0,
-    "risk_level": "CRITICAL",
+    "risk_percentage": 96.0,
+    "risk_level": "HIGH",
     "threats_detected": [
       "Synthetic Voice Clone Impersonation",
       "Real-Time Pitch/Formant Voicemod Alteration",
-      "Conversational Scam: Digital Arrest Extortion",
-      "Biometric Imposter: Acoustics mismatch claimed Unknown Caller"
+      "Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation"
     ],
     "deep_forensics": {
       "acoustic_vectors": {
-        "spectral_centroid_hz": 1950.4,
-        "spectral_rolloff_hz": 4120.0,
-        "pitch_mean_hz": 155.2,
-        "pitch_std_hz": 34.1,
-        "jitter_pct": 2.45,
-        "shimmer_pct": 5.12,
-        "hnr_db": 13.8,
-        "zero_crossing_rate": 0.089,
+        "spectral_centroid_hz": 1750.0,
+        "spectral_rolloff_hz": 3800.0,
+        "pitch_mean_hz": 145.0,
+        "pitch_std_hz": 28.5,
+        "jitter_pct": 1.2,
+        "shimmer_pct": 3.4,
+        "hnr_db": 16.8,
+        "zero_crossing_rate": 0.075,
         "formants": [
-          680.0,
-          1780.0,
-          2720.0
+          700.0,
+          1800.0,
+          2700.0
         ]
       },
       "conformer": {
-        "raw_prob": 0.93,
-        "predicted_class": "VOICE_CLONING_ATTACK",
-        "entropy": 0.22
+        "raw_prob": 0.05,
+        "predicted_class": "HUMAN",
+        "entropy": 0.15
       },
       "ensemble_fusion": {
         "predicted_class": "VOICE_CLONING_ATTACK",
-        "consensus_confidence_pct": 94.2,
-        "agreement_score": 0.95,
+        "consensus_confidence_pct": 76.7,
+        "agreement_score": 0.9,
         "probabilities": {
-          "human": 0.04,
-          "non_human": 0.04,
-          "voice_clone_attack": 0.92
+          "human": 0.05,
+          "non_human": 0.02,
+          "voice_clone_attack": 0.93
         }
       },
       "voicemod": {
         "detected": true,
-        "comb_ripple": 0.52,
-        "is_micro_clip": false
+        "comb_ripple": 0.6116,
+        "is_micro_clip": true
       },
       "semantic_scam": {
-        "category": "Digital Arrest Extortion",
-        "coercion_urgency_pct": 90.0,
+        "category": "\ud83d\udea8 Family / Boss Voice Note Impersonation",
+        "coercion_urgency_pct": 0.0,
         "flagged_keywords": [
-          "arrest",
-          "police",
-          "cbi",
-          "warrant"
+          "familial intimate greeting",
+          "distress emergency claim"
         ],
-        "transcript_snippet": "This is CBI Police. An arrest warrant has been issued against your Aadhaar."
+        "transcript_snippet": "Mom, I broke my phone in an emergency."
       },
       "speaker_biometrics": {
-        "claimed": "Unknown Caller",
-        "identified_name": "Unenrolled Target",
-        "confidence_pct": 12.0,
+        "claimed": "None",
+        "identified_name": "Unenrolled",
+        "confidence_pct": 0.0,
         "is_known_contact": false,
         "is_scammer_watchlist": false,
-        "is_discrepancy": true
+        "is_discrepancy": false
       },
       "glottal_lpc": {
-        "residual_kurtosis": 6.4,
-        "status": "SUSPICIOUS_UNNATURAL"
+        "residual_kurtosis": 109.15,
+        "status": "NORMAL_BIOLOGICAL"
       },
       "phase_mgd": {
-        "phase_jitter": 0.048,
-        "status": "DISCONTINUOUS"
+        "phase_jitter": 0.02,
+        "status": "PHASE_COHERENT"
       }
     },
     "action_taken": "FLAGGED_AS_HIGH_RISK_ATTACK",
     "alerts": {},
     "compliance": {
-      "sha256_fingerprint": "abcdef1234567890abcdef1234567890",
+      "sha256_fingerprint": "274bf551bf914e8a9689e83d2da87a99",
       "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
     }
   },
   {
-    "incident_id": "SCR-4607D05C",
-    "session_id": "SCREEN-C9C4C5",
-    "timestamp": "10 Sep 2026, 05:52:53 UTC",
-    "iso_timestamp": "2026-09-10T05:52:53Z",
-    "source": "ANDROID_MOBILE",
-    "event_type": "CALL_SCREENING_INTERCEPT",
-    "caller_or_file": "+91-140-776655",
-    "claimed_identity": "Screened Incoming Call",
-    "verdict": "CALL_SCREENED_BLOCKED",
-    "risk_percentage": 99.0,
-    "risk_level": "CRITICAL",
-    "threats_detected": [
-      "Known Watchlist Fraudster Pre-Call Block"
-    ],
-    "deep_forensics": {
-      "screening_decision": "REJECTED",
-      "reason": "Known Watchlist Fraudster Pre-Call Block",
-      "sms_precaution_dispatched": true,
-      "acoustic_vectors": {
-        "spectral_centroid_hz": 1800.0,
-        "spectral_rolloff_hz": 3900.0,
-        "pitch_mean_hz": 138.0,
-        "pitch_std_hz": 29.0,
-        "jitter_pct": 2.5,
-        "shimmer_pct": 5.0,
-        "hnr_db": 13.5,
-        "zero_crossing_rate": 0.08,
-        "formants": [
-          680.0,
-          1750.0,
-          2650.0
-        ]
-      }
-    },
-    "action_taken": "PRE_CALL_BLOCKED_AND_SILENCED",
-    "alerts": {
-      "sms": {
-        "sent": true,
-        "gateway": "Android Native SIM Card Quota",
-        "status": "SENT_VIA_DEVICE_SIM"
-      }
-    },
-    "compliance": {
-      "sha256_fingerprint": "530af386b298451893bd99d79fe3b9f5",
-      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
-    }
-  },
-  {
-    "incident_id": "AUD-F8E7200C",
-    "session_id": "CALL-UNITTEST",
-    "timestamp": "10 Sep 2026, 05:52:53 UTC",
-    "iso_timestamp": "2026-09-10T05:52:53Z",
-    "source": "WEB_DASHBOARD",
+    "incident_id": "AUD-2F139A21",
+    "session_id": "SESSION-4144EC",
+    "timestamp": "10 Sep 2026, 04:58:36 UTC",
+    "iso_timestamp": "2026-09-10T04:58:36Z",
+    "source": "CHROME_EXTENSION",
     "event_type": "AUDIO_FORENSIC_ANALYSIS",
-    "caller_or_file": "3sec_scam_arrest_call.wav",
-    "claimed_identity": "Unknown Caller",
+    "caller_or_file": "Browser_Tab_Audio_Capture",
+    "claimed_identity": "Unspecified Speaker",
     "verdict": "VOICE_CLONING_ATTACK",
-    "risk_percentage": 92.0,
-    "risk_level": "CRITICAL",
+    "risk_percentage": 96.0,
+    "risk_level": "HIGH",
     "threats_detected": [
       "Synthetic Voice Clone Impersonation",
       "Real-Time Pitch/Formant Voicemod Alteration",
-      "Conversational Scam: Digital Arrest Extortion",
-      "Biometric Imposter: Acoustics mismatch claimed Unknown Caller"
+      "Conversational Scam: \ud83d\udea8 Family / Boss Voice Note Impersonation"
     ],
     "deep_forensics": {
       "acoustic_vectors": {
-        "spectral_centroid_hz": 1950.4,
-        "spectral_rolloff_hz": 4120.0,
-        "pitch_mean_hz": 155.2,
-        "pitch_std_hz": 34.1,
-        "jitter_pct": 2.45,
-        "shimmer_pct": 5.12,
-        "hnr_db": 13.8,
-        "zero_crossing_rate": 0.089,
+        "spectral_centroid_hz": 1750.0,
+        "spectral_rolloff_hz": 3800.0,
+        "pitch_mean_hz": 145.0,
+        "pitch_std_hz": 28.5,
+        "jitter_pct": 1.2,
+        "shimmer_pct": 3.4,
+        "hnr_db": 16.8,
+        "zero_crossing_rate": 0.075,
         "formants": [
-          680.0,
-          1780.0,
-          2720.0
+          700.0,
+          1800.0,
+          2700.0
         ]
       },
       "conformer": {
-        "raw_prob": 0.93,
-        "predicted_class": "VOICE_CLONING_ATTACK",
-        "entropy": 0.22
+        "raw_prob": 0.05,
+        "predicted_class": "HUMAN",
+        "entropy": 0.15
       },
       "ensemble_fusion": {
         "predicted_class": "VOICE_CLONING_ATTACK",
-        "consensus_confidence_pct": 94.2,
-        "agreement_score": 0.95,
+        "consensus_confidence_pct": 76.7,
+        "agreement_score": 0.9,
         "probabilities": {
-          "human": 0.04,
-          "non_human": 0.04,
-          "voice_clone_attack": 0.92
+          "human": 0.05,
+          "non_human": 0.02,
+          "voice_clone_attack": 0.93
         }
       },
       "voicemod": {
         "detected": true,
-        "comb_ripple": 0.52,
-        "is_micro_clip": false
+        "comb_ripple": 0.6116,
+        "is_micro_clip": true
       },
       "semantic_scam": {
-        "category": "Digital Arrest Extortion",
-        "coercion_urgency_pct": 90.0,
+        "category": "\ud83d\udea8 Family / Boss Voice Note Impersonation",
+        "coercion_urgency_pct": 0.0,
         "flagged_keywords": [
-          "arrest",
-          "police",
-          "cbi",
-          "warrant"
+          "familial intimate greeting",
+          "distress emergency claim"
         ],
-        "transcript_snippet": "This is CBI Police. An arrest warrant has been issued against your Aadhaar."
+        "transcript_snippet": "Mom, I broke my phone in an emergency."
       },
       "speaker_biometrics": {
-        "claimed": "Unknown Caller",
-        "identified_name": "Unenrolled Target",
-        "confidence_pct": 12.0,
+        "claimed": "None",
+        "identified_name": "Unenrolled",
+        "confidence_pct": 0.0,
         "is_known_contact": false,
         "is_scammer_watchlist": false,
-        "is_discrepancy": true
+        "is_discrepancy": false
       },
       "glottal_lpc": {
-        "residual_kurtosis": 6.4,
-        "status": "SUSPICIOUS_UNNATURAL"
+        "residual_kurtosis": 109.15,
+        "status": "NORMAL_BIOLOGICAL"
       },
       "phase_mgd": {
-        "phase_jitter": 0.048,
-        "status": "DISCONTINUOUS"
+        "phase_jitter": 0.02,
+        "status": "PHASE_COHERENT"
       }
     },
     "action_taken": "FLAGGED_AS_HIGH_RISK_ATTACK",
     "alerts": {},
     "compliance": {
-      "sha256_fingerprint": "abcdef1234567890abcdef1234567890",
+      "sha256_fingerprint": "e2bf3dfbd7da45cc83eec0a948802b91",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "AUD-7C22A22D",
+    "session_id": "SESSION-231E08",
+    "timestamp": "10 Sep 2026, 04:58:31 UTC",
+    "iso_timestamp": "2026-09-10T04:58:31Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "AUDIO_FORENSIC_ANALYSIS",
+    "caller_or_file": "WhatsApp Audio 2026-09-09 at 1.50.51 PM.mpeg",
+    "claimed_identity": "Unspecified Speaker",
+    "verdict": "VOICE_CLONING_ATTACK",
+    "risk_percentage": 92.2,
+    "risk_level": "HIGH",
+    "threats_detected": [
+      "Synthetic Voice Clone Impersonation",
+      "Real-Time Pitch/Formant Voicemod Alteration"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1750.0,
+        "spectral_rolloff_hz": 3800.0,
+        "pitch_mean_hz": 145.0,
+        "pitch_std_hz": 28.5,
+        "jitter_pct": 1.2,
+        "shimmer_pct": 3.4,
+        "hnr_db": 16.8,
+        "zero_crossing_rate": 0.075,
+        "formants": [
+          700.0,
+          1800.0,
+          2700.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.05,
+        "predicted_class": "HUMAN",
+        "entropy": 0.15
+      },
+      "ensemble_fusion": {
+        "predicted_class": "VOICE_CLONING_ATTACK",
+        "consensus_confidence_pct": 52.9,
+        "agreement_score": 0.9,
+        "probabilities": {
+          "human": 0.05,
+          "non_human": 0.02,
+          "voice_clone_attack": 0.93
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.504,
+        "is_micro_clip": true
+      },
+      "semantic_scam": {
+        "category": "\ud83d\udfe2 Legitimate / Safe Conversation",
+        "coercion_urgency_pct": 0.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "No, no, no!"
+      },
+      "speaker_biometrics": {
+        "claimed": "None",
+        "identified_name": "Unenrolled",
+        "confidence_pct": 0.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 68.69,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.02,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "FLAGGED_AS_HIGH_RISK_ATTACK",
+    "alerts": {},
+    "compliance": {
+      "sha256_fingerprint": "0846e74709c44802bd8be7f6cdd97101",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "AUD-263126E8",
+    "session_id": "SESSION-4AE64D",
+    "timestamp": "10 Sep 2026, 04:56:43 UTC",
+    "iso_timestamp": "2026-09-10T04:56:43Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "AUDIO_FORENSIC_ANALYSIS",
+    "caller_or_file": "WhatsApp Audio 2026-09-09 at 1.50.58 PM.mpeg",
+    "claimed_identity": "Unspecified Speaker",
+    "verdict": "VOICE_CLONING_ATTACK",
+    "risk_percentage": 85.0,
+    "risk_level": "HIGH",
+    "threats_detected": [
+      "Synthetic Voice Clone Impersonation",
+      "Real-Time Pitch/Formant Voicemod Alteration"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1750.0,
+        "spectral_rolloff_hz": 3800.0,
+        "pitch_mean_hz": 145.0,
+        "pitch_std_hz": 28.5,
+        "jitter_pct": 1.2,
+        "shimmer_pct": 3.4,
+        "hnr_db": 16.8,
+        "zero_crossing_rate": 0.075,
+        "formants": [
+          700.0,
+          1800.0,
+          2700.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.05,
+        "predicted_class": "HUMAN",
+        "entropy": 0.15
+      },
+      "ensemble_fusion": {
+        "predicted_class": "VOICE_CLONING_ATTACK",
+        "consensus_confidence_pct": 74.9,
+        "agreement_score": 0.9,
+        "probabilities": {
+          "human": 0.05,
+          "non_human": 0.02,
+          "voice_clone_attack": 0.93
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.5444,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "\ud83d\udfe2 Legitimate / Safe Conversation",
+        "coercion_urgency_pct": 0.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "Hello, I am from the Bank SBI. Can you share me your bank details?"
+      },
+      "speaker_biometrics": {
+        "claimed": "None",
+        "identified_name": "Unenrolled",
+        "confidence_pct": 0.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 42.34,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.02,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "FLAGGED_AS_HIGH_RISK_ATTACK",
+    "alerts": {},
+    "compliance": {
+      "sha256_fingerprint": "6bd2352592c44077824ca385250a9588",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "AUD-5C14A594",
+    "session_id": "SESSION-DA9E71",
+    "timestamp": "10 Sep 2026, 04:52:13 UTC",
+    "iso_timestamp": "2026-09-10T04:52:13Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "AUDIO_FORENSIC_ANALYSIS",
+    "caller_or_file": "scam_bank_kyc_otp_theft.wav",
+    "claimed_identity": "Unspecified Speaker",
+    "verdict": "VOICE_CLONING_ATTACK",
+    "risk_percentage": 96.0,
+    "risk_level": "HIGH",
+    "threats_detected": [
+      "Synthetic Voice Clone Impersonation",
+      "Real-Time Pitch/Formant Voicemod Alteration",
+      "Conversational Scam: \ud83d\udcb3 Banking KYC / OTP Harvesting"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1750.0,
+        "spectral_rolloff_hz": 3800.0,
+        "pitch_mean_hz": 145.0,
+        "pitch_std_hz": 28.5,
+        "jitter_pct": 1.2,
+        "shimmer_pct": 3.4,
+        "hnr_db": 16.8,
+        "zero_crossing_rate": 0.075,
+        "formants": [
+          700.0,
+          1800.0,
+          2700.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.05,
+        "predicted_class": "HUMAN",
+        "entropy": 0.15
+      },
+      "ensemble_fusion": {
+        "predicted_class": "VOICE_CLONING_ATTACK",
+        "consensus_confidence_pct": 75.3,
+        "agreement_score": 0.9,
+        "probabilities": {
+          "human": 0.05,
+          "non_human": 0.02,
+          "voice_clone_attack": 0.93
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.5916,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "\ud83d\udcb3 Banking KYC / OTP Harvesting",
+        "coercion_urgency_pct": 0.0,
+        "flagged_keywords": [
+          "six-digit OTP verification",
+          "kyc expired scare",
+          "card reference",
+          "one-time password request",
+          "immediacy pressure",
+          "otp request"
+        ],
+        "transcript_snippet": "Urgent alert from bank security. Your debit card and net banking have been blocked due to KYC expired. Please share your one-time password and six-digit OTP immediately to reactivate."
+      },
+      "speaker_biometrics": {
+        "claimed": "None",
+        "identified_name": "Unenrolled",
+        "confidence_pct": 0.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 133.98,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.02,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "FLAGGED_AS_HIGH_RISK_ATTACK",
+    "alerts": {},
+    "compliance": {
+      "sha256_fingerprint": "b8bab551f82645d7afd6397b89bcbd01",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "AUD-C0B55F05",
+    "session_id": "SESSION-5C55AA",
+    "timestamp": "10 Sep 2026, 04:42:43 UTC",
+    "iso_timestamp": "2026-09-10T04:42:43Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "AUDIO_FORENSIC_ANALYSIS",
+    "caller_or_file": "scam_bank_kyc_otp_theft.wav",
+    "claimed_identity": "Unspecified Speaker",
+    "verdict": "VOICE_CLONING_ATTACK",
+    "risk_percentage": 96.0,
+    "risk_level": "HIGH",
+    "threats_detected": [
+      "Synthetic Voice Clone Impersonation",
+      "Real-Time Pitch/Formant Voicemod Alteration",
+      "Conversational Scam: \ud83d\udcb3 Banking KYC / OTP Harvesting"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1750.0,
+        "spectral_rolloff_hz": 3800.0,
+        "pitch_mean_hz": 145.0,
+        "pitch_std_hz": 28.5,
+        "jitter_pct": 1.2,
+        "shimmer_pct": 3.4,
+        "hnr_db": 16.8,
+        "zero_crossing_rate": 0.075,
+        "formants": [
+          700.0,
+          1800.0,
+          2700.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.05,
+        "predicted_class": "HUMAN",
+        "entropy": 0.15
+      },
+      "ensemble_fusion": {
+        "predicted_class": "VOICE_CLONING_ATTACK",
+        "consensus_confidence_pct": 75.3,
+        "agreement_score": 0.9,
+        "probabilities": {
+          "human": 0.05,
+          "non_human": 0.02,
+          "voice_clone_attack": 0.93
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.5916,
+        "is_micro_clip": false
+      },
+      "semantic_scam": {
+        "category": "\ud83d\udcb3 Banking KYC / OTP Harvesting",
+        "coercion_urgency_pct": 0.0,
+        "flagged_keywords": [
+          "kyc expired scare",
+          "otp request",
+          "card reference",
+          "one-time password request",
+          "six-digit OTP verification",
+          "immediacy pressure"
+        ],
+        "transcript_snippet": "Urgent alert from bank security. Your debit card and net banking have been blocked due to KYC expired. Please share your one-time password and six-digit OTP immediately to reactivate."
+      },
+      "speaker_biometrics": {
+        "claimed": "None",
+        "identified_name": "Unenrolled",
+        "confidence_pct": 0.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 133.98,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.02,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "FLAGGED_AS_HIGH_RISK_ATTACK",
+    "alerts": {},
+    "compliance": {
+      "sha256_fingerprint": "eac2d9f3b95e46f786269449a7fa0a46",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "AUD-D417BBC5",
+    "session_id": "SESSION-519CB1",
+    "timestamp": "10 Sep 2026, 04:40:31 UTC",
+    "iso_timestamp": "2026-09-10T04:40:31Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "AUDIO_FORENSIC_ANALYSIS",
+    "caller_or_file": "synthetic_tts_01.wav",
+    "claimed_identity": "Unspecified Speaker",
+    "verdict": "VOICE_CLONING_ATTACK",
+    "risk_percentage": 93.8,
+    "risk_level": "HIGH",
+    "threats_detected": [
+      "Synthetic Voice Clone Impersonation",
+      "Real-Time Pitch/Formant Voicemod Alteration"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1750.0,
+        "spectral_rolloff_hz": 3800.0,
+        "pitch_mean_hz": 145.0,
+        "pitch_std_hz": 28.5,
+        "jitter_pct": 1.2,
+        "shimmer_pct": 3.4,
+        "hnr_db": 16.8,
+        "zero_crossing_rate": 0.075,
+        "formants": [
+          700.0,
+          1800.0,
+          2700.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.05,
+        "predicted_class": "HUMAN",
+        "entropy": 0.15
+      },
+      "ensemble_fusion": {
+        "predicted_class": "VOICE_CLONING_ATTACK",
+        "consensus_confidence_pct": 77.7,
+        "agreement_score": 0.9,
+        "probabilities": {
+          "human": 0.05,
+          "non_human": 0.02,
+          "voice_clone_attack": 0.93
+        }
+      },
+      "voicemod": {
+        "detected": true,
+        "comb_ripple": 0.7569,
+        "is_micro_clip": true
+      },
+      "semantic_scam": {
+        "category": "\ud83d\udfe2 Legitimate / Safe Conversation",
+        "coercion_urgency_pct": 0.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "..."
+      },
+      "speaker_biometrics": {
+        "claimed": "None",
+        "identified_name": "Unenrolled",
+        "confidence_pct": 0.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 76.38,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.02,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "FLAGGED_AS_HIGH_RISK_ATTACK",
+    "alerts": {},
+    "compliance": {
+      "sha256_fingerprint": "6cd3d96135e44e1aa2ea05a5a3e11e50",
+      "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
+    }
+  },
+  {
+    "incident_id": "AUD-3A3F62F5",
+    "session_id": "SESSION-1E8774",
+    "timestamp": "10 Sep 2026, 04:40:31 UTC",
+    "iso_timestamp": "2026-09-10T04:40:31Z",
+    "source": "WEB_DASHBOARD",
+    "event_type": "AUDIO_FORENSIC_ANALYSIS",
+    "caller_or_file": "synthetic_clone_02.wav",
+    "claimed_identity": "Unspecified Speaker",
+    "verdict": "VOICE_CLONING_ATTACK",
+    "risk_percentage": 93.7,
+    "risk_level": "HIGH",
+    "threats_detected": [
+      "Synthetic Voice Clone Impersonation"
+    ],
+    "deep_forensics": {
+      "acoustic_vectors": {
+        "spectral_centroid_hz": 1750.0,
+        "spectral_rolloff_hz": 3800.0,
+        "pitch_mean_hz": 145.0,
+        "pitch_std_hz": 28.5,
+        "jitter_pct": 1.2,
+        "shimmer_pct": 3.4,
+        "hnr_db": 16.8,
+        "zero_crossing_rate": 0.075,
+        "formants": [
+          700.0,
+          1800.0,
+          2700.0
+        ]
+      },
+      "conformer": {
+        "raw_prob": 0.05,
+        "predicted_class": "HUMAN",
+        "entropy": 0.15
+      },
+      "ensemble_fusion": {
+        "predicted_class": "VOICE_CLONING_ATTACK",
+        "consensus_confidence_pct": 59.8,
+        "agreement_score": 0.9,
+        "probabilities": {
+          "human": 0.05,
+          "non_human": 0.02,
+          "voice_clone_attack": 0.93
+        }
+      },
+      "voicemod": {
+        "detected": false,
+        "comb_ripple": 0.0,
+        "is_micro_clip": true
+      },
+      "semantic_scam": {
+        "category": "\ud83d\udfe2 Legitimate / Safe Conversation",
+        "coercion_urgency_pct": 0.0,
+        "flagged_keywords": [],
+        "transcript_snippet": "Bye!"
+      },
+      "speaker_biometrics": {
+        "claimed": "None",
+        "identified_name": "Unenrolled",
+        "confidence_pct": 0.0,
+        "is_known_contact": false,
+        "is_scammer_watchlist": false,
+        "is_discrepancy": false
+      },
+      "glottal_lpc": {
+        "residual_kurtosis": 85.7,
+        "status": "NORMAL_BIOLOGICAL"
+      },
+      "phase_mgd": {
+        "phase_jitter": 0.02,
+        "status": "PHASE_COHERENT"
+      }
+    },
+    "action_taken": "FLAGGED_AS_HIGH_RISK_ATTACK",
+    "alerts": {},
+    "compliance": {
+      "sha256_fingerprint": "61694ee6e4db4c02b7392fcd15e9d758",
       "privacy_standard": "India DPDP Act 2023 (Zero-Retention Ephemeral RAM)"
     }
   }
