@@ -1,3 +1,14 @@
+---
+title: VoiceShield AI - Voice Clone & Deepfake Defense
+emoji: 🛡️
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+license: apache-2.0
+---
+
 # 🛡️ VoiceShield AI: Real-Time Voice Cloning Detection & Impersonation Defense
 
 [![SIH 2026](https://img.shields.io/badge/SIH_2026-Problem_Statement_26104-blue.svg)](https://www.sih.gov.in/)
