@@ -3,8 +3,11 @@ services:
     name: voiceshield-ai
     runtime: python
     plan: free
-    buildCommand: "pip install -r requirements.txt"
+    buildCommand: "pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && pip install --no-cache-dir -r requirements.txt"
     startCommand: "uvicorn api.server:app --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /api/system-status
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
+      - key: PORT
+        value: 8000

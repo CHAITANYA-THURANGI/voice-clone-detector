@@ -15,9 +15,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Install Python dependencies
+# Install Python dependencies (install CPU torch first to save 2.5GB image size)
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy application source code
 COPY . .
@@ -25,5 +26,5 @@ COPY . .
 # Expose service port
 EXPOSE 8000
 
-# Start FastAPI backend server and dashboard
-CMD ["uvicorn", "api.server:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start FastAPI backend server and dashboard dynamically respecting $PORT
+CMD ["sh", "-c", "uvicorn api.server:app --host 0.0.0.0 --port ${PORT:-8000}"]
