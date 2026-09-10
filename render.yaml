@@ -11,3 +11,5 @@ services:
         value: 3.11.9
       - key: PORT
         value: 8000
+      - key: ENABLE_LOCAL_WHISPER
+        value: "0"

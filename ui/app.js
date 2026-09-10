@@ -462,7 +462,9 @@ async function runAnalysis() {
       data = JSON.parse(rawText);
     } catch (e) {
       let errMsg = `Server returned status ${res.status}`;
-      if (rawText.includes('<title>')) {
+      if (res.status === 502) {
+        errMsg = `Server returned status 502 (Bad Gateway). The cloud instance may be spinning up or restarting. Please try again in 15-30 seconds.`;
+      } else if (rawText.includes('<title>')) {
         const match = rawText.match(/<title>(.*?)<\/title>/i);
         if (match && match[1]) errMsg = `Server Error (${res.status}): ${match[1]}`;
       }

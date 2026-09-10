@@ -719,5 +719,169 @@
       "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-88888-99999 Terminated - VoiceShield AI",
       "status": "CONFIG_REQUIRED"
     }
+  },
+  {
+    "incident_id": "INC-27961D70",
+    "session_id": "CALL-68432DA0",
+    "timestamp": "10 Sep 2026, 05:31:51 UTC",
+    "caller_number": "+91-140-776655",
+    "caller_claimed_name": "Anita Sharma (Mom)",
+    "risk_percentage": 4.0,
+    "threats": [],
+    "action": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "sms_alert": {
+      "channel": "SMS",
+      "recipient": "+91-99887-76655",
+      "secondary_recipient": "+91-91234-56789",
+      "incident_id": "INC-27961D70",
+      "timestamp": "10 Sep 2026, 05:31:51 UTC",
+      "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-27961D70]:\nCall from +91-140-776655 (Anita Sharma (Mom)) AUTO-TERMINATED (05:31 UTC).\nThreat: AI Voice Clone Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Anita Sharma (Mom) on primary number.",
+      "status": "QUEUED_FOR_DEVICE_SIM",
+      "success": true,
+      "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
+      "dispatch_metadata": {
+        "success": true,
+        "status": "QUEUED_FOR_DEVICE_SIM",
+        "channel": "ANDROID_SIM_CARRIER",
+        "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
+        "recipient": "+91-99887-76655",
+        "incident_id": "INC-27961D70",
+        "char_count": 242,
+        "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-27961D70]:\nCall from +91-140-776655 (Anita Sharma (Mom)) AUTO-TERMINATED (05:31 UTC).\nThreat: AI Voice Clone Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Anita Sharma (Mom) on primary number.",
+        "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
+        "timestamp": "2026-09-10T05:31:51Z"
+      }
+    },
+    "email_alert": {
+      "channel": "EMAIL",
+      "recipient": "victim@domain.org",
+      "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-140-776655 Terminated - VoiceShield AI",
+      "status": "AUTH_FAILED"
+    }
+  },
+  {
+    "incident_id": "INC-D6B24064",
+    "session_id": "CALL-281174DC",
+    "timestamp": "10 Sep 2026, 05:33:27 UTC",
+    "caller_number": "+91-140-776655",
+    "caller_claimed_name": "Police Officer",
+    "risk_percentage": 41.6,
+    "threats": [
+      "Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist"
+    ],
+    "action": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "sms_alert": {
+      "channel": "SMS",
+      "recipient": "+91-99887-11223",
+      "secondary_recipient": "+91-91234-56789",
+      "incident_id": "INC-D6B24064",
+      "timestamp": "10 Sep 2026, 05:33:27 UTC",
+      "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-D6B24064]:\nCall from +91-140-776655 (Police Officer) AUTO-TERMINATED (05:33 UTC).\nThreat: Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Police Officer on primary number.",
+      "status": "QUEUED_FOR_DEVICE_SIM",
+      "success": true,
+      "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
+      "dispatch_metadata": {
+        "success": true,
+        "status": "QUEUED_FOR_DEVICE_SIM",
+        "channel": "ANDROID_SIM_CARRIER",
+        "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
+        "recipient": "+91-99887-11223",
+        "incident_id": "INC-D6B24064",
+        "char_count": 290,
+        "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-D6B24064]:\nCall from +91-140-776655 (Police Officer) AUTO-TERMINATED (05:33 UTC).\nThreat: Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Police Officer on primary number.",
+        "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
+        "timestamp": "2026-09-10T05:33:27Z"
+      }
+    },
+    "email_alert": {
+      "channel": "EMAIL",
+      "recipient": "victim@enterprise.com",
+      "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-140-776655 Terminated - VoiceShield AI",
+      "status": "CONFIG_REQUIRED"
+    }
+  },
+  {
+    "incident_id": "INC-029E827A",
+    "session_id": "CALL-C767854C",
+    "timestamp": "10 Sep 2026, 05:33:27 UTC",
+    "caller_number": "+91-98765-00112",
+    "caller_claimed_name": "Bank Security",
+    "risk_percentage": 4.0,
+    "threats": [
+      "Banking KYC Scam",
+      "Synthetic Voice Attack"
+    ],
+    "action": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "sms_alert": {
+      "channel": "SMS",
+      "recipient": "+91-99887-33445",
+      "secondary_recipient": "+91-91234-56789",
+      "incident_id": "INC-029E827A",
+      "timestamp": "10 Sep 2026, 05:33:27 UTC",
+      "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-029E827A]:\nCall from +91-98765-00112 (Bank Security) AUTO-TERMINATED (05:33 UTC).\nThreat: Banking KYC Scam, Synthetic Voice Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Bank Security on primary number.",
+      "status": "QUEUED_FOR_DEVICE_SIM",
+      "success": true,
+      "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
+      "dispatch_metadata": {
+        "success": true,
+        "status": "QUEUED_FOR_DEVICE_SIM",
+        "channel": "ANDROID_SIM_CARRIER",
+        "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
+        "recipient": "+91-99887-33445",
+        "incident_id": "INC-029E827A",
+        "char_count": 252,
+        "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-029E827A]:\nCall from +91-98765-00112 (Bank Security) AUTO-TERMINATED (05:33 UTC).\nThreat: Banking KYC Scam, Synthetic Voice Attack (4.0% risk).\nDO NOT send money or OTPs. Verify directly with Bank Security on primary number.",
+        "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
+        "timestamp": "2026-09-10T05:33:27Z"
+      }
+    },
+    "email_alert": {
+      "channel": "EMAIL",
+      "recipient": "victim@securemail.org",
+      "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-98765-00112 Terminated - VoiceShield AI",
+      "status": "CONFIG_REQUIRED"
+    }
+  },
+  {
+    "incident_id": "INC-56D78A65",
+    "session_id": "CALL-A0279375",
+    "timestamp": "10 Sep 2026, 05:33:28 UTC",
+    "caller_number": "+91-88888-99999",
+    "caller_claimed_name": "Unknown Caller",
+    "risk_percentage": 41.6,
+    "threats": [
+      "Voicemod Real-Time Voice Changer Detected",
+      "Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist"
+    ],
+    "action": "AUTO_CALL_DROP_AND_PRECAUTION_DISPATCH",
+    "sms_alert": {
+      "channel": "SMS",
+      "recipient": "+91-99887-76655",
+      "secondary_recipient": "+91-91234-56789",
+      "incident_id": "INC-56D78A65",
+      "timestamp": "10 Sep 2026, 05:33:28 UTC",
+      "content": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-56D78A65]:\nCall from +91-88888-99999 (Unknown Caller) AUTO-TERMINATED (05:33 UTC).\nThreat: Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Unknown Caller on primary number.",
+      "status": "QUEUED_FOR_DEVICE_SIM",
+      "success": true,
+      "gateway": "Android Native SIM Card (Carrier Plan SMS Quota)",
+      "dispatch_metadata": {
+        "success": true,
+        "status": "QUEUED_FOR_DEVICE_SIM",
+        "channel": "ANDROID_SIM_CARRIER",
+        "gateway_description": "Android Native SIM Card (Carrier Plan SMS Quota)",
+        "recipient": "+91-99887-76655",
+        "incident_id": "INC-56D78A65",
+        "char_count": 334,
+        "sms_text": "\ud83d\udea8 VOICESHIELD AI ALERT [INC-56D78A65]:\nCall from +91-88888-99999 (Unknown Caller) AUTO-TERMINATED (05:33 UTC).\nThreat: Voicemod Real-Time Voice Changer Detected, Threat Watchlist Match: Voiceprint matches Known Digital Arrest Extortionist (41.6% risk).\nDO NOT send money or OTPs. Verify directly with Unknown Caller on primary number.",
+        "instructions": "Android app executes SmsManager.getDefault().sendTextMessage(...) using SIM quota.",
+        "timestamp": "2026-09-10T05:33:28Z"
+      }
+    },
+    "email_alert": {
+      "channel": "EMAIL",
+      "recipient": "security-alert@user.org",
+      "subject": "\ud83d\udea8 [CRITICAL ALERT] Incoming Threat Call from +91-88888-99999 Terminated - VoiceShield AI",
+      "status": "CONFIG_REQUIRED"
+    }
   }
 ]

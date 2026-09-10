@@ -4,7 +4,8 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PORT=8000
+    PORT=8000 \
+    ENABLE_LOCAL_WHISPER=0
 
 # Install system audio libraries and ffmpeg
 RUN apt-get update && apt-get install -y --no-install-recommends \

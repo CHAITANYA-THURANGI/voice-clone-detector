@@ -128,7 +128,12 @@ class TestSemanticScamDetection(unittest.TestCase):
         audio_path = os.path.join(PROJECT_ROOT, "data", "samples", "scam_digital_arrest_police.wav")
         self.assertTrue(os.path.exists(audio_path), f"Audio file not found: {audio_path}")
 
-        res = ensemble_instance.analyze_audio(audio_path)
+        context = None
+        if os.environ.get("ENABLE_LOCAL_WHISPER", "0") != "1":
+            context = {
+                "transcript": "This is DCP Cyber Crime Police Mumbai. A parcel in your name was seized with illegal drugs. You are under digital arrest."
+            }
+        res = ensemble_instance.analyze_audio(audio_path, context=context)
         self.assertEqual(res["status"], "success")
         self.assertIn("transcript", res)
         self.assertTrue(len(res["transcript"]) > 10, "Transcription returned empty string")

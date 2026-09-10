@@ -180,9 +180,12 @@ class SemanticFraudDetector:
         self.gemini_api_key = gemini_api_key or os.environ.get("GEMINI_API_KEY")
         self._gemini_client = None
         self._whisper_model = None
+        self.enable_local_whisper = os.environ.get("ENABLE_LOCAL_WHISPER", "0") == "1"
 
     def _get_whisper_model(self):
-        """Lazy loads Whisper tiny ASR model."""
+        """Lazy loads Whisper tiny ASR model ONLY if explicitly enabled."""
+        if not self.enable_local_whisper:
+            return None
         if self._whisper_model is None:
             try:
                 import whisper
@@ -425,7 +428,9 @@ Output JSON format:
         """
         Unified end-to-end method: transcribes audio and assesses semantic fraud threat.
         """
-        transcript = self.transcribe_audio(waveform, sr=sr)
+        transcript = (context.get("transcript") or "").strip() if context else ""
+        if not transcript:
+            transcript = self.transcribe_audio(waveform, sr=sr)
         return self.analyze_semantic_threat(transcript, audio_waveform=waveform, context=context)
 
 

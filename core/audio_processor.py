@@ -12,7 +12,28 @@ import numpy as np
 import soundfile as sf
 
 
+import shutil
+
 TARGET_SAMPLE_RATE = 16000
+
+
+def get_ffmpeg_binary() -> str:
+    """
+    Returns the path to a working FFmpeg binary.
+    Prioritizes system ffmpeg, with guaranteed zero-dependency fallback via imageio-ffmpeg.
+    """
+    sys_ffmpeg = shutil.which("ffmpeg")
+    if sys_ffmpeg:
+        return sys_ffmpeg
+    try:
+        import imageio_ffmpeg
+        exe = imageio_ffmpeg.get_ffmpeg_exe()
+        exe_dir = os.path.dirname(exe)
+        if exe_dir not in os.environ.get("PATH", ""):
+            os.environ["PATH"] = exe_dir + os.pathsep + os.environ.get("PATH", "")
+        return exe
+    except Exception:
+        return "ffmpeg"
 
 
 def convert_to_16k_mono(input_path: str, output_path: str = None) -> str:
@@ -27,8 +48,9 @@ def convert_to_16k_mono(input_path: str, output_path: str = None) -> str:
         fd, output_path = tempfile.mkstemp(suffix="_16k_mono.wav")
         os.close(fd)
 
+    ffmpeg_bin = get_ffmpeg_binary()
     cmd = [
-        "ffmpeg",
+        ffmpeg_bin,
         "-y",
         "-i", input_path,
         "-vn",

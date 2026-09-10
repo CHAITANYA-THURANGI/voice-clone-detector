@@ -11,3 +11,4 @@ onnx>=1.16.0
 onnxruntime>=1.17.0
 librosa>=0.10.0
 openai-whisper
+imageio-ffmpeg>=0.5.1

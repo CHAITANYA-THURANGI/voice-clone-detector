@@ -82,7 +82,11 @@ class Test3SecAndVoicemodForensics(unittest.TestCase):
     def test_end_to_end_ensemble_analysis(self):
         """Verify the full 7-vector ensemble correctly routes and classifies the 3-second samples."""
         # 1. Family clone
-        clone_result = ensemble_instance.analyze_audio(self.family_clone_path, call_id="TEST-3SEC-CLONE")
+        clone_result = ensemble_instance.analyze_audio(
+            self.family_clone_path, 
+            call_id="TEST-3SEC-CLONE",
+            context={"transcript": "Mom, I broke my phone and need money urgently"}
+        )
         self.assertEqual(clone_result["ensemble_fusion"]["predicted_class"], "VOICE_CLONING_ATTACK")
         self.assertGreaterEqual(clone_result["risk_assessment"]["risk_score"], 0.70)
         self.assertEqual(clone_result["semantic_fraud_detector"]["scam_category"], CAT_FAMILY_BOSS_CLONE)

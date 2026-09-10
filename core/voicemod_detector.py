@@ -90,9 +90,9 @@ def analyze_voicemod_and_microclip(waveform: np.ndarray, sr: int = 16000) -> Dic
     )
     composite_score = float(np.clip(composite_score, 0.0, 1.0))
 
-    is_voicemod = (composite_score >= 0.35 or harmonic_comb_ratio > 0.50)
+    is_voicemod = (composite_score >= 0.38 or harmonic_comb_ratio >= 0.58)
 
-    if harmonic_comb_ratio > 0.50:
+    if harmonic_comb_ratio >= 0.58:
         voicemod_confidence = float(np.clip(harmonic_comb_ratio * 1.35, 0.75, 0.96))
     elif is_voicemod:
         voicemod_confidence = float(np.clip(composite_score * 1.8, 0.70, 0.95))

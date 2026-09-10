@@ -6,6 +6,7 @@ and telecom core gateways (SIH PS-26104).
 
 import os
 import sys
+import gc
 import glob
 import asyncio
 from typing import Optional, Dict
@@ -85,7 +86,8 @@ async def analyze_audio_file(
     claimed_speaker_id: Optional[str] = Form(None),
     transaction_amount: Optional[float] = Form(0.0),
     is_cxo_call: Optional[bool] = Form(False),
-    credential_request: Optional[bool] = Form(False)
+    credential_request: Optional[bool] = Form(False),
+    transcript: Optional[str] = Form(None)
 ):
     """
     End-to-end multi-layer forensic analysis of an incoming audio recording or call intercept.
@@ -101,6 +103,8 @@ async def analyze_audio_file(
             "is_cxo_call": is_cxo_call,
             "credential_request": credential_request
         }
+        if transcript:
+            context["transcript"] = transcript.strip()
 
         call_prefix = (file.filename or "AUDIO")[:8]
         result = await asyncio.to_thread(
@@ -126,6 +130,8 @@ async def analyze_audio_file(
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        gc.collect()
 
 
 @app.post("/api/extension/scan")
